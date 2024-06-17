@@ -1,0 +1,160 @@
+\hypertarget{namespacefisher__nonlin}{}\doxysection{fisher\+\_\+nonlin Namespace Reference}
+\label{namespacefisher__nonlin}\index{fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{namespacefisher__nonlin_acb97088dd7450a6e8082d6dfa2e49746}{epsilon}} = 0.\+001
+\item 
+int \mbox{\hyperlink{namespacefisher__nonlin_a92203b82930624422c73b82f3a6e93d6}{beta}} = 1
+\item 
+int \mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}} = 10
+\item 
+int \mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}} = 10
+\item 
+\mbox{\hyperlink{namespacefisher__nonlin_a4d6185c8634ed2b35dca54f13c9bc532}{budget}} = np.\+random.\+rand(\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}})
+\item 
+tuple \mbox{\hyperlink{namespacefisher__nonlin_a5940f7e69b3117579540fa179eb62e16}{capacity}} = (\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}} / \mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}}) $\ast$ np.\+ones(\mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}})
+\item 
+\mbox{\hyperlink{namespacefisher__nonlin_a110e2ca9cff699f1a447ff1a82a4512e}{valuation}} = np.\+random.\+rand(\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}}, \mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}})
+\item 
+\mbox{\hyperlink{namespacefisher__nonlin_ad0541ae1afcca8359073e933bb5254da}{initial\+\_\+prices}} = np.\+random.\+rand(\mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}})
+\item 
+\mbox{\hyperlink{namespacefisher__nonlin_a9540e117d30af06ea47118af672141ca}{opt\+\_\+xi}} = np.\+zeros((\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}}, \mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}}))
+\item 
+int \mbox{\hyperlink{namespacefisher__nonlin_a48004ff9778e1ddbeb5679992f0597bd}{x\+\_\+iter}} = 1
+\item 
+\mbox{\hyperlink{namespacefisher__nonlin_a2b167ca02f1a31eba997cd052c29fa05}{p}} = \mbox{\hyperlink{namespacefisher__nonlin_ad0541ae1afcca8359073e933bb5254da}{initial\+\_\+prices}}
+\item 
+list \mbox{\hyperlink{namespacefisher__nonlin_a0779089b14cdd06a0c6de4f6871951f2}{supply\+\_\+demand2}} = \mbox{[}$\,$\mbox{]}
+\item 
+tuple \mbox{\hyperlink{namespacefisher__nonlin_a11bbd0f944f6d07f74f3496042f53c7a}{y\+\_\+in}} = (1/\mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}}) $\ast$ np.\+ones((\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}}, \mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}}))
+\item 
+\mbox{\hyperlink{namespacefisher__nonlin_ae584bb2772b715259f3523a2e258cf93}{x}} = cp.\+Variable(\mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}})
+\item 
+\mbox{\hyperlink{namespacefisher__nonlin_ad1b45651e0357f197bf260442d8fb96c}{objective}} = cp.\+Maximize(\mbox{\hyperlink{namespacefisher__nonlin_a4d6185c8634ed2b35dca54f13c9bc532}{budget}}\mbox{[}i\mbox{]} $\ast$ cp.\+log(\mbox{\hyperlink{namespacefisher__nonlin_a110e2ca9cff699f1a447ff1a82a4512e}{valuation}}\mbox{[}i, \+:\mbox{]} @ \mbox{\hyperlink{namespacefisher__nonlin_ae584bb2772b715259f3523a2e258cf93}{x}}) -\/ \mbox{\hyperlink{namespacefisher__nonlin_a2b167ca02f1a31eba997cd052c29fa05}{p}} @ \mbox{\hyperlink{namespacefisher__nonlin_ae584bb2772b715259f3523a2e258cf93}{x}} -\/ (\mbox{\hyperlink{namespacefisher__nonlin_a92203b82930624422c73b82f3a6e93d6}{beta}} / 2) $\ast$ cp.\+square(cp.\+norm(\mbox{\hyperlink{namespacefisher__nonlin_ae584bb2772b715259f3523a2e258cf93}{x}} -\/ \mbox{\hyperlink{namespacefisher__nonlin_a11bbd0f944f6d07f74f3496042f53c7a}{y\+\_\+in}}\mbox{[}i, \+:\mbox{]}, 2)))
+\item 
+list \mbox{\hyperlink{namespacefisher__nonlin_a26ca38285ffb3c8dd050e9948d699f93}{constraints}} = \mbox{[}\mbox{\hyperlink{namespacefisher__nonlin_ae584bb2772b715259f3523a2e258cf93}{x}} $>$= 0\mbox{]}
+\item 
+\mbox{\hyperlink{namespacefisher__nonlin_a707ab94c08730725a2ebebfbb6f758c1}{problem}} = cp.\+Problem(\mbox{\hyperlink{namespacefisher__nonlin_ad1b45651e0357f197bf260442d8fb96c}{objective}}, \mbox{\hyperlink{namespacefisher__nonlin_a26ca38285ffb3c8dd050e9948d699f93}{constraints}})
+\item 
+\mbox{\hyperlink{namespacefisher__nonlin_a4384fe7a4c5f4814da7ac27f2f48cc0f}{y}} = cp.\+Variable((\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}}, \mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}}))
+\item 
+tuple \mbox{\hyperlink{namespacefisher__nonlin_a01da55cc4ce133de093f3fb7f90947c1}{sup\+\_\+dem}} = np.\+sum(\mbox{\hyperlink{namespacefisher__nonlin_a9540e117d30af06ea47118af672141ca}{opt\+\_\+xi}}, axis=0) -\/ capacity.\+flatten()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacefisher__nonlin_a92203b82930624422c73b82f3a6e93d6}\label{namespacefisher__nonlin_a92203b82930624422c73b82f3a6e93d6}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!beta@{beta}}
+\index{beta@{beta}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{beta}{beta}}
+{\footnotesize\ttfamily int fisher\+\_\+nonlin.\+beta = 1}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a4d6185c8634ed2b35dca54f13c9bc532}\label{namespacefisher__nonlin_a4d6185c8634ed2b35dca54f13c9bc532}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!budget@{budget}}
+\index{budget@{budget}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{budget}{budget}}
+{\footnotesize\ttfamily fisher\+\_\+nonlin.\+budget = np.\+random.\+rand(\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}})}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a5940f7e69b3117579540fa179eb62e16}\label{namespacefisher__nonlin_a5940f7e69b3117579540fa179eb62e16}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!capacity@{capacity}}
+\index{capacity@{capacity}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{capacity}{capacity}}
+{\footnotesize\ttfamily tuple fisher\+\_\+nonlin.\+capacity = (\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}} / \mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}}) $\ast$ np.\+ones(\mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}})}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a26ca38285ffb3c8dd050e9948d699f93}\label{namespacefisher__nonlin_a26ca38285ffb3c8dd050e9948d699f93}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!constraints@{constraints}}
+\index{constraints@{constraints}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{constraints}{constraints}}
+{\footnotesize\ttfamily list fisher\+\_\+nonlin.\+constraints = \mbox{[}\mbox{\hyperlink{namespacefisher__nonlin_ae584bb2772b715259f3523a2e258cf93}{x}} $>$= 0\mbox{]}}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_acb97088dd7450a6e8082d6dfa2e49746}\label{namespacefisher__nonlin_acb97088dd7450a6e8082d6dfa2e49746}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!epsilon@{epsilon}}
+\index{epsilon@{epsilon}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{epsilon}{epsilon}}
+{\footnotesize\ttfamily float fisher\+\_\+nonlin.\+epsilon = 0.\+001}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_ad0541ae1afcca8359073e933bb5254da}\label{namespacefisher__nonlin_ad0541ae1afcca8359073e933bb5254da}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!initial\_prices@{initial\_prices}}
+\index{initial\_prices@{initial\_prices}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{initial\_prices}{initial\_prices}}
+{\footnotesize\ttfamily fisher\+\_\+nonlin.\+initial\+\_\+prices = np.\+random.\+rand(\mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}})}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}\label{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!num\_agents@{num\_agents}}
+\index{num\_agents@{num\_agents}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{num\_agents}{num\_agents}}
+{\footnotesize\ttfamily int fisher\+\_\+nonlin.\+num\+\_\+agents = 10}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}\label{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!num\_goods@{num\_goods}}
+\index{num\_goods@{num\_goods}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{num\_goods}{num\_goods}}
+{\footnotesize\ttfamily int fisher\+\_\+nonlin.\+num\+\_\+goods = 10}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_ad1b45651e0357f197bf260442d8fb96c}\label{namespacefisher__nonlin_ad1b45651e0357f197bf260442d8fb96c}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!objective@{objective}}
+\index{objective@{objective}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{objective}{objective}}
+{\footnotesize\ttfamily fisher\+\_\+nonlin.\+objective = cp.\+Maximize(\mbox{\hyperlink{namespacefisher__nonlin_a4d6185c8634ed2b35dca54f13c9bc532}{budget}}\mbox{[}i\mbox{]} $\ast$ cp.\+log(\mbox{\hyperlink{namespacefisher__nonlin_a110e2ca9cff699f1a447ff1a82a4512e}{valuation}}\mbox{[}i, \+:\mbox{]} @ \mbox{\hyperlink{namespacefisher__nonlin_ae584bb2772b715259f3523a2e258cf93}{x}}) -\/ \mbox{\hyperlink{namespacefisher__nonlin_a2b167ca02f1a31eba997cd052c29fa05}{p}} @ \mbox{\hyperlink{namespacefisher__nonlin_ae584bb2772b715259f3523a2e258cf93}{x}} -\/ (\mbox{\hyperlink{namespacefisher__nonlin_a92203b82930624422c73b82f3a6e93d6}{beta}} / 2) $\ast$ cp.\+square(cp.\+norm(\mbox{\hyperlink{namespacefisher__nonlin_ae584bb2772b715259f3523a2e258cf93}{x}} -\/ \mbox{\hyperlink{namespacefisher__nonlin_a11bbd0f944f6d07f74f3496042f53c7a}{y\+\_\+in}}\mbox{[}i, \+:\mbox{]}, 2)))}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a9540e117d30af06ea47118af672141ca}\label{namespacefisher__nonlin_a9540e117d30af06ea47118af672141ca}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!opt\_xi@{opt\_xi}}
+\index{opt\_xi@{opt\_xi}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{opt\_xi}{opt\_xi}}
+{\footnotesize\ttfamily fisher\+\_\+nonlin.\+opt\+\_\+xi = np.\+zeros((\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}}, \mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}}))}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a2b167ca02f1a31eba997cd052c29fa05}\label{namespacefisher__nonlin_a2b167ca02f1a31eba997cd052c29fa05}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!p@{p}}
+\index{p@{p}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{p}{p}}
+{\footnotesize\ttfamily int fisher\+\_\+nonlin.\+p = \mbox{\hyperlink{namespacefisher__nonlin_ad0541ae1afcca8359073e933bb5254da}{initial\+\_\+prices}}}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a707ab94c08730725a2ebebfbb6f758c1}\label{namespacefisher__nonlin_a707ab94c08730725a2ebebfbb6f758c1}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!problem@{problem}}
+\index{problem@{problem}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{problem}{problem}}
+{\footnotesize\ttfamily fisher\+\_\+nonlin.\+problem = cp.\+Problem(\mbox{\hyperlink{namespacefisher__nonlin_ad1b45651e0357f197bf260442d8fb96c}{objective}}, \mbox{\hyperlink{namespacefisher__nonlin_a26ca38285ffb3c8dd050e9948d699f93}{constraints}})}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a01da55cc4ce133de093f3fb7f90947c1}\label{namespacefisher__nonlin_a01da55cc4ce133de093f3fb7f90947c1}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!sup\_dem@{sup\_dem}}
+\index{sup\_dem@{sup\_dem}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{sup\_dem}{sup\_dem}}
+{\footnotesize\ttfamily tuple fisher\+\_\+nonlin.\+sup\+\_\+dem = np.\+sum(\mbox{\hyperlink{namespacefisher__nonlin_a9540e117d30af06ea47118af672141ca}{opt\+\_\+xi}}, axis=0) -\/ capacity.\+flatten()}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a0779089b14cdd06a0c6de4f6871951f2}\label{namespacefisher__nonlin_a0779089b14cdd06a0c6de4f6871951f2}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!supply\_demand2@{supply\_demand2}}
+\index{supply\_demand2@{supply\_demand2}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{supply\_demand2}{supply\_demand2}}
+{\footnotesize\ttfamily list fisher\+\_\+nonlin.\+supply\+\_\+demand2 = \mbox{[}$\,$\mbox{]}}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a110e2ca9cff699f1a447ff1a82a4512e}\label{namespacefisher__nonlin_a110e2ca9cff699f1a447ff1a82a4512e}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!valuation@{valuation}}
+\index{valuation@{valuation}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{valuation}{valuation}}
+{\footnotesize\ttfamily fisher\+\_\+nonlin.\+valuation = np.\+random.\+rand(\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}}, \mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}})}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_ae584bb2772b715259f3523a2e258cf93}\label{namespacefisher__nonlin_ae584bb2772b715259f3523a2e258cf93}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!x@{x}}
+\index{x@{x}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{x}{x}}
+{\footnotesize\ttfamily fisher\+\_\+nonlin.\+x = cp.\+Variable(\mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}})}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a48004ff9778e1ddbeb5679992f0597bd}\label{namespacefisher__nonlin_a48004ff9778e1ddbeb5679992f0597bd}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!x\_iter@{x\_iter}}
+\index{x\_iter@{x\_iter}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{x\_iter}{x\_iter}}
+{\footnotesize\ttfamily int fisher\+\_\+nonlin.\+x\+\_\+iter = 1}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a4384fe7a4c5f4814da7ac27f2f48cc0f}\label{namespacefisher__nonlin_a4384fe7a4c5f4814da7ac27f2f48cc0f}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!y@{y}}
+\index{y@{y}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{y}{y}}
+{\footnotesize\ttfamily fisher\+\_\+nonlin.\+y = cp.\+Variable((\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}}, \mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}}))}
+
+\mbox{\Hypertarget{namespacefisher__nonlin_a11bbd0f944f6d07f74f3496042f53c7a}\label{namespacefisher__nonlin_a11bbd0f944f6d07f74f3496042f53c7a}} 
+\index{fisher\_nonlin@{fisher\_nonlin}!y\_in@{y\_in}}
+\index{y\_in@{y\_in}!fisher\_nonlin@{fisher\_nonlin}}
+\doxysubsubsection{\texorpdfstring{y\_in}{y\_in}}
+{\footnotesize\ttfamily fisher\+\_\+nonlin.\+y\+\_\+in = (1/\mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}}) $\ast$ np.\+ones((\mbox{\hyperlink{namespacefisher__nonlin_a1e3894e878102e23ab9953ef773b69a6}{num\+\_\+agents}}, \mbox{\hyperlink{namespacefisher__nonlin_a7b1551eda425f9d1b1a431053b9d3d89}{num\+\_\+goods}}))}
+

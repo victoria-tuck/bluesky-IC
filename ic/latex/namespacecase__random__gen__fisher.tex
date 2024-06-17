@@ -1,0 +1,250 @@
+\hypertarget{namespacecase__random__gen__fisher}{}\doxysection{case\+\_\+random\+\_\+gen\+\_\+fisher Namespace Reference}
+\label{namespacecase__random__gen__fisher}\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacecase__random__gen__fisher_af6066c66958a3cc5ec05e8dd41eb99a2}{generate\+\_\+flights}} ()
+\item 
+def \mbox{\hyperlink{namespacecase__random__gen__fisher_a68e20bbc4c403c50806dd31207e3b881}{calculate\+\_\+distance}} (origin, destination)
+\item 
+def \mbox{\hyperlink{namespacecase__random__gen__fisher_a4608437ec8ffd0ca250e385bda4c7422}{generate\+\_\+fleets}} (flights\+\_\+data)
+\item 
+def \mbox{\hyperlink{namespacecase__random__gen__fisher_a137cfe9466a58f4fc725334d006e47e1}{generate\+\_\+routes}} (\mbox{\hyperlink{namespacecase__random__gen__fisher_aaf27b39fe35078416f4eeca812f5f0f1}{vertiports}})
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{namespacecase__random__gen__fisher_a40a2fa38e547c9b9d7dfded2a074a5f3}{START\+\_\+\+TIME}} = 1
+\item 
+int \mbox{\hyperlink{namespacecase__random__gen__fisher_af5412579ff10949d555f39c2cdb67838}{END\+\_\+\+TIME}} = 100
+\item 
+int \mbox{\hyperlink{namespacecase__random__gen__fisher_acc0ed9d0e832d73bbcae341d153b28b6}{TIME\+\_\+\+STEP}} = 1
+\item 
+int \mbox{\hyperlink{namespacecase__random__gen__fisher_a93fd5e49b92a521f2884305bb165f4b3}{AUCTION\+\_\+\+DT}} = 10
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_ad23367cc7e7bc01a413151f46524dcb8}{N\+\_\+\+FLIGHTS}} = random.\+randint(10, 15)
+\item 
+int \mbox{\hyperlink{namespacecase__random__gen__fisher_ad607554da09e805832b27ccc34c8fe05}{NUM\+\_\+\+FLEETS}} = 10
+\item 
+dictionary \mbox{\hyperlink{namespacecase__random__gen__fisher_aaf27b39fe35078416f4eeca812f5f0f1}{vertiports}}
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a09d0225045bdd21b210b19443914f576}{total\+\_\+capacity}} = sum(vertiport\mbox{[}\char`\"{}hold\+\_\+capacity\char`\"{}\mbox{]} for vertiport in vertiports.\+values())
+\item 
+def \mbox{\hyperlink{namespacecase__random__gen__fisher_a7688535b4d466de63dfcfdd410d5ad0e}{fleets}} = \mbox{\hyperlink{namespacecase__random__gen__fisher_a4608437ec8ffd0ca250e385bda4c7422}{generate\+\_\+fleets}}(list(flights.\+keys()))
+\item 
+dictionary \mbox{\hyperlink{namespacecase__random__gen__fisher_a60cf17e3f0b3282f65f72bdd12a8d309}{json\+\_\+data}}
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a878bd5f010e9710f1cad1687dbfbd275}{current\+\_\+datetime}} = datetime.\+now()
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_ad691f6681f030628e3563667a32f76b6}{formatted\+\_\+datetime}} = current\+\_\+datetime.\+strftime(\char`\"{}\%Y\%m\%d\+\_\+\%H\%M\%S\char`\"{})
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a6eba48ebf3f226d7a34dd8aa5c2c0995}{current\+\_\+directory}} = os.\+getcwd()
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_ab63ec3d9ff57a70efbdd0c8464343979}{test\+\_\+cases\+\_\+directory}} = os.\+path.\+join(\mbox{\hyperlink{namespacecase__random__gen__fisher_a6eba48ebf3f226d7a34dd8aa5c2c0995}{current\+\_\+directory}}, \textquotesingle{}test\+\_\+cases\textquotesingle{})
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a3dcdd0f320cbb881b3f0503d1244f13e}{file\+\_\+path}} = os.\+path.\+join(\mbox{\hyperlink{namespacecase__random__gen__fisher_ab63ec3d9ff57a70efbdd0c8464343979}{test\+\_\+cases\+\_\+directory}}, \mbox{\hyperlink{namespacecase__random__gen__fisher_a20cbd0afce3a826b2ef3cecc90b814bb}{f}}\textquotesingle{}casef\+\_\+\{\mbox{\hyperlink{namespacecase__random__gen__fisher_ad691f6681f030628e3563667a32f76b6}{formatted\+\_\+datetime}}\}.json\textquotesingle{})
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a20cbd0afce3a826b2ef3cecc90b814bb}{f}}
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a90d589a165f1378458383eede3dcc73f}{indent}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a68e20bbc4c403c50806dd31207e3b881}\label{namespacecase__random__gen__fisher_a68e20bbc4c403c50806dd31207e3b881}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!calculate\_distance@{calculate\_distance}}
+\index{calculate\_distance@{calculate\_distance}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{calculate\_distance()}{calculate\_distance()}}
+{\footnotesize\ttfamily def case\+\_\+random\+\_\+gen\+\_\+fisher.\+calculate\+\_\+distance (\begin{DoxyParamCaption}\item[{}]{origin,  }\item[{}]{destination }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}This function calculates distance from two vertiports
+input:
+output: distance in km
+\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacecase__random__gen__fisher_a68e20bbc4c403c50806dd31207e3b881_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a4608437ec8ffd0ca250e385bda4c7422}\label{namespacecase__random__gen__fisher_a4608437ec8ffd0ca250e385bda4c7422}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!generate\_fleets@{generate\_fleets}}
+\index{generate\_fleets@{generate\_fleets}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{generate\_fleets()}{generate\_fleets()}}
+{\footnotesize\ttfamily def case\+\_\+random\+\_\+gen\+\_\+fisher.\+generate\+\_\+fleets (\begin{DoxyParamCaption}\item[{}]{flights\+\_\+data }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_af6066c66958a3cc5ec05e8dd41eb99a2}\label{namespacecase__random__gen__fisher_af6066c66958a3cc5ec05e8dd41eb99a2}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!generate\_flights@{generate\_flights}}
+\index{generate\_flights@{generate\_flights}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{generate\_flights()}{generate\_flights()}}
+{\footnotesize\ttfamily def case\+\_\+random\+\_\+gen\+\_\+fisher.\+generate\+\_\+flights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacecase__random__gen__fisher_af6066c66958a3cc5ec05e8dd41eb99a2_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacecase__random__gen__fisher_af6066c66958a3cc5ec05e8dd41eb99a2_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a137cfe9466a58f4fc725334d006e47e1}\label{namespacecase__random__gen__fisher_a137cfe9466a58f4fc725334d006e47e1}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!generate\_routes@{generate\_routes}}
+\index{generate\_routes@{generate\_routes}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{generate\_routes()}{generate\_routes()}}
+{\footnotesize\ttfamily def case\+\_\+random\+\_\+gen\+\_\+fisher.\+generate\+\_\+routes (\begin{DoxyParamCaption}\item[{}]{vertiports }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacecase__random__gen__fisher_a137cfe9466a58f4fc725334d006e47e1_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacecase__random__gen__fisher_a137cfe9466a58f4fc725334d006e47e1_icgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a93fd5e49b92a521f2884305bb165f4b3}\label{namespacecase__random__gen__fisher_a93fd5e49b92a521f2884305bb165f4b3}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!AUCTION\_DT@{AUCTION\_DT}}
+\index{AUCTION\_DT@{AUCTION\_DT}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{AUCTION\_DT}{AUCTION\_DT}}
+{\footnotesize\ttfamily int case\+\_\+random\+\_\+gen\+\_\+fisher.\+AUCTION\+\_\+\+DT = 10}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a878bd5f010e9710f1cad1687dbfbd275}\label{namespacecase__random__gen__fisher_a878bd5f010e9710f1cad1687dbfbd275}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!current\_datetime@{current\_datetime}}
+\index{current\_datetime@{current\_datetime}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{current\_datetime}{current\_datetime}}
+{\footnotesize\ttfamily case\+\_\+random\+\_\+gen\+\_\+fisher.\+current\+\_\+datetime = datetime.\+now()}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a6eba48ebf3f226d7a34dd8aa5c2c0995}\label{namespacecase__random__gen__fisher_a6eba48ebf3f226d7a34dd8aa5c2c0995}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!current\_directory@{current\_directory}}
+\index{current\_directory@{current\_directory}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{current\_directory}{current\_directory}}
+{\footnotesize\ttfamily case\+\_\+random\+\_\+gen\+\_\+fisher.\+current\+\_\+directory = os.\+getcwd()}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_af5412579ff10949d555f39c2cdb67838}\label{namespacecase__random__gen__fisher_af5412579ff10949d555f39c2cdb67838}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!END\_TIME@{END\_TIME}}
+\index{END\_TIME@{END\_TIME}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{END\_TIME}{END\_TIME}}
+{\footnotesize\ttfamily int case\+\_\+random\+\_\+gen\+\_\+fisher.\+END\+\_\+\+TIME = 100}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a20cbd0afce3a826b2ef3cecc90b814bb}\label{namespacecase__random__gen__fisher_a20cbd0afce3a826b2ef3cecc90b814bb}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!f@{f}}
+\index{f@{f}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{f}{f}}
+{\footnotesize\ttfamily case\+\_\+random\+\_\+gen\+\_\+fisher.\+f}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a3dcdd0f320cbb881b3f0503d1244f13e}\label{namespacecase__random__gen__fisher_a3dcdd0f320cbb881b3f0503d1244f13e}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!file\_path@{file\_path}}
+\index{file\_path@{file\_path}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{file\_path}{file\_path}}
+{\footnotesize\ttfamily case\+\_\+random\+\_\+gen\+\_\+fisher.\+file\+\_\+path = os.\+path.\+join(\mbox{\hyperlink{namespacecase__random__gen__fisher_ab63ec3d9ff57a70efbdd0c8464343979}{test\+\_\+cases\+\_\+directory}}, \mbox{\hyperlink{namespacecase__random__gen__fisher_a20cbd0afce3a826b2ef3cecc90b814bb}{f}}\textquotesingle{}casef\+\_\+\{\mbox{\hyperlink{namespacecase__random__gen__fisher_ad691f6681f030628e3563667a32f76b6}{formatted\+\_\+datetime}}\}.json\textquotesingle{})}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a7688535b4d466de63dfcfdd410d5ad0e}\label{namespacecase__random__gen__fisher_a7688535b4d466de63dfcfdd410d5ad0e}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!fleets@{fleets}}
+\index{fleets@{fleets}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{fleets}{fleets}}
+{\footnotesize\ttfamily def case\+\_\+random\+\_\+gen\+\_\+fisher.\+fleets = \mbox{\hyperlink{namespacecase__random__gen__fisher_a4608437ec8ffd0ca250e385bda4c7422}{generate\+\_\+fleets}}(list(flights.\+keys()))}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_ad691f6681f030628e3563667a32f76b6}\label{namespacecase__random__gen__fisher_ad691f6681f030628e3563667a32f76b6}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!formatted\_datetime@{formatted\_datetime}}
+\index{formatted\_datetime@{formatted\_datetime}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{formatted\_datetime}{formatted\_datetime}}
+{\footnotesize\ttfamily case\+\_\+random\+\_\+gen\+\_\+fisher.\+formatted\+\_\+datetime = current\+\_\+datetime.\+strftime(\char`\"{}\%Y\%m\%d\+\_\+\%H\%M\%S\char`\"{})}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a90d589a165f1378458383eede3dcc73f}\label{namespacecase__random__gen__fisher_a90d589a165f1378458383eede3dcc73f}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!indent@{indent}}
+\index{indent@{indent}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{indent}{indent}}
+{\footnotesize\ttfamily case\+\_\+random\+\_\+gen\+\_\+fisher.\+indent}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a60cf17e3f0b3282f65f72bdd12a8d309}\label{namespacecase__random__gen__fisher_a60cf17e3f0b3282f65f72bdd12a8d309}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!json\_data@{json\_data}}
+\index{json\_data@{json\_data}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{json\_data}{json\_data}}
+{\footnotesize\ttfamily case\+\_\+random\+\_\+gen\+\_\+fisher.\+json\+\_\+data}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  \{}
+\DoxyCodeLine{2     \textcolor{stringliteral}{"{}timing\_info"{}}: \{\textcolor{stringliteral}{"{}start\_time"{}}: START\_TIME, \textcolor{stringliteral}{"{}end\_time"{}}: END\_TIME, \textcolor{stringliteral}{"{}time\_step"{}}: TIME\_STEP, \textcolor{stringliteral}{"{}auction\_frequency"{}}: AUCTION\_DT\},}
+\DoxyCodeLine{3     \textcolor{stringliteral}{"{}fleets"{}}: fleets,}
+\DoxyCodeLine{4     \textcolor{stringliteral}{"{}flights"{}}: flights,}
+\DoxyCodeLine{5     \textcolor{stringliteral}{"{}vertiports"{}}: vertiports,}
+\DoxyCodeLine{6     \textcolor{stringliteral}{"{}routes"{}}: routes}
+\DoxyCodeLine{7 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_ad23367cc7e7bc01a413151f46524dcb8}\label{namespacecase__random__gen__fisher_ad23367cc7e7bc01a413151f46524dcb8}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!N\_FLIGHTS@{N\_FLIGHTS}}
+\index{N\_FLIGHTS@{N\_FLIGHTS}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{N\_FLIGHTS}{N\_FLIGHTS}}
+{\footnotesize\ttfamily case\+\_\+random\+\_\+gen\+\_\+fisher.\+N\+\_\+\+FLIGHTS = random.\+randint(10, 15)}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_ad607554da09e805832b27ccc34c8fe05}\label{namespacecase__random__gen__fisher_ad607554da09e805832b27ccc34c8fe05}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!NUM\_FLEETS@{NUM\_FLEETS}}
+\index{NUM\_FLEETS@{NUM\_FLEETS}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{NUM\_FLEETS}{NUM\_FLEETS}}
+{\footnotesize\ttfamily int case\+\_\+random\+\_\+gen\+\_\+fisher.\+NUM\+\_\+\+FLEETS = 10}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a40a2fa38e547c9b9d7dfded2a074a5f3}\label{namespacecase__random__gen__fisher_a40a2fa38e547c9b9d7dfded2a074a5f3}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!START\_TIME@{START\_TIME}}
+\index{START\_TIME@{START\_TIME}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{START\_TIME}{START\_TIME}}
+{\footnotesize\ttfamily int case\+\_\+random\+\_\+gen\+\_\+fisher.\+START\+\_\+\+TIME = 1}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_ab63ec3d9ff57a70efbdd0c8464343979}\label{namespacecase__random__gen__fisher_ab63ec3d9ff57a70efbdd0c8464343979}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!test\_cases\_directory@{test\_cases\_directory}}
+\index{test\_cases\_directory@{test\_cases\_directory}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{test\_cases\_directory}{test\_cases\_directory}}
+{\footnotesize\ttfamily case\+\_\+random\+\_\+gen\+\_\+fisher.\+test\+\_\+cases\+\_\+directory = os.\+path.\+join(\mbox{\hyperlink{namespacecase__random__gen__fisher_a6eba48ebf3f226d7a34dd8aa5c2c0995}{current\+\_\+directory}}, \textquotesingle{}test\+\_\+cases\textquotesingle{})}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_acc0ed9d0e832d73bbcae341d153b28b6}\label{namespacecase__random__gen__fisher_acc0ed9d0e832d73bbcae341d153b28b6}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!TIME\_STEP@{TIME\_STEP}}
+\index{TIME\_STEP@{TIME\_STEP}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{TIME\_STEP}{TIME\_STEP}}
+{\footnotesize\ttfamily int case\+\_\+random\+\_\+gen\+\_\+fisher.\+TIME\+\_\+\+STEP = 1}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_a09d0225045bdd21b210b19443914f576}\label{namespacecase__random__gen__fisher_a09d0225045bdd21b210b19443914f576}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!total\_capacity@{total\_capacity}}
+\index{total\_capacity@{total\_capacity}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{total\_capacity}{total\_capacity}}
+{\footnotesize\ttfamily case\+\_\+random\+\_\+gen\+\_\+fisher.\+total\+\_\+capacity = sum(vertiport\mbox{[}\char`\"{}hold\+\_\+capacity\char`\"{}\mbox{]} for vertiport in vertiports.\+values())}
+
+\mbox{\Hypertarget{namespacecase__random__gen__fisher_aaf27b39fe35078416f4eeca812f5f0f1}\label{namespacecase__random__gen__fisher_aaf27b39fe35078416f4eeca812f5f0f1}} 
+\index{case\_random\_gen\_fisher@{case\_random\_gen\_fisher}!vertiports@{vertiports}}
+\index{vertiports@{vertiports}!case\_random\_gen\_fisher@{case\_random\_gen\_fisher}}
+\doxysubsubsection{\texorpdfstring{vertiports}{vertiports}}
+{\footnotesize\ttfamily dictionary case\+\_\+random\+\_\+gen\+\_\+fisher.\+vertiports}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  \{}
+\DoxyCodeLine{2     \textcolor{stringliteral}{"{}V001"{}}: \{\textcolor{stringliteral}{"{}latitude"{}}: 37.766699, \textcolor{stringliteral}{"{}longitude"{}}: -\/122.3903664, \textcolor{stringliteral}{"{}landing\_capacity"{}}: random.randint(1, 3), \textcolor{stringliteral}{"{}takeoff\_capacity"{}}: random.randint(1, 5), \textcolor{stringliteral}{"{}hold\_capacity"{}}: 8\},}
+\DoxyCodeLine{3     \textcolor{stringliteral}{"{}V002"{}}: \{\textcolor{stringliteral}{"{}latitude"{}}: 37.8361761, \textcolor{stringliteral}{"{}longitude"{}}: -\/122.2668028, \textcolor{stringliteral}{"{}landing\_capacity"{}}: random.randint(1, 3), \textcolor{stringliteral}{"{}takeoff\_capacity"{}}: random.randint(1, 5), \textcolor{stringliteral}{"{}hold\_capacity"{}}: 8\},}
+\DoxyCodeLine{4     \textcolor{stringliteral}{"{}V003"{}}: \{\textcolor{stringliteral}{"{}latitude"{}}: 37.7835538, \textcolor{stringliteral}{"{}longitude"{}}: -\/122.5067642, \textcolor{stringliteral}{"{}landing\_capacity"{}}: random.randint(1, 3), \textcolor{stringliteral}{"{}takeoff\_capacity"{}}: random.randint(1, 5), \textcolor{stringliteral}{"{}hold\_capacity"{}}: 8\},}
+\DoxyCodeLine{5     \textcolor{stringliteral}{"{}V004"{}}: \{\textcolor{stringliteral}{"{}latitude"{}}: 37.9472484, \textcolor{stringliteral}{"{}longitude"{}}: -\/122.4880737, \textcolor{stringliteral}{"{}landing\_capacity"{}}: random.randint(1, 3), \textcolor{stringliteral}{"{}takeoff\_capacity"{}}: random.randint(1, 5), \textcolor{stringliteral}{"{}hold\_capacity"{}}: 8\},}
+\DoxyCodeLine{6     \textcolor{stringliteral}{"{}V005"{}}: \{\textcolor{stringliteral}{"{}latitude"{}}: 37.38556649999999, \textcolor{stringliteral}{"{}longitude"{}}: -\/121.9723564, \textcolor{stringliteral}{"{}landing\_capacity"{}}: random.randint(1, 3), \textcolor{stringliteral}{"{}takeoff\_capacity"{}}: random.randint(1, 5), \textcolor{stringliteral}{"{}hold\_capacity"{}}: 8\},}
+\DoxyCodeLine{7     \textcolor{stringliteral}{"{}V006"{}}: \{\textcolor{stringliteral}{"{}latitude"{}}: 37.25214395119753, \textcolor{stringliteral}{"{}longitude"{}}: -\/122.4066509403772, \textcolor{stringliteral}{"{}landing\_capacity"{}}: random.randint(1, 3), \textcolor{stringliteral}{"{}takeoff\_capacity"{}}: random.randint(1, 5), \textcolor{stringliteral}{"{}hold\_capacity"{}}: 8\},}
+\DoxyCodeLine{8     \textcolor{stringliteral}{"{}V007"{}}: \{\textcolor{stringliteral}{"{}latitude"{}}: 38.58856301092047, \textcolor{stringliteral}{"{}longitude"{}}: -\/121.5627454937505, \textcolor{stringliteral}{"{}landing\_capacity"{}}: random.randint(1, 3), \textcolor{stringliteral}{"{}takeoff\_capacity"{}}: random.randint(1, 5), \textcolor{stringliteral}{"{}hold\_capacity"{}}: 8\},}
+\DoxyCodeLine{9 \}}
+
+\end{DoxyCode}

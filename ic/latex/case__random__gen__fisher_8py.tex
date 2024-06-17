@@ -1,0 +1,55 @@
+\hypertarget{case__random__gen__fisher_8py}{}\doxysection{fisher/case\+\_\+random\+\_\+gen\+\_\+fisher.py File Reference}
+\label{case__random__gen__fisher_8py}\index{fisher/case\_random\_gen\_fisher.py@{fisher/case\_random\_gen\_fisher.py}}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacecase__random__gen__fisher}{case\+\_\+random\+\_\+gen\+\_\+fisher}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacecase__random__gen__fisher_af6066c66958a3cc5ec05e8dd41eb99a2}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+generate\+\_\+flights}} ()
+\item 
+def \mbox{\hyperlink{namespacecase__random__gen__fisher_a68e20bbc4c403c50806dd31207e3b881}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+calculate\+\_\+distance}} (origin, destination)
+\item 
+def \mbox{\hyperlink{namespacecase__random__gen__fisher_a4608437ec8ffd0ca250e385bda4c7422}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+generate\+\_\+fleets}} (flights\+\_\+data)
+\item 
+def \mbox{\hyperlink{namespacecase__random__gen__fisher_a137cfe9466a58f4fc725334d006e47e1}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+generate\+\_\+routes}} (vertiports)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{namespacecase__random__gen__fisher_a40a2fa38e547c9b9d7dfded2a074a5f3}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+START\+\_\+\+TIME}} = 1
+\item 
+int \mbox{\hyperlink{namespacecase__random__gen__fisher_af5412579ff10949d555f39c2cdb67838}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+END\+\_\+\+TIME}} = 100
+\item 
+int \mbox{\hyperlink{namespacecase__random__gen__fisher_acc0ed9d0e832d73bbcae341d153b28b6}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+TIME\+\_\+\+STEP}} = 1
+\item 
+int \mbox{\hyperlink{namespacecase__random__gen__fisher_a93fd5e49b92a521f2884305bb165f4b3}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+AUCTION\+\_\+\+DT}} = 10
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_ad23367cc7e7bc01a413151f46524dcb8}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+N\+\_\+\+FLIGHTS}} = random.\+randint(10, 15)
+\item 
+int \mbox{\hyperlink{namespacecase__random__gen__fisher_ad607554da09e805832b27ccc34c8fe05}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+NUM\+\_\+\+FLEETS}} = 10
+\item 
+dictionary \mbox{\hyperlink{namespacecase__random__gen__fisher_aaf27b39fe35078416f4eeca812f5f0f1}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+vertiports}}
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a09d0225045bdd21b210b19443914f576}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+total\+\_\+capacity}} = sum(vertiport\mbox{[}\char`\"{}hold\+\_\+capacity\char`\"{}\mbox{]} for vertiport in vertiports.\+values())
+\item 
+def \mbox{\hyperlink{namespacecase__random__gen__fisher_a7688535b4d466de63dfcfdd410d5ad0e}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+fleets}} = generate\+\_\+fleets(list(flights.\+keys()))
+\item 
+dictionary \mbox{\hyperlink{namespacecase__random__gen__fisher_a60cf17e3f0b3282f65f72bdd12a8d309}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+json\+\_\+data}}
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a878bd5f010e9710f1cad1687dbfbd275}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+current\+\_\+datetime}} = datetime.\+now()
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_ad691f6681f030628e3563667a32f76b6}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+formatted\+\_\+datetime}} = current\+\_\+datetime.\+strftime(\char`\"{}\%Y\%m\%d\+\_\+\%H\%M\%S\char`\"{})
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a6eba48ebf3f226d7a34dd8aa5c2c0995}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+current\+\_\+directory}} = os.\+getcwd()
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_ab63ec3d9ff57a70efbdd0c8464343979}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+test\+\_\+cases\+\_\+directory}} = os.\+path.\+join(current\+\_\+directory, \textquotesingle{}test\+\_\+cases\textquotesingle{})
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a3dcdd0f320cbb881b3f0503d1244f13e}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+file\+\_\+path}} = os.\+path.\+join(test\+\_\+cases\+\_\+directory, f\textquotesingle{}casef\+\_\+\{formatted\+\_\+datetime\}.json\textquotesingle{})
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a20cbd0afce3a826b2ef3cecc90b814bb}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+f}}
+\item 
+\mbox{\hyperlink{namespacecase__random__gen__fisher_a90d589a165f1378458383eede3dcc73f}{case\+\_\+random\+\_\+gen\+\_\+fisher.\+indent}}
+\end{DoxyCompactItemize}

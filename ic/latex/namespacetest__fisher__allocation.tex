@@ -1,0 +1,113 @@
+\hypertarget{namespacetest__fisher__allocation}{}\doxysection{test\+\_\+fisher\+\_\+allocation Namespace Reference}
+\label{namespacetest__fisher__allocation}\index{test\_fisher\_allocation@{test\_fisher\_allocation}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacetest__fisher__allocation_a626b3e4bf1c0b3eb1b238abb3387612e}{test\+\_\+update\+\_\+basic\+\_\+agents}} ()
+\item 
+def \mbox{\hyperlink{namespacetest__fisher__allocation_aca3c7da6187a9b59638780229d9d596b}{test\+\_\+update\+\_\+market}} ()
+\item 
+def \mbox{\hyperlink{namespacetest__fisher__allocation_a301ca4f41bc468b5222c3d3f7dfe5c31}{test\+\_\+run\+\_\+market}} (plotting=False, rational=False, homogeneous=False)
+\item 
+def \mbox{\hyperlink{namespacetest__fisher__allocation_a1b6c0bf2568908f0784be94b7f29f1d9}{test\+\_\+construct\+\_\+and\+\_\+run\+\_\+market}} (data)
+\item 
+def \mbox{\hyperlink{namespacetest__fisher__allocation_a9ab1fa7ae7ebf48365a5e85e503e3f41}{load\+\_\+json}} (file=None)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{namespacetest__fisher__allocation_a582eccd3a758ce4589ed0fc9c8c2b7fb}{file\+\_\+path}} = \char`\"{}test\+\_\+cases/case2\+\_\+fisher.\+json\char`\"{}
+\item 
+def \mbox{\hyperlink{namespacetest__fisher__allocation_aab2fe8fbcceaf7fc3a5295105f8defce}{test\+\_\+case\+\_\+data}} = \mbox{\hyperlink{namespacetest__fisher__allocation_a9ab1fa7ae7ebf48365a5e85e503e3f41}{load\+\_\+json}}(\mbox{\hyperlink{namespacetest__fisher__allocation_a582eccd3a758ce4589ed0fc9c8c2b7fb}{file\+\_\+path}})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacetest__fisher__allocation_a9ab1fa7ae7ebf48365a5e85e503e3f41}\label{namespacetest__fisher__allocation_a9ab1fa7ae7ebf48365a5e85e503e3f41}} 
+\index{test\_fisher\_allocation@{test\_fisher\_allocation}!load\_json@{load\_json}}
+\index{load\_json@{load\_json}!test\_fisher\_allocation@{test\_fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{load\_json()}{load\_json()}}
+{\footnotesize\ttfamily def test\+\_\+fisher\+\_\+allocation.\+load\+\_\+json (\begin{DoxyParamCaption}\item[{}]{file = {\ttfamily None} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load a case file for a fisher market test case from a JSON file.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacetest__fisher__allocation_a1b6c0bf2568908f0784be94b7f29f1d9}\label{namespacetest__fisher__allocation_a1b6c0bf2568908f0784be94b7f29f1d9}} 
+\index{test\_fisher\_allocation@{test\_fisher\_allocation}!test\_construct\_and\_run\_market@{test\_construct\_and\_run\_market}}
+\index{test\_construct\_and\_run\_market@{test\_construct\_and\_run\_market}!test\_fisher\_allocation@{test\_fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{test\_construct\_and\_run\_market()}{test\_construct\_and\_run\_market()}}
+{\footnotesize\ttfamily def test\+\_\+fisher\+\_\+allocation.\+test\+\_\+construct\+\_\+and\+\_\+run\+\_\+market (\begin{DoxyParamCaption}\item[{}]{data }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacetest__fisher__allocation_a1b6c0bf2568908f0784be94b7f29f1d9_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacetest__fisher__allocation_a301ca4f41bc468b5222c3d3f7dfe5c31}\label{namespacetest__fisher__allocation_a301ca4f41bc468b5222c3d3f7dfe5c31}} 
+\index{test\_fisher\_allocation@{test\_fisher\_allocation}!test\_run\_market@{test\_run\_market}}
+\index{test\_run\_market@{test\_run\_market}!test\_fisher\_allocation@{test\_fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{test\_run\_market()}{test\_run\_market()}}
+{\footnotesize\ttfamily def test\+\_\+fisher\+\_\+allocation.\+test\+\_\+run\+\_\+market (\begin{DoxyParamCaption}\item[{}]{plotting = {\ttfamily False},  }\item[{}]{rational = {\ttfamily False},  }\item[{}]{homogeneous = {\ttfamily False} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to update agents parameters
+num_agents (int): number of agents 
+num_goods (int): number of goods
+constraints_per_agent (list, nx1): number of constraints per agent
+w (list, num_agetns x 1): budget of each agent 
+p (list, num_goods x 1): price of each good
+r (list, num_agents x 1): rebates of each agent
+constraints (matrix, num_constraints x num_goods): constraints of each agent
+\end{DoxyVerb}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacetest__fisher__allocation_a301ca4f41bc468b5222c3d3f7dfe5c31_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacetest__fisher__allocation_a626b3e4bf1c0b3eb1b238abb3387612e}\label{namespacetest__fisher__allocation_a626b3e4bf1c0b3eb1b238abb3387612e}} 
+\index{test\_fisher\_allocation@{test\_fisher\_allocation}!test\_update\_basic\_agents@{test\_update\_basic\_agents}}
+\index{test\_update\_basic\_agents@{test\_update\_basic\_agents}!test\_fisher\_allocation@{test\_fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{test\_update\_basic\_agents()}{test\_update\_basic\_agents()}}
+{\footnotesize\ttfamily def test\+\_\+fisher\+\_\+allocation.\+test\+\_\+update\+\_\+basic\+\_\+agents (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacetest__fisher__allocation_a626b3e4bf1c0b3eb1b238abb3387612e_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacetest__fisher__allocation_aca3c7da6187a9b59638780229d9d596b}\label{namespacetest__fisher__allocation_aca3c7da6187a9b59638780229d9d596b}} 
+\index{test\_fisher\_allocation@{test\_fisher\_allocation}!test\_update\_market@{test\_update\_market}}
+\index{test\_update\_market@{test\_update\_market}!test\_fisher\_allocation@{test\_fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{test\_update\_market()}{test\_update\_market()}}
+{\footnotesize\ttfamily def test\+\_\+fisher\+\_\+allocation.\+test\+\_\+update\+\_\+market (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacetest__fisher__allocation_aca3c7da6187a9b59638780229d9d596b_cgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacetest__fisher__allocation_a582eccd3a758ce4589ed0fc9c8c2b7fb}\label{namespacetest__fisher__allocation_a582eccd3a758ce4589ed0fc9c8c2b7fb}} 
+\index{test\_fisher\_allocation@{test\_fisher\_allocation}!file\_path@{file\_path}}
+\index{file\_path@{file\_path}!test\_fisher\_allocation@{test\_fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{file\_path}{file\_path}}
+{\footnotesize\ttfamily string test\+\_\+fisher\+\_\+allocation.\+file\+\_\+path = \char`\"{}test\+\_\+cases/case2\+\_\+fisher.\+json\char`\"{}}
+
+\mbox{\Hypertarget{namespacetest__fisher__allocation_aab2fe8fbcceaf7fc3a5295105f8defce}\label{namespacetest__fisher__allocation_aab2fe8fbcceaf7fc3a5295105f8defce}} 
+\index{test\_fisher\_allocation@{test\_fisher\_allocation}!test\_case\_data@{test\_case\_data}}
+\index{test\_case\_data@{test\_case\_data}!test\_fisher\_allocation@{test\_fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{test\_case\_data}{test\_case\_data}}
+{\footnotesize\ttfamily def test\+\_\+fisher\+\_\+allocation.\+test\+\_\+case\+\_\+data = \mbox{\hyperlink{namespacetest__fisher__allocation_a9ab1fa7ae7ebf48365a5e85e503e3f41}{load\+\_\+json}}(\mbox{\hyperlink{namespacetest__fisher__allocation_a582eccd3a758ce4589ed0fc9c8c2b7fb}{file\+\_\+path}})}
+

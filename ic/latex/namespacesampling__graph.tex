@@ -1,0 +1,214 @@
+\hypertarget{namespacesampling__graph}{}\doxysection{sampling\+\_\+graph Namespace Reference}
+\label{namespacesampling__graph}\index{sampling\_graph@{sampling\_graph}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_ae43087270a6ecae76a9d76e77d483fde}{agent\+\_\+probability\+\_\+graph}} (edge\+\_\+information, x)
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_a4089bafdbdc5a523e8ec0267d4a57c55}{parse\+\_\+node\+\_\+label}} (node)
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_ad59ff5199920ade7cb1eb12310d0c731}{custom\+\_\+layout}} (G)
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_a21871a8f763d4de2fa1f022c7bf97c25}{agent\+\_\+probability\+\_\+graph\+\_\+extended}} (edge\+\_\+information, x, agent\+\_\+number=1, output\+\_\+folder=False)
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_ac2a8b051cc472aa14ab2f647245eb5bb}{sample\+\_\+path}} (G, start\+\_\+node, agent\+\_\+allocations)
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_adcae46cd430b9c8653de384027743cf9}{plot\+\_\+sample\+\_\+path}} (G, sampled\+\_\+path)
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_a7f2f5dc3804b8586c69167423d48ce09}{plot\+\_\+sample\+\_\+path\+\_\+extended}} (G, sampled\+\_\+path, agent\+\_\+number, output\+\_\+folder=False)
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_aa84b8ac6c269a41dda8ca3bd1a6a9b7d}{build\+\_\+edge\+\_\+information}} (goods\+\_\+list)
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_af8c9bc586b9d818d06487a5e6153eefd}{build\+\_\+agent\+\_\+edge\+\_\+utilities}} (edge\+\_\+information, agents\+\_\+goods\+\_\+list, utility\+\_\+values)
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_ace21282317e2fb5912b6915f09e31219}{process\+\_\+allocations}} (x, edge\+\_\+information, agent\+\_\+goods\+\_\+lists)
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_a15b93c822aac24aaca67238fda9a87fd}{mapping\+\_\+agent\+\_\+to\+\_\+full\+\_\+data}} (full\+\_\+edge\+\_\+information, sampled\+\_\+edges)
+\item 
+def \mbox{\hyperlink{namespacesampling__graph_a076191b964763e6de1ab1052437b9232}{mapping\+\_\+goods\+\_\+from\+\_\+allocation}} (new\+\_\+allocations, goods\+\_\+list)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacesampling__graph_ae43087270a6ecae76a9d76e77d483fde}\label{namespacesampling__graph_ae43087270a6ecae76a9d76e77d483fde}} 
+\index{sampling\_graph@{sampling\_graph}!agent\_probability\_graph@{agent\_probability\_graph}}
+\index{agent\_probability\_graph@{agent\_probability\_graph}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{agent\_probability\_graph()}{agent\_probability\_graph()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+agent\+\_\+probability\+\_\+graph (\begin{DoxyParamCaption}\item[{}]{edge\+\_\+information,  }\item[{}]{x }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacesampling__graph_a21871a8f763d4de2fa1f022c7bf97c25}\label{namespacesampling__graph_a21871a8f763d4de2fa1f022c7bf97c25}} 
+\index{sampling\_graph@{sampling\_graph}!agent\_probability\_graph\_extended@{agent\_probability\_graph\_extended}}
+\index{agent\_probability\_graph\_extended@{agent\_probability\_graph\_extended}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{agent\_probability\_graph\_extended()}{agent\_probability\_graph\_extended()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+agent\+\_\+probability\+\_\+graph\+\_\+extended (\begin{DoxyParamCaption}\item[{}]{edge\+\_\+information,  }\item[{}]{x,  }\item[{}]{agent\+\_\+number = {\ttfamily 1},  }\item[{}]{output\+\_\+folder = {\ttfamily False} }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacesampling__graph_a21871a8f763d4de2fa1f022c7bf97c25_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacesampling__graph_a21871a8f763d4de2fa1f022c7bf97c25_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacesampling__graph_af8c9bc586b9d818d06487a5e6153eefd}\label{namespacesampling__graph_af8c9bc586b9d818d06487a5e6153eefd}} 
+\index{sampling\_graph@{sampling\_graph}!build\_agent\_edge\_utilities@{build\_agent\_edge\_utilities}}
+\index{build\_agent\_edge\_utilities@{build\_agent\_edge\_utilities}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{build\_agent\_edge\_utilities()}{build\_agent\_edge\_utilities()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+build\+\_\+agent\+\_\+edge\+\_\+utilities (\begin{DoxyParamCaption}\item[{}]{edge\+\_\+information,  }\item[{}]{agents\+\_\+goods\+\_\+list,  }\item[{}]{utility\+\_\+values }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Build a dictionary of edges with node tuples and utility values for each agent.
+This creates utility values for agents goods mapped to the master list
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacesampling__graph_aa84b8ac6c269a41dda8ca3bd1a6a9b7d}\label{namespacesampling__graph_aa84b8ac6c269a41dda8ca3bd1a6a9b7d}} 
+\index{sampling\_graph@{sampling\_graph}!build\_edge\_information@{build\_edge\_information}}
+\index{build\_edge\_information@{build\_edge\_information}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{build\_edge\_information()}{build\_edge\_information()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+build\+\_\+edge\+\_\+information (\begin{DoxyParamCaption}\item[{}]{goods\+\_\+list }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Build edge information from goods list.
+The last good is the default good so it is removed
+Outputs: a dictionary with all the labeled edges. This would a master list.
+\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacesampling__graph_aa84b8ac6c269a41dda8ca3bd1a6a9b7d_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacesampling__graph_ad59ff5199920ade7cb1eb12310d0c731}\label{namespacesampling__graph_ad59ff5199920ade7cb1eb12310d0c731}} 
+\index{sampling\_graph@{sampling\_graph}!custom\_layout@{custom\_layout}}
+\index{custom\_layout@{custom\_layout}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{custom\_layout()}{custom\_layout()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+custom\+\_\+layout (\begin{DoxyParamCaption}\item[{}]{G }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=348pt]{namespacesampling__graph_ad59ff5199920ade7cb1eb12310d0c731_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacesampling__graph_ad59ff5199920ade7cb1eb12310d0c731_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacesampling__graph_a15b93c822aac24aaca67238fda9a87fd}\label{namespacesampling__graph_a15b93c822aac24aaca67238fda9a87fd}} 
+\index{sampling\_graph@{sampling\_graph}!mapping\_agent\_to\_full\_data@{mapping\_agent\_to\_full\_data}}
+\index{mapping\_agent\_to\_full\_data@{mapping\_agent\_to\_full\_data}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{mapping\_agent\_to\_full\_data()}{mapping\_agent\_to\_full\_data()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+mapping\+\_\+agent\+\_\+to\+\_\+full\+\_\+data (\begin{DoxyParamCaption}\item[{}]{full\+\_\+edge\+\_\+information,  }\item[{}]{sampled\+\_\+edges }\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacesampling__graph_a15b93c822aac24aaca67238fda9a87fd_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacesampling__graph_a076191b964763e6de1ab1052437b9232}\label{namespacesampling__graph_a076191b964763e6de1ab1052437b9232}} 
+\index{sampling\_graph@{sampling\_graph}!mapping\_goods\_from\_allocation@{mapping\_goods\_from\_allocation}}
+\index{mapping\_goods\_from\_allocation@{mapping\_goods\_from\_allocation}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{mapping\_goods\_from\_allocation()}{mapping\_goods\_from\_allocation()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+mapping\+\_\+goods\+\_\+from\+\_\+allocation (\begin{DoxyParamCaption}\item[{}]{new\+\_\+allocations,  }\item[{}]{goods\+\_\+list }\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacesampling__graph_a076191b964763e6de1ab1052437b9232_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacesampling__graph_a4089bafdbdc5a523e8ec0267d4a57c55}\label{namespacesampling__graph_a4089bafdbdc5a523e8ec0267d4a57c55}} 
+\index{sampling\_graph@{sampling\_graph}!parse\_node\_label@{parse\_node\_label}}
+\index{parse\_node\_label@{parse\_node\_label}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{parse\_node\_label()}{parse\_node\_label()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+parse\+\_\+node\+\_\+label (\begin{DoxyParamCaption}\item[{}]{node }\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacesampling__graph_a4089bafdbdc5a523e8ec0267d4a57c55_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacesampling__graph_adcae46cd430b9c8653de384027743cf9}\label{namespacesampling__graph_adcae46cd430b9c8653de384027743cf9}} 
+\index{sampling\_graph@{sampling\_graph}!plot\_sample\_path@{plot\_sample\_path}}
+\index{plot\_sample\_path@{plot\_sample\_path}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{plot\_sample\_path()}{plot\_sample\_path()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+plot\+\_\+sample\+\_\+path (\begin{DoxyParamCaption}\item[{}]{G,  }\item[{}]{sampled\+\_\+path }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacesampling__graph_a7f2f5dc3804b8586c69167423d48ce09}\label{namespacesampling__graph_a7f2f5dc3804b8586c69167423d48ce09}} 
+\index{sampling\_graph@{sampling\_graph}!plot\_sample\_path\_extended@{plot\_sample\_path\_extended}}
+\index{plot\_sample\_path\_extended@{plot\_sample\_path\_extended}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{plot\_sample\_path\_extended()}{plot\_sample\_path\_extended()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+plot\+\_\+sample\+\_\+path\+\_\+extended (\begin{DoxyParamCaption}\item[{}]{G,  }\item[{}]{sampled\+\_\+path,  }\item[{}]{agent\+\_\+number,  }\item[{}]{output\+\_\+folder = {\ttfamily False} }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacesampling__graph_a7f2f5dc3804b8586c69167423d48ce09_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacesampling__graph_ace21282317e2fb5912b6915f09e31219}\label{namespacesampling__graph_ace21282317e2fb5912b6915f09e31219}} 
+\index{sampling\_graph@{sampling\_graph}!process\_allocations@{process\_allocations}}
+\index{process\_allocations@{process\_allocations}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{process\_allocations()}{process\_allocations()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+process\+\_\+allocations (\begin{DoxyParamCaption}\item[{}]{x,  }\item[{}]{edge\+\_\+information,  }\item[{}]{agent\+\_\+goods\+\_\+lists }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Process the allocation matrix to output agent-specific goods allocations
+and corresponding indices in goods_list (master list). We also remove the default good
+for every agent to process sampling and integer allocaton
+
+Parameters:
+- x: np.ndarray of shape (len(goods_list), num_agents)
+- edge_information: dictionary of edge information ('edge_label': ('origin_node', 'destination_node')
+- agent_goods_lists: list of lists, each containing tuples of goods for each agent
+
+Returns:
+- agent_allocations: list of np.ndarrays, each containing the fractional allocations for an agent from the fisher market
+- agent_indices: list of np.ndarrays, each containing the indices in goods_list for an agent to map the indices to the master list
+- agent_edge_information: list of dictionaries, each containing the edge information for an agent goods  (edge_label: ('origin_node', 'destination_node'))
+\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacesampling__graph_ace21282317e2fb5912b6915f09e31219_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacesampling__graph_ac2a8b051cc472aa14ab2f647245eb5bb}\label{namespacesampling__graph_ac2a8b051cc472aa14ab2f647245eb5bb}} 
+\index{sampling\_graph@{sampling\_graph}!sample\_path@{sample\_path}}
+\index{sample\_path@{sample\_path}!sampling\_graph@{sampling\_graph}}
+\doxysubsubsection{\texorpdfstring{sample\_path()}{sample\_path()}}
+{\footnotesize\ttfamily def sampling\+\_\+graph.\+sample\+\_\+path (\begin{DoxyParamCaption}\item[{}]{G,  }\item[{}]{start\+\_\+node,  }\item[{}]{agent\+\_\+allocations }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Sample a path in the graph G starting from the given node.\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacesampling__graph_ac2a8b051cc472aa14ab2f647245eb5bb_icgraph}
+\end{center}
+\end{figure}

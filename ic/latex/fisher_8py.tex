@@ -1,0 +1,48 @@
+\hypertarget{fisher_8py}{}\doxysection{archive/fisher.py File Reference}
+\label{fisher_8py}\index{archive/fisher.py@{archive/fisher.py}}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacefisher}{fisher}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{namespacefisher_ad802c83dec5979ea4a274b2976cc4a87}{fisher.\+epsilon}} = 0.\+001
+\item 
+int \mbox{\hyperlink{namespacefisher_a392303755d2144c16a0b1bd38449c834}{fisher.\+beta}} = 1
+\item 
+int \mbox{\hyperlink{namespacefisher_a1600da4811dce03fd1221c68ed182830}{fisher.\+num\+\_\+agents}} = 10
+\item 
+int \mbox{\hyperlink{namespacefisher_a2c0ff94fef423113ffd601ea65771bbc}{fisher.\+num\+\_\+goods}} = 10
+\item 
+\mbox{\hyperlink{namespacefisher_a86d8a3d8850e0ffc00ebfbf6ca4ae021}{fisher.\+budget}} = np.\+random.\+rand(num\+\_\+agents)
+\item 
+tuple \mbox{\hyperlink{namespacefisher_a44293bd453a5a50fdb9e30cbbaa34441}{fisher.\+capacity}} = (num\+\_\+agents / num\+\_\+goods) $\ast$ np.\+ones(num\+\_\+goods)
+\item 
+\mbox{\hyperlink{namespacefisher_a507b1f9d29503ac307a1c555a4220c77}{fisher.\+valuation}} = np.\+random.\+rand(num\+\_\+agents, num\+\_\+goods)
+\item 
+\mbox{\hyperlink{namespacefisher_af1ec10b943c88e5fc8ae3357cfa09ad8}{fisher.\+initial\+\_\+prices}} = np.\+random.\+rand(num\+\_\+goods)
+\item 
+\mbox{\hyperlink{namespacefisher_a1abdb4a8607841cdec28d54694af40c0}{fisher.\+opt\+\_\+xi}} = np.\+zeros((num\+\_\+agents, num\+\_\+goods))
+\item 
+int \mbox{\hyperlink{namespacefisher_a8a888dd881aa17a5ea0e9ba7089b740b}{fisher.\+x\+\_\+iter}} = 1
+\item 
+\mbox{\hyperlink{namespacefisher_a0a7af14d563fcaaa178276864ad0eef6}{fisher.\+p}} = initial\+\_\+prices
+\item 
+list \mbox{\hyperlink{namespacefisher_a7275fb85554c93925f992bc148ddd6d6}{fisher.\+supply\+\_\+demand2}} = \mbox{[}$\,$\mbox{]}
+\item 
+tuple \mbox{\hyperlink{namespacefisher_acf2a899aaef6b17d3bbe4580fd248f90}{fisher.\+y\+\_\+in}} = (1/num\+\_\+goods) $\ast$ np.\+ones((num\+\_\+agents, num\+\_\+goods))
+\item 
+\mbox{\hyperlink{namespacefisher_a86f3bd1a041f635f0b7738990d8b7007}{fisher.\+x}} = cp.\+Variable(num\+\_\+goods)
+\item 
+\mbox{\hyperlink{namespacefisher_aba2dd6fa27aaaf576c6787ab76c140ab}{fisher.\+objective}} = cp.\+Maximize(budget\mbox{[}i\mbox{]} $\ast$ cp.\+log(valuation\mbox{[}i, \+:\mbox{]} @ x) -\/ p @ x -\/ (beta / 2) $\ast$ cp.\+square(cp.\+norm(x -\/ y\+\_\+in\mbox{[}i, \+:\mbox{]}, 2)))
+\item 
+list \mbox{\hyperlink{namespacefisher_a127e1d0a0de9e68a296f0554b185271c}{fisher.\+constraints}} = \mbox{[}x $>$= 0\mbox{]}
+\item 
+\mbox{\hyperlink{namespacefisher_a5e9b680dd2414f8b5b772dc91a3cb61a}{fisher.\+problem}} = cp.\+Problem(objective, constraints)
+\item 
+\mbox{\hyperlink{namespacefisher_a3090cc21ecf00832b6cbd3b717a18b26}{fisher.\+y}} = cp.\+Variable((num\+\_\+agents, num\+\_\+goods))
+\item 
+tuple \mbox{\hyperlink{namespacefisher_ac01f6ad2c0b3d2c9c6dbc9e68b424d09}{fisher.\+sup\+\_\+dem}} = np.\+sum(opt\+\_\+xi, axis=0) -\/ capacity.\+flatten()
+\end{DoxyCompactItemize}

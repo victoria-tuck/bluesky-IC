@@ -1,0 +1,171 @@
+\hypertarget{namespacefisher__int__optimization}{}\doxysection{fisher\+\_\+int\+\_\+optimization Namespace Reference}
+\label{namespacefisher__int__optimization}\index{fisher\_int\_optimization@{fisher\_int\_optimization}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacefisher__int__optimization_a522dab6ec1360abea71bf8d9dd3bed76}{int\+\_\+optimization}} (full\+\_\+allocations, capacity, budget, prices, utility, agents\+\_\+constraints, agent\+\_\+indices, agents\+\_\+allocations, output\+\_\+folder)
+\item 
+def \mbox{\hyperlink{namespacefisher__int__optimization_aa49e328f21008e5a0f7bc3c46b805971}{update\+\_\+allocation}} (x\+\_\+agents, xi\+\_\+values, agents\+\_\+with\+\_\+contested\+\_\+allocations)
+\item 
+def \mbox{\hyperlink{namespacefisher__int__optimization_aa787441acb9314ac1fa057f157058373}{print\+\_\+equilibrium\+\_\+results}} (iteration, equilibrium\+\_\+reached, prices, xi\+\_\+values, demand)
+\item 
+def \mbox{\hyperlink{namespacefisher__int__optimization_a08ead41267f292f6b4f4192c646a4116}{check\+\_\+equilibrium}} (demand, capacity)
+\item 
+def \mbox{\hyperlink{namespacefisher__int__optimization_a95426cd4632a77d80f1e3bc454c04b94}{find\+\_\+optimal\+\_\+xi}} (n, utility, A, b, prices, budget)
+\item 
+def \mbox{\hyperlink{namespacefisher__int__optimization_a2e39c53a4017ff1e028f631ec9f7ff6e}{contested\+\_\+allocations}} (integer\+\_\+allocations, capacity)
+\item 
+def \mbox{\hyperlink{namespacefisher__int__optimization_a19973ced79d890100b2daf4b85d9bf65}{map\+\_\+agent\+\_\+values}} (full\+\_\+x\+\_\+array, agent\+\_\+indices, agent\+\_\+values)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacefisher__int__optimization_a08ead41267f292f6b4f4192c646a4116}\label{namespacefisher__int__optimization_a08ead41267f292f6b4f4192c646a4116}} 
+\index{fisher\_int\_optimization@{fisher\_int\_optimization}!check\_equilibrium@{check\_equilibrium}}
+\index{check\_equilibrium@{check\_equilibrium}!fisher\_int\_optimization@{fisher\_int\_optimization}}
+\doxysubsubsection{\texorpdfstring{check\_equilibrium()}{check\_equilibrium()}}
+{\footnotesize\ttfamily def fisher\+\_\+int\+\_\+optimization.\+check\+\_\+equilibrium (\begin{DoxyParamCaption}\item[{}]{demand,  }\item[{}]{capacity }\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__int__optimization_a08ead41267f292f6b4f4192c646a4116_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__int__optimization_a2e39c53a4017ff1e028f631ec9f7ff6e}\label{namespacefisher__int__optimization_a2e39c53a4017ff1e028f631ec9f7ff6e}} 
+\index{fisher\_int\_optimization@{fisher\_int\_optimization}!contested\_allocations@{contested\_allocations}}
+\index{contested\_allocations@{contested\_allocations}!fisher\_int\_optimization@{fisher\_int\_optimization}}
+\doxysubsubsection{\texorpdfstring{contested\_allocations()}{contested\_allocations()}}
+{\footnotesize\ttfamily def fisher\+\_\+int\+\_\+optimization.\+contested\+\_\+allocations (\begin{DoxyParamCaption}\item[{}]{integer\+\_\+allocations,  }\item[{}]{capacity }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to check contested allocations
+Args:
+integer_allocations (np.array): stacked allocation matrix for all agents, integer (n_agents,n_goods)
+capacity (np.array): capacity vector (n_goods,)
+Returns:
+contested_edges (list): list of contested edges
+agents_with_contested_allocations (list): list of agents with contested allocations
+contested_edges_col (np.array): column of contested edges
+contested_agent_allocations (np.array): contested agent allocations\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__int__optimization_a2e39c53a4017ff1e028f631ec9f7ff6e_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__int__optimization_a95426cd4632a77d80f1e3bc454c04b94}\label{namespacefisher__int__optimization_a95426cd4632a77d80f1e3bc454c04b94}} 
+\index{fisher\_int\_optimization@{fisher\_int\_optimization}!find\_optimal\_xi@{find\_optimal\_xi}}
+\index{find\_optimal\_xi@{find\_optimal\_xi}!fisher\_int\_optimization@{fisher\_int\_optimization}}
+\doxysubsubsection{\texorpdfstring{find\_optimal\_xi()}{find\_optimal\_xi()}}
+{\footnotesize\ttfamily def fisher\+\_\+int\+\_\+optimization.\+find\+\_\+optimal\+\_\+xi (\begin{DoxyParamCaption}\item[{}]{n,  }\item[{}]{utility,  }\item[{}]{A,  }\item[{}]{b,  }\item[{}]{prices,  }\item[{}]{budget }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Finds the optimal value of xi that maximizes the utility function for agent i.
+
+Parameters:
+- n (int): The number of agents for the new market
+- utility (list): The utility values for the agent's goods .
+- A (numpy.ndarray): The coefficient matrix for the linear equality constraints for the agent.
+- b (numpy.ndarray): The constant vector for the linear equality constraints.
+- prices (numpy.ndarray): The prices for each good.
+- budget (float): The maximum budget constraint for each agent.
+Returns:
+- numpy.ndarray: The optimal values of xi.
+\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__int__optimization_a95426cd4632a77d80f1e3bc454c04b94_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__int__optimization_a522dab6ec1360abea71bf8d9dd3bed76}\label{namespacefisher__int__optimization_a522dab6ec1360abea71bf8d9dd3bed76}} 
+\index{fisher\_int\_optimization@{fisher\_int\_optimization}!int\_optimization@{int\_optimization}}
+\index{int\_optimization@{int\_optimization}!fisher\_int\_optimization@{fisher\_int\_optimization}}
+\doxysubsubsection{\texorpdfstring{int\_optimization()}{int\_optimization()}}
+{\footnotesize\ttfamily def fisher\+\_\+int\+\_\+optimization.\+int\+\_\+optimization (\begin{DoxyParamCaption}\item[{}]{full\+\_\+allocations,  }\item[{}]{capacity,  }\item[{}]{budget,  }\item[{}]{prices,  }\item[{}]{utility,  }\item[{}]{agents\+\_\+constraints,  }\item[{}]{agent\+\_\+indices,  }\item[{}]{agents\+\_\+allocations,  }\item[{}]{output\+\_\+folder }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to solve an integer optimization problem
+Args:
+x_agents (np.array): stacked allocation matrix for all agents, integer (n_agents,n_goods)
+capacity (np.array): capacity vector (n_goods,)
+budget (np.array): budget vector (n_agents,)
+prices (np.array): prices vector (n_goods,)
+utility (np.array): utility vector (n_agents,n_goods)
+A (list,n_agents): constraint matrix [np.array(n_constranst,n_goods), ...]
+b (np.array): constraint vector\end{DoxyVerb}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__int__optimization_a522dab6ec1360abea71bf8d9dd3bed76_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__int__optimization_a522dab6ec1360abea71bf8d9dd3bed76_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__int__optimization_a19973ced79d890100b2daf4b85d9bf65}\label{namespacefisher__int__optimization_a19973ced79d890100b2daf4b85d9bf65}} 
+\index{fisher\_int\_optimization@{fisher\_int\_optimization}!map\_agent\_values@{map\_agent\_values}}
+\index{map\_agent\_values@{map\_agent\_values}!fisher\_int\_optimization@{fisher\_int\_optimization}}
+\doxysubsubsection{\texorpdfstring{map\_agent\_values()}{map\_agent\_values()}}
+{\footnotesize\ttfamily def fisher\+\_\+int\+\_\+optimization.\+map\+\_\+agent\+\_\+values (\begin{DoxyParamCaption}\item[{}]{full\+\_\+x\+\_\+array,  }\item[{}]{agent\+\_\+indices,  }\item[{}]{agent\+\_\+values }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to map agent values to the index in agent indices
+Args:
+agent_indices (list): list of indices corresponding to the agents
+agent_values (list): list of values for each agent
+Returns:
+mapped_values (np.array): array of mapped values
+\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__int__optimization_a19973ced79d890100b2daf4b85d9bf65_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__int__optimization_aa787441acb9314ac1fa057f157058373}\label{namespacefisher__int__optimization_aa787441acb9314ac1fa057f157058373}} 
+\index{fisher\_int\_optimization@{fisher\_int\_optimization}!print\_equilibrium\_results@{print\_equilibrium\_results}}
+\index{print\_equilibrium\_results@{print\_equilibrium\_results}!fisher\_int\_optimization@{fisher\_int\_optimization}}
+\doxysubsubsection{\texorpdfstring{print\_equilibrium\_results()}{print\_equilibrium\_results()}}
+{\footnotesize\ttfamily def fisher\+\_\+int\+\_\+optimization.\+print\+\_\+equilibrium\+\_\+results (\begin{DoxyParamCaption}\item[{}]{iteration,  }\item[{}]{equilibrium\+\_\+reached,  }\item[{}]{prices,  }\item[{}]{xi\+\_\+values,  }\item[{}]{demand }\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__int__optimization_aa787441acb9314ac1fa057f157058373_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__int__optimization_aa49e328f21008e5a0f7bc3c46b805971}\label{namespacefisher__int__optimization_aa49e328f21008e5a0f7bc3c46b805971}} 
+\index{fisher\_int\_optimization@{fisher\_int\_optimization}!update\_allocation@{update\_allocation}}
+\index{update\_allocation@{update\_allocation}!fisher\_int\_optimization@{fisher\_int\_optimization}}
+\doxysubsubsection{\texorpdfstring{update\_allocation()}{update\_allocation()}}
+{\footnotesize\ttfamily def fisher\+\_\+int\+\_\+optimization.\+update\+\_\+allocation (\begin{DoxyParamCaption}\item[{}]{x\+\_\+agents,  }\item[{}]{xi\+\_\+values,  }\item[{}]{agents\+\_\+with\+\_\+contested\+\_\+allocations }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Function to update the allocation matrix with the new xi values
+Args:
+x_agents (list, nxm): allocation matrix
+xi_values (list, nxm): xi values
+agents_with_contested_allocations (list, nx1): agents with contested allocations
+\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__int__optimization_aa49e328f21008e5a0f7bc3c46b805971_icgraph}
+\end{center}
+\end{figure}

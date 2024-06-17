@@ -11,7 +11,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from fisher_allocation import update_basic_agents, update_market, run_basic_market, run_market, build_graph, construct_market
-from ic.VertiportStatus import VertiportStatus
+from VertiportStatus import VertiportStatus
 
 
 # parser = argparse.ArgumentParser(description="Inputs to test Fisher market implementation.")
@@ -157,7 +157,7 @@ def load_json(file=None):
 if __name__ == "__main__":
     # file_path = args.file
     # assert Path(file_path).is_file(), f"File at {file_path} does not exist."
-    file_path = "test_cases/case2_fisher.json"
+    file_path = "test_cases/case_2f.json"
     test_case_data = load_json(file_path)
     test_construct_and_run_market(test_case_data)
     # test_run_market(plotting=True, rational=False, homogeneous=True)

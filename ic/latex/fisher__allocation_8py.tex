@@ -1,0 +1,49 @@
+\hypertarget{fisher__allocation_8py}{}\doxysection{fisher/fisher\+\_\+allocation.py File Reference}
+\label{fisher__allocation_8py}\index{fisher/fisher\_allocation.py@{fisher/fisher\_allocation.py}}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacefisher__allocation}{fisher\+\_\+allocation}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a5984c4e964f0c00cc76ff995cb522ad7}{fisher\+\_\+allocation.\+build\+\_\+graph}} (vertiport\+\_\+status, timing\+\_\+info)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_aa4ab1bf9e9022278f3a29f574065cc47}{fisher\+\_\+allocation.\+construct\+\_\+market}} (market\+\_\+graph, flights, timing\+\_\+info, routes, vertiports)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_aeda724769c2dd677c90bfb4729223cc5}{fisher\+\_\+allocation.\+find\+\_\+capacity}} (goods\+\_\+list, route\+\_\+data, vertiport\+\_\+data)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a13185d853326fc308c1145d1745dac76}{fisher\+\_\+allocation.\+update\+\_\+basic\+\_\+market}} (x, values\+\_\+k, market\+\_\+settings, constraints)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_ac3b76e1179f3b4a7d50c16d32f294938}{fisher\+\_\+allocation.\+update\+\_\+market}} (x, values\+\_\+k, market\+\_\+settings, constraints, agent\+\_\+goods\+\_\+lists, goods\+\_\+list)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_af65811388487e0372eb53238e9daddc2}{fisher\+\_\+allocation.\+update\+\_\+basic\+\_\+agents}} (w, u, p, r, constraints, y, beta, rational=False)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a355802b551094276a41aaf9c65ccd695}{fisher\+\_\+allocation.\+update\+\_\+agents}} (w, u, p, r, constraints, goods\+\_\+list, agent\+\_\+goods\+\_\+lists, y, beta, rational=False, parallel=False)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a287e45ef9adc06884d6faeab368a3769}{fisher\+\_\+allocation.\+update\+\_\+agent}} (w\+\_\+i, u\+\_\+i, p, r\+\_\+i, constraints, y\+\_\+i, beta, rational=False, solver=cp.\+SCS)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a37afa05968ed26e7b67cdffad7b1df59}{fisher\+\_\+allocation.\+run\+\_\+basic\+\_\+market}} (initial\+\_\+values, agent\+\_\+settings, market\+\_\+settings, plotting=False, rational=False)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a62ad2eced1cf263bb32f837dd88aeb13}{fisher\+\_\+allocation.\+run\+\_\+market}} (initial\+\_\+values, agent\+\_\+settings, market\+\_\+settings, bookkeeping, plotting=True, rational=False, output\+\_\+folder=False)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a23fe8aed535de74598a9c9a6a8a0bd14}{fisher\+\_\+allocation.\+load\+\_\+json}} (file=None)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a414a388eac772bbdb2f3721c938e5f74}{fisher\+\_\+allocation.\+fisher\+\_\+allocation\+\_\+and\+\_\+payment}} (vertiport\+\_\+usage, flights, timing\+\_\+info, routes\+\_\+data, vertiports, output\+\_\+folder=None, save\+\_\+file=None, initial\+\_\+allocation=True)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacefisher__allocation_ad78597d8808fea2f9d9d03f07f062029}{fisher\+\_\+allocation.\+top\+\_\+level\+\_\+path}} = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parent.\+parent
+\item 
+bool \mbox{\hyperlink{namespacefisher__allocation_ae0aebeda1a9032cdbbc3212c4382a4f2}{fisher\+\_\+allocation.\+UPDATED\+\_\+\+APPROACH}} = True
+\item 
+int \mbox{\hyperlink{namespacefisher__allocation_af85fc3a9dc848f7b5a86a412174fa39f}{fisher\+\_\+allocation.\+TOL\+\_\+\+ERROR}} = 1e-\/3
+\item 
+int \mbox{\hyperlink{namespacefisher__allocation_affa48db32eac97d1e5383a59987e3510}{fisher\+\_\+allocation.\+MAX\+\_\+\+NUM\+\_\+\+ITERATIONS}} = 300
+\item 
+int \mbox{\hyperlink{namespacefisher__allocation_a679f17012aa24f3b8c6b89d5e312785c}{fisher\+\_\+allocation.\+BETA}} = 10
+\item 
+float \mbox{\hyperlink{namespacefisher__allocation_a777a4cd426adb8f2173b8abb7cd9c9a4}{fisher\+\_\+allocation.\+epsilon}} = 0.\+05
+\end{DoxyCompactItemize}

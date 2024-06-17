@@ -17,9 +17,9 @@ print(str(top_level_path))
 sys.path.append(str(top_level_path))
 
 import bluesky as bs
-from ic.VertiportStatus import VertiportStatus, draw_graph
-from ic.allocation import allocation_and_payment
-from ic.fisher.fisher_allocation import fisher_allocation_and_payment
+from VertiportStatus import VertiportStatus, draw_graph
+from allocation import allocation_and_payment
+from fisher.fisher_allocation import fisher_allocation_and_payment
 
 # Bluesky settings
 T_STEP = 10000
@@ -28,23 +28,23 @@ VISUALIZE = False
 LOG = True
 SIMDT = 1
 
-parser = argparse.ArgumentParser(description="Process a true/false argument.")
-parser.add_argument("--gui", action="store_true", help="Flag for running with gui.")
-parser.add_argument(
-    "--file", type=str, required=True, help="The path to the test case json file."
-)
-parser.add_argument(
-    "--scn_folder", type=str, help="The folder in which scenario files are saved."
-)
-parser.add_argument(
-    "--force_overwrite",
-    action="store_true",
-    help="Flag for overwriting the scenario file(s).",
-)
-parser.add_argument(
-    "--method", type=str, help="The method used to allocate flights."
-)
-args = parser.parse_args()
+# parser = argparse.ArgumentParser(description="Process a true/false argument.")
+# parser.add_argument("--gui", action="store_true", help="Flag for running with gui.")
+# parser.add_argument(
+#     "--file", type=str, required=True, help="The path to the test case json file."
+# )
+# parser.add_argument(
+#     "--scn_folder", type=str, help="The folder in which scenario files are saved."
+# )
+# parser.add_argument(
+#     "--force_overwrite",
+#     action="store_true",
+#     help="Flag for overwriting the scenario file(s).",
+# )
+# parser.add_argument(
+#     "--method", type=str, help="The method used to allocate flights."
+# )
+# args = parser.parse_args()
 
 
 def load_json(file=None):
@@ -80,7 +80,7 @@ def get_vehicle_info(flight, lat1, lon1, lat2, lon2):
     
 
     # Predefined placeholders as constants for now
-    return "B744", "FL250", 200, true_heading
+    return "B744", "FL250", 0, true_heading
 
 
 def get_lat_lon(vertiport):
@@ -181,17 +181,21 @@ def add_commands_for_flight(
     poly_name = f"{flight_id}_AREA"
     strategic_area_string = create_allocated_area(or_lat, or_lon, des_lat, des_lon, 3)
 
+
     stack_commands.extend(
         [
             f"{time_stamp}>CRE {flight_id} {veh_type} {or_lat} {or_lon} {head} {alt} {spd}\n",
             f"{time_stamp}>DEST {flight_id} {des_lat}, {des_lon}\n",
-            # f"{time_stamp}>SCHEDULE {arrival_time_stamp}, DEL {flight_id}\n",
-            f"{time_stamp}>POLY {poly_name},{strategic_area_string}\n",
-            f"{time_stamp}>AREA, {poly_name}\n",
-            f"{time_stamp}>SCHEDULE {arrival_time_stamp}, DEL {poly_name}\n",
+            f"{time_stamp}>SCHEDULE {arrival_time_stamp}, DEL {flight_id}\n",
+
+            # f"{time_stamp}>POLY {poly_name},{strategic_area_string}\n",
+            # f"{time_stamp}>AREA, {poly_name}\n",
+            # f"{time_stamp}>SCHEDULE {arrival_time_stamp}, DEL {poly_name}\n",
         ]
     
     )
+
+    
 
 def step_simulation(
     vertiport_usage, vertiports, flights, allocated_flights, stack_commands
@@ -212,7 +216,7 @@ def step_simulation(
         request = flight["requests"][request_id]
 
         # Move aircraft in VertiportStatus
-        vertiport_usage.move_aircraft(flight["origin_vertiport_id"], request)
+        # vertiport_usage.move_aircraft(flight["origin_vertiport_id"], request)
 
         # Add movement to stack commands
         origin_vertiport = vertiports[flight["origin_vertiport_id"]]
@@ -266,7 +270,10 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method="fisher")
             ordered_flights[appearance_time].append(flight_id)
 
     # Initialize stack commands
-    stack_commands = ["00:00:00.00>TRAILS ON\n00:00:00.00>PAN OAK\n00:00:00.00>ZOOM 1\n00:00:00.00>CDMETHOD STATEBASED\n00:00:00.00>DTMULT 30\n"]
+    stack_commands = ["00:00:00.00>TRAILS ON\n00:00:00.00>PAN CCR\n00:00:00.00>ZOOM 1\n00:00:00.00>CDMETHOD STATEBASED\n00:00:00.00>DTMULT 30\n"]
+    for vertiport_id in vertiports.keys():
+        vertiport_lat, vertiport_lon = get_lat_lon(vertiports[vertiport_id])
+        stack_commands.append(f"00:00:00.00>CIRCLE {vertiport_id},{vertiport_lat},{vertiport_lon},0.25,\n") # in nm
     
     start_time = time.time()
     initial_allocation = True
@@ -376,6 +383,8 @@ def write_scenario(scenario_folder, scenario_name, stack_commands):
         scenario_name (str): The desired name of the scenario file.
         stack_commands (list): A list of stack commands to write to the scenario file.
     """
+    stack_commands.sort(key=lambda x: x.split(">")[0])
+
     text = "".join(stack_commands)
 
     # Create directory if it doesn't exist
@@ -393,49 +402,50 @@ def write_scenario(scenario_folder, scenario_name, stack_commands):
 
 
 if __name__ == "__main__":
+    pass
     # Example call:
     # python3 main.py --file /path/to/test_case.json
     # python3 ic/main.py --file test_cases/case1.json --scn_folder /scenario/TEST_IC
-    file_path = args.file
-    assert Path(file_path).is_file(), f"File at {file_path} does not exist."
-    test_case_data = load_json(file_path)
-    file_name = Path(file_path).name
+    # file_path = args.file
+    # assert Path(file_path).is_file(), f"File at {file_path} does not exist."
+    # test_case_data = load_json(file_path)
+    # file_name = Path(file_path).name
 
-    # Create the scenario
-    if args.scn_folder is not None:
-        SCN_FOLDER = str(top_level_path) + args.scn_folder
-    else:
-        print(str(top_level_path))
-        SCN_FOLDER = str(top_level_path) + "/scenario/TEST_IC"
-        print(SCN_FOLDER)
-    SCN_NAME = file_name.split(".")[0]
-    path = f"{SCN_FOLDER}/{SCN_NAME}.scn"
+    # # Create the scenario
+    # if args.scn_folder is not None:
+    #     SCN_FOLDER = str(top_level_path) + args.scn_folder
+    # else:
+    #     print(str(top_level_path))
+    #     SCN_FOLDER = str(top_level_path) + "/scenario/TEST_IC"
+    #     print(SCN_FOLDER)
+    # SCN_NAME = file_name.split(".")[0]
+    # path = f"{SCN_FOLDER}/{SCN_NAME}.scn"
 
-    print(SCN_NAME)
+    # print(SCN_NAME)
 
-    # Check if the path exists and if the user wants to overwrite
-    if os.path.exists(path):
-        # Directly proceed if force overwrite is enabled; else, prompt the user
-        if (
-            not args.force_overwrite
-            and input(
-                "The scenario file already exists. Do you want to overwrite it? (y/n): "
-            ).lower()
-            != "y"
-        ):
-            print("File not overwritten. Exiting...")
-            sys.exit()
+    # # Check if the path exists and if the user wants to overwrite
+    # if os.path.exists(path):
+    #     # Directly proceed if force overwrite is enabled; else, prompt the user
+    #     if (
+    #         not args.force_overwrite
+    #         and input(
+    #             "The scenario file already exists. Do you want to overwrite it? (y/n): "
+    #         ).lower()
+    #         != "y"
+    #     ):
+    #         print("File not overwritten. Exiting...")
+    #         sys.exit()
 
-    # Create the scenario file and double check the correct path was used
-    # run_scenario(data, scenario_path, scenario_name, file_path, method="fisher")
-    path_to_scn_file = run_scenario(test_case_data, SCN_FOLDER, SCN_NAME, file_path, args.method)
-    print(path_to_scn_file)
-    assert path == path_to_scn_file, "An error occured while writing the scenario file."
+    # # Create the scenario file and double check the correct path was used
+    # # run_scenario(data, scenario_path, scenario_name, file_path, method="fisher")
+    # path_to_scn_file = run_scenario(test_case_data, SCN_FOLDER, SCN_NAME, file_path, args.method)
+    # print(path_to_scn_file)
+    # assert path == path_to_scn_file, "An error occured while writing the scenario file."
 
-    # Evaluate scenario
-    if args.gui:
-        # run_from_json(file_path, run_gui=True)
-        # Always call as false because the gui does not currently work
-        evaluate_scenario(path_to_scn_file, run_gui=False)
-    else:
-        evaluate_scenario(path_to_scn_file)
+    # # Evaluate scenario
+    # if args.gui:
+    #     # run_from_json(file_path, run_gui=True)
+    #     # Always call as false because the gui does not currently work
+    #     evaluate_scenario(path_to_scn_file, run_gui=False)
+    # else:
+    #     evaluate_scenario(path_to_scn_file)

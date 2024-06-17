@@ -1,0 +1,304 @@
+\hypertarget{namespacefisher__allocation}{}\doxysection{fisher\+\_\+allocation Namespace Reference}
+\label{namespacefisher__allocation}\index{fisher\_allocation@{fisher\_allocation}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a5984c4e964f0c00cc76ff995cb522ad7}{build\+\_\+graph}} (vertiport\+\_\+status, timing\+\_\+info)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_aa4ab1bf9e9022278f3a29f574065cc47}{construct\+\_\+market}} (market\+\_\+graph, flights, timing\+\_\+info, routes, vertiports)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_aeda724769c2dd677c90bfb4729223cc5}{find\+\_\+capacity}} (goods\+\_\+list, route\+\_\+data, vertiport\+\_\+data)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a13185d853326fc308c1145d1745dac76}{update\+\_\+basic\+\_\+market}} (x, values\+\_\+k, market\+\_\+settings, constraints)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_ac3b76e1179f3b4a7d50c16d32f294938}{update\+\_\+market}} (x, values\+\_\+k, market\+\_\+settings, constraints, agent\+\_\+goods\+\_\+lists, goods\+\_\+list)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_af65811388487e0372eb53238e9daddc2}{update\+\_\+basic\+\_\+agents}} (w, u, p, r, constraints, y, beta, rational=False)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a355802b551094276a41aaf9c65ccd695}{update\+\_\+agents}} (w, u, p, r, constraints, goods\+\_\+list, agent\+\_\+goods\+\_\+lists, y, beta, rational=False, parallel=False)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a287e45ef9adc06884d6faeab368a3769}{update\+\_\+agent}} (w\+\_\+i, u\+\_\+i, p, r\+\_\+i, constraints, y\+\_\+i, beta, rational=False, solver=cp.\+SCS)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a37afa05968ed26e7b67cdffad7b1df59}{run\+\_\+basic\+\_\+market}} (initial\+\_\+values, agent\+\_\+settings, market\+\_\+settings, plotting=False, rational=False)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a62ad2eced1cf263bb32f837dd88aeb13}{run\+\_\+market}} (initial\+\_\+values, agent\+\_\+settings, market\+\_\+settings, bookkeeping, plotting=True, rational=False, output\+\_\+folder=False)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a23fe8aed535de74598a9c9a6a8a0bd14}{load\+\_\+json}} (file=None)
+\item 
+def \mbox{\hyperlink{namespacefisher__allocation_a414a388eac772bbdb2f3721c938e5f74}{fisher\+\_\+allocation\+\_\+and\+\_\+payment}} (vertiport\+\_\+usage, flights, timing\+\_\+info, routes\+\_\+data, vertiports, output\+\_\+folder=None, save\+\_\+file=None, initial\+\_\+allocation=True)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacefisher__allocation_ad78597d8808fea2f9d9d03f07f062029}{top\+\_\+level\+\_\+path}} = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parent.\+parent
+\item 
+bool \mbox{\hyperlink{namespacefisher__allocation_ae0aebeda1a9032cdbbc3212c4382a4f2}{UPDATED\+\_\+\+APPROACH}} = True
+\item 
+int \mbox{\hyperlink{namespacefisher__allocation_af85fc3a9dc848f7b5a86a412174fa39f}{TOL\+\_\+\+ERROR}} = 1e-\/3
+\item 
+int \mbox{\hyperlink{namespacefisher__allocation_affa48db32eac97d1e5383a59987e3510}{MAX\+\_\+\+NUM\+\_\+\+ITERATIONS}} = 300
+\item 
+int \mbox{\hyperlink{namespacefisher__allocation_a679f17012aa24f3b8c6b89d5e312785c}{BETA}} = 10
+\item 
+float \mbox{\hyperlink{namespacefisher__allocation_a777a4cd426adb8f2173b8abb7cd9c9a4}{epsilon}} = 0.\+05
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacefisher__allocation_a5984c4e964f0c00cc76ff995cb522ad7}\label{namespacefisher__allocation_a5984c4e964f0c00cc76ff995cb522ad7}} 
+\index{fisher\_allocation@{fisher\_allocation}!build\_graph@{build\_graph}}
+\index{build\_graph@{build\_graph}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{build\_graph()}{build\_graph()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+build\+\_\+graph (\begin{DoxyParamCaption}\item[{}]{vertiport\+\_\+status,  }\item[{}]{timing\+\_\+info }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_a5984c4e964f0c00cc76ff995cb522ad7_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__allocation_aa4ab1bf9e9022278f3a29f574065cc47}\label{namespacefisher__allocation_aa4ab1bf9e9022278f3a29f574065cc47}} 
+\index{fisher\_allocation@{fisher\_allocation}!construct\_market@{construct\_market}}
+\index{construct\_market@{construct\_market}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{construct\_market()}{construct\_market()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+construct\+\_\+market (\begin{DoxyParamCaption}\item[{}]{market\+\_\+graph,  }\item[{}]{flights,  }\item[{}]{timing\+\_\+info,  }\item[{}]{routes,  }\item[{}]{vertiports }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}\end{DoxyVerb}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_aa4ab1bf9e9022278f3a29f574065cc47_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_aa4ab1bf9e9022278f3a29f574065cc47_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__allocation_aeda724769c2dd677c90bfb4729223cc5}\label{namespacefisher__allocation_aeda724769c2dd677c90bfb4729223cc5}} 
+\index{fisher\_allocation@{fisher\_allocation}!find\_capacity@{find\_capacity}}
+\index{find\_capacity@{find\_capacity}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{find\_capacity()}{find\_capacity()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+find\+\_\+capacity (\begin{DoxyParamCaption}\item[{}]{goods\+\_\+list,  }\item[{}]{route\+\_\+data,  }\item[{}]{vertiport\+\_\+data }\end{DoxyParamCaption})}
+
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_aeda724769c2dd677c90bfb4729223cc5_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__allocation_a414a388eac772bbdb2f3721c938e5f74}\label{namespacefisher__allocation_a414a388eac772bbdb2f3721c938e5f74}} 
+\index{fisher\_allocation@{fisher\_allocation}!fisher\_allocation\_and\_payment@{fisher\_allocation\_and\_payment}}
+\index{fisher\_allocation\_and\_payment@{fisher\_allocation\_and\_payment}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{fisher\_allocation\_and\_payment()}{fisher\_allocation\_and\_payment()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+fisher\+\_\+allocation\+\_\+and\+\_\+payment (\begin{DoxyParamCaption}\item[{}]{vertiport\+\_\+usage,  }\item[{}]{flights,  }\item[{}]{timing\+\_\+info,  }\item[{}]{routes\+\_\+data,  }\item[{}]{vertiports,  }\item[{}]{output\+\_\+folder = {\ttfamily None},  }\item[{}]{save\+\_\+file = {\ttfamily None},  }\item[{}]{initial\+\_\+allocation = {\ttfamily True} }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_a414a388eac772bbdb2f3721c938e5f74_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=339pt]{namespacefisher__allocation_a414a388eac772bbdb2f3721c938e5f74_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__allocation_a23fe8aed535de74598a9c9a6a8a0bd14}\label{namespacefisher__allocation_a23fe8aed535de74598a9c9a6a8a0bd14}} 
+\index{fisher\_allocation@{fisher\_allocation}!load\_json@{load\_json}}
+\index{load\_json@{load\_json}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{load\_json()}{load\_json()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+load\+\_\+json (\begin{DoxyParamCaption}\item[{}]{file = {\ttfamily None} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load a case file for a fisher market test case from a JSON file.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacefisher__allocation_a37afa05968ed26e7b67cdffad7b1df59}\label{namespacefisher__allocation_a37afa05968ed26e7b67cdffad7b1df59}} 
+\index{fisher\_allocation@{fisher\_allocation}!run\_basic\_market@{run\_basic\_market}}
+\index{run\_basic\_market@{run\_basic\_market}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{run\_basic\_market()}{run\_basic\_market()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+run\+\_\+basic\+\_\+market (\begin{DoxyParamCaption}\item[{}]{initial\+\_\+values,  }\item[{}]{agent\+\_\+settings,  }\item[{}]{market\+\_\+settings,  }\item[{}]{plotting = {\ttfamily False},  }\item[{}]{rational = {\ttfamily False} }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_a37afa05968ed26e7b67cdffad7b1df59_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=348pt]{namespacefisher__allocation_a37afa05968ed26e7b67cdffad7b1df59_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__allocation_a62ad2eced1cf263bb32f837dd88aeb13}\label{namespacefisher__allocation_a62ad2eced1cf263bb32f837dd88aeb13}} 
+\index{fisher\_allocation@{fisher\_allocation}!run\_market@{run\_market}}
+\index{run\_market@{run\_market}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{run\_market()}{run\_market()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+run\+\_\+market (\begin{DoxyParamCaption}\item[{}]{initial\+\_\+values,  }\item[{}]{agent\+\_\+settings,  }\item[{}]{market\+\_\+settings,  }\item[{}]{bookkeeping,  }\item[{}]{plotting = {\ttfamily True},  }\item[{}]{rational = {\ttfamily False},  }\item[{}]{output\+\_\+folder = {\ttfamily False} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}\end{DoxyVerb}
+ Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_a62ad2eced1cf263bb32f837dd88aeb13_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_a62ad2eced1cf263bb32f837dd88aeb13_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__allocation_a287e45ef9adc06884d6faeab368a3769}\label{namespacefisher__allocation_a287e45ef9adc06884d6faeab368a3769}} 
+\index{fisher\_allocation@{fisher\_allocation}!update\_agent@{update\_agent}}
+\index{update\_agent@{update\_agent}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{update\_agent()}{update\_agent()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+update\+\_\+agent (\begin{DoxyParamCaption}\item[{}]{w\+\_\+i,  }\item[{}]{u\+\_\+i,  }\item[{}]{p,  }\item[{}]{r\+\_\+i,  }\item[{}]{constraints,  }\item[{}]{y\+\_\+i,  }\item[{}]{beta,  }\item[{}]{rational = {\ttfamily False},  }\item[{}]{solver = {\ttfamily cp.SCS} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Update individual agent's consumption given market settings and constraints
+\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_a287e45ef9adc06884d6faeab368a3769_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__allocation_a355802b551094276a41aaf9c65ccd695}\label{namespacefisher__allocation_a355802b551094276a41aaf9c65ccd695}} 
+\index{fisher\_allocation@{fisher\_allocation}!update\_agents@{update\_agents}}
+\index{update\_agents@{update\_agents}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{update\_agents()}{update\_agents()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+update\+\_\+agents (\begin{DoxyParamCaption}\item[{}]{w,  }\item[{}]{u,  }\item[{}]{p,  }\item[{}]{r,  }\item[{}]{constraints,  }\item[{}]{goods\+\_\+list,  }\item[{}]{agent\+\_\+goods\+\_\+lists,  }\item[{}]{y,  }\item[{}]{beta,  }\item[{}]{rational = {\ttfamily False},  }\item[{}]{parallel = {\ttfamily False} }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_a355802b551094276a41aaf9c65ccd695_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_a355802b551094276a41aaf9c65ccd695_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__allocation_af65811388487e0372eb53238e9daddc2}\label{namespacefisher__allocation_af65811388487e0372eb53238e9daddc2}} 
+\index{fisher\_allocation@{fisher\_allocation}!update\_basic\_agents@{update\_basic\_agents}}
+\index{update\_basic\_agents@{update\_basic\_agents}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{update\_basic\_agents()}{update\_basic\_agents()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+update\+\_\+basic\+\_\+agents (\begin{DoxyParamCaption}\item[{}]{w,  }\item[{}]{u,  }\item[{}]{p,  }\item[{}]{r,  }\item[{}]{constraints,  }\item[{}]{y,  }\item[{}]{beta,  }\item[{}]{rational = {\ttfamily False} }\end{DoxyParamCaption})}
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_af65811388487e0372eb53238e9daddc2_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_af65811388487e0372eb53238e9daddc2_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__allocation_a13185d853326fc308c1145d1745dac76}\label{namespacefisher__allocation_a13185d853326fc308c1145d1745dac76}} 
+\index{fisher\_allocation@{fisher\_allocation}!update\_basic\_market@{update\_basic\_market}}
+\index{update\_basic\_market@{update\_basic\_market}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{update\_basic\_market()}{update\_basic\_market()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+update\+\_\+basic\+\_\+market (\begin{DoxyParamCaption}\item[{}]{x,  }\item[{}]{values\+\_\+k,  }\item[{}]{market\+\_\+settings,  }\item[{}]{constraints }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Update market consumption, prices, and rebates\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_a13185d853326fc308c1145d1745dac76_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{namespacefisher__allocation_ac3b76e1179f3b4a7d50c16d32f294938}\label{namespacefisher__allocation_ac3b76e1179f3b4a7d50c16d32f294938}} 
+\index{fisher\_allocation@{fisher\_allocation}!update\_market@{update\_market}}
+\index{update\_market@{update\_market}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{update\_market()}{update\_market()}}
+{\footnotesize\ttfamily def fisher\+\_\+allocation.\+update\+\_\+market (\begin{DoxyParamCaption}\item[{}]{x,  }\item[{}]{values\+\_\+k,  }\item[{}]{market\+\_\+settings,  }\item[{}]{constraints,  }\item[{}]{agent\+\_\+goods\+\_\+lists,  }\item[{}]{goods\+\_\+list }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Update market consumption, prices, and rebates
+\end{DoxyVerb}
+ Here is the caller graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{namespacefisher__allocation_ac3b76e1179f3b4a7d50c16d32f294938_icgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacefisher__allocation_a679f17012aa24f3b8c6b89d5e312785c}\label{namespacefisher__allocation_a679f17012aa24f3b8c6b89d5e312785c}} 
+\index{fisher\_allocation@{fisher\_allocation}!BETA@{BETA}}
+\index{BETA@{BETA}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{BETA}{BETA}}
+{\footnotesize\ttfamily int fisher\+\_\+allocation.\+BETA = 10}
+
+\mbox{\Hypertarget{namespacefisher__allocation_a777a4cd426adb8f2173b8abb7cd9c9a4}\label{namespacefisher__allocation_a777a4cd426adb8f2173b8abb7cd9c9a4}} 
+\index{fisher\_allocation@{fisher\_allocation}!epsilon@{epsilon}}
+\index{epsilon@{epsilon}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{epsilon}{epsilon}}
+{\footnotesize\ttfamily float fisher\+\_\+allocation.\+epsilon = 0.\+05}
+
+\mbox{\Hypertarget{namespacefisher__allocation_affa48db32eac97d1e5383a59987e3510}\label{namespacefisher__allocation_affa48db32eac97d1e5383a59987e3510}} 
+\index{fisher\_allocation@{fisher\_allocation}!MAX\_NUM\_ITERATIONS@{MAX\_NUM\_ITERATIONS}}
+\index{MAX\_NUM\_ITERATIONS@{MAX\_NUM\_ITERATIONS}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{MAX\_NUM\_ITERATIONS}{MAX\_NUM\_ITERATIONS}}
+{\footnotesize\ttfamily int fisher\+\_\+allocation.\+MAX\+\_\+\+NUM\+\_\+\+ITERATIONS = 300}
+
+\mbox{\Hypertarget{namespacefisher__allocation_af85fc3a9dc848f7b5a86a412174fa39f}\label{namespacefisher__allocation_af85fc3a9dc848f7b5a86a412174fa39f}} 
+\index{fisher\_allocation@{fisher\_allocation}!TOL\_ERROR@{TOL\_ERROR}}
+\index{TOL\_ERROR@{TOL\_ERROR}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{TOL\_ERROR}{TOL\_ERROR}}
+{\footnotesize\ttfamily int fisher\+\_\+allocation.\+TOL\+\_\+\+ERROR = 1e-\/3}
+
+\mbox{\Hypertarget{namespacefisher__allocation_ad78597d8808fea2f9d9d03f07f062029}\label{namespacefisher__allocation_ad78597d8808fea2f9d9d03f07f062029}} 
+\index{fisher\_allocation@{fisher\_allocation}!top\_level\_path@{top\_level\_path}}
+\index{top\_level\_path@{top\_level\_path}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{top\_level\_path}{top\_level\_path}}
+{\footnotesize\ttfamily fisher\+\_\+allocation.\+top\+\_\+level\+\_\+path = Path(\+\_\+\+\_\+file\+\_\+\+\_\+).resolve().parent.\+parent}
+
+\mbox{\Hypertarget{namespacefisher__allocation_ae0aebeda1a9032cdbbc3212c4382a4f2}\label{namespacefisher__allocation_ae0aebeda1a9032cdbbc3212c4382a4f2}} 
+\index{fisher\_allocation@{fisher\_allocation}!UPDATED\_APPROACH@{UPDATED\_APPROACH}}
+\index{UPDATED\_APPROACH@{UPDATED\_APPROACH}!fisher\_allocation@{fisher\_allocation}}
+\doxysubsubsection{\texorpdfstring{UPDATED\_APPROACH}{UPDATED\_APPROACH}}
+{\footnotesize\ttfamily bool fisher\+\_\+allocation.\+UPDATED\+\_\+\+APPROACH = True}
+
