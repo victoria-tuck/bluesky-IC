@@ -82,7 +82,7 @@ def get_vehicle_info(flight, lat1, lon1, lat2, lon2):
     
 
     # Predefined placeholders as constants for now, the initial speed must be 0 to gete average of 90ish in flight
-    return "B744", "FL250", 0, true_heading
+    return "EC135", "FL250", 0, true_heading
 
 
 def get_lat_lon(vertiport):
