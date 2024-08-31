@@ -315,6 +315,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method="fisher",
 
     start_time = timing_info["start_time"]
     end_time = timing_info["end_time"]
+    timing_info["dissapear_ts"] = 3
     auction_intervals = list(range(start_time, end_time, auction_freq))
 
     max_travel_time = 60
@@ -367,7 +368,8 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method="fisher",
             filtered_routes = [route for route in routes_data if (route['origin_vertiport_id'], route['destination_vertiport_id']) in interval_routes]
         
             # Create vertiport graph and add starting aircraft positions
-            filtered_vertiport_usage = VertiportStatus(filtered_vertiports, filtered_routes, timing_info)
+            # filtered_vertiport_usage = VertiportStatus(filtered_vertiports, filtered_routes, timing_info)
+            filtered_vertiport_usage = VertiportStatus(filtered_vertiports, filtered_routes, timing_info, interval_flights)
             filtered_vertiport_usage.add_aircraft(interval_flights)
 
             print("Performing auction for interval: ", auction_start, " to ", auction_end)
@@ -381,7 +383,8 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method="fisher",
             current_timing_info = {
                 "start_time" : auction_start,
                 "end_time": timing_info["end_time"],
-                "time_step": timing_info["time_step"]
+                "time_step": timing_info["time_step"],
+                "dissapear_ts": timing_info["dissapear_ts"] 
             }
             if method == "fisher":
                 allocated_flights, rebased_flights, payments = fisher_allocation_and_payment(

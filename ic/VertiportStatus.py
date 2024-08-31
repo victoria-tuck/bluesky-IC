@@ -2,51 +2,89 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
+
 class VertiportStatus(nx.DiGraph):
     """
     Class for storing the status of vertiports.
     """
     
-    def __init__(self, vertiports, edges, timing, data=None, **attr):
+    def __init__(self, vertiports, edges, timing, flights, data=None, **attr):
         """
         Create time-extended vertiport graph.
 
         Args:
             vertiports (dictionary): Dictionary of vertiports with ids as keys containing 
                 latitude, longitude, landing_capacity, takeoff_capacity, and hold_capacity.
-            edges (list): List of edges where an edge has an origin_vertiport_id and destination_vertport_id.
+            edges (list): (or routes) List of edges where an edge has an origin_vertiport_id and destination_vertport_id.
             timing (dictionary): Dictionary of timing information for the simulation including
                 start_time, end_time, and time_step.
         """
         super().__init__(data, **attr)
-        self.time_steps = list(range(timing["start_time"], timing["end_time"] + timing["time_step"], timing["time_step"]))
+        # self.time_steps = list(range(timing["start_time"], timing["end_time"] + timing["time_step"], timing["time_step"]))
         self.vertiports = vertiports
+        self.ts = timing["time_step"]
+        self.dissapearance_ts = timing["dissapear_ts"]
+        self.route_info = edges
 
         # Create time extended graph of vertiports
-        for step in self.time_steps:
-            for vertiport in vertiports.items():
-                time_extended_vertiport_id = vertiport[0] + "_" + str(step)
-                self.add_node(time_extended_vertiport_id, **vertiport[1])
-                self.nodes[time_extended_vertiport_id]["landing_usage"] = 0
-                self.nodes[time_extended_vertiport_id]["takeoff_usage"] = 0
-                self.nodes[time_extended_vertiport_id]["hold_usage"] = 0
-                self.nodes[time_extended_vertiport_id]["time"] = step
-                self.nodes[time_extended_vertiport_id]["landing_capacity"] = vertiport[1]["landing_capacity"]
-                self.nodes[time_extended_vertiport_id]["takeoff_capacity"] = vertiport[1]["takeoff_capacity"]
-                self.nodes[time_extended_vertiport_id]["hold_capacity"] = vertiport[1]["hold_capacity"]
-                self.nodes[time_extended_vertiport_id]["vertiport_id"] = vertiport[0]
+        for key, value in flights.items():
+            agent_appareance_time = value["appearance_time"]
+            agent_desired_departure_time = value["requests"]["001"]["request_departure_time"]
+            agent_desired_arrival_time = value["requests"]["001"]["request_arrival_time"]
+            agent_disappearance_time = agent_desired_arrival_time + self.dissapearance_ts
+            #change the hardcoded 3 to a random value
+            time_steps = list(range(agent_appareance_time, agent_disappearance_time, self.ts))
+            origin_vertiport = value["origin_vertiport_id"]
+            for step in time_steps:
+                # for all the parked vertiports in orginal vertiport
+                time_extended_vertiport_id = origin_vertiport + "_" + str(step) 
+                self.add_node(time_extended_vertiport_id, **vertiports[origin_vertiport])                
+                self.add_node_attributes(time_extended_vertiport_id, origin_vertiport, step)
+                self.create_route_edges(origin_vertiport, origin_vertiport, step, step + 1)
 
-        # Add edges to time extended graph
-        for step in self.time_steps:
-            for edge in edges:
-                arrival_time = step + edge["travel_time"]
-                if arrival_time > timing["end_time"]:
-                    continue
-                assert arrival_time in self.time_steps, f"Timing setup incorrect. Arrival time {arrival_time} not in time steps."
-                time_extended_start = edge["origin_vertiport_id"] + "_" + str(step)
-                time_extended_end = edge["destination_vertiport_id"] + "_" + str(arrival_time)
-                self.add_edge(time_extended_start, time_extended_end)
 
+            # for all the destination vertiports
+            destination_vertiport = value["requests"]["001"]["destination_vertiport_id"]
+            for dest_step in range(agent_desired_arrival_time, agent_disappearance_time, self.ts):
+                destination_vertiport = value["requests"]["001"]["destination_vertiport_id"]
+                time_extended_dest_vertiport_id = destination_vertiport + "_" + str(dest_step) 
+                self.add_node(time_extended_dest_vertiport_id, **vertiports[destination_vertiport])  
+                self.add_node_attributes(time_extended_dest_vertiport_id, destination_vertiport, dest_step)
+                self.create_route_edges(destination_vertiport, destination_vertiport, 
+                                        dest_step, dest_step + 1)
+        
+
+    def create_route_edges(self, origin_vertiport, destination_vertiport, dept_time, arr_time):
+        # Define the time-extended edge
+        edge_start = f"{origin_vertiport}_{dept_time}"
+        edge_end = f"{destination_vertiport}_{arr_time}"
+    
+        # Check if the edge already exists in the graph
+        if not self.has_edge(edge_start, edge_end):
+            # Add the edge if it doesn't exist
+            self.add_edge(edge_start, edge_end)
+        # time_steps = list(range(timing["start_time"], timing["end_time"] + timing["time_step"], timing["time_step"]))
+        # for step in time_steps:
+        #     for edge in edges:
+        #         arrival_time = step + edge["travel_time"]
+        #         if arrival_time > timing["end_time"]:
+        #             continue
+        #         assert arrival_time in time_steps, f"Timing setup incorrect. Arrival time {arrival_time} not in time steps."
+        #         time_extended_start = edge["origin_vertiport_id"] + "_" + str(step)
+        #         time_extended_end = edge["destination_vertiport_id"] + "_" + str(arrival_time)
+        #         self.add_edge(time_extended_start, time_extended_end)
+
+
+
+    def add_node_attributes(self, time_extended_vertiport_id, vertiport_id, step):
+        self.nodes[time_extended_vertiport_id]["landing_usage"] = 0
+        self.nodes[time_extended_vertiport_id]["takeoff_usage"] = 0
+        self.nodes[time_extended_vertiport_id]["hold_usage"] = 0
+        self.nodes[time_extended_vertiport_id]["time"] = step
+        self.nodes[time_extended_vertiport_id]["landing_capacity"] = self.vertiports[vertiport_id]["landing_capacity"]
+        self.nodes[time_extended_vertiport_id]["takeoff_capacity"] = self.vertiports[vertiport_id]["takeoff_capacity"]
+        self.nodes[time_extended_vertiport_id]["hold_capacity"] = self.vertiports[vertiport_id]["hold_capacity"]
+        self.nodes[time_extended_vertiport_id]["vertiport_id"] = vertiport_id   
 
     def add_aircraft(self, flights):
         """
@@ -57,7 +95,12 @@ class VertiportStatus(nx.DiGraph):
         """
         for flight_id, flight in flights.items():
             start_vertiport = flight["origin_vertiport_id"]
-            for time in self.time_steps:
+            start_time = flight["appearance_time"]
+            end_time = flight["requests"]["001"]["request_arrival_time"] + self.dissapearance_ts
+
+            time_steps = list(range(start_time, end_time, self.ts))
+            # This might need to be changed to only hold the capacity in the current simulation time
+            for time in time_steps:
                 time_extended_start = start_vertiport + "_" + str(time)
                 self.nodes[time_extended_start]["hold_usage"] += 1
                 assert self.nodes[time_extended_start]["hold_usage"] <= self.nodes[time_extended_start]["hold_capacity"], \

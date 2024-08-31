@@ -36,41 +36,45 @@ MAX_NUM_ITERATIONS = 5000
 
 
 
-def build_graph(vertiport_status, timing_info):
+def build_graph(vertiport_status, flights, timing_info):
     """
 
     """
     print("Building graph...")
-    start_time_graph_build = time.time()
-    max_time, time_step = timing_info["end_time"], timing_info["time_step"]
-
     auxiliary_graph = nx.DiGraph()
-    ## Construct nodes
-    #  Create dep, arr, and standard nodes for each initial node (vertiport + time step)
-    for node in vertiport_status.nodes:
-        auxiliary_graph.add_node(node + "_dep")
-        auxiliary_graph.add_node(node + "_arr")
-        auxiliary_graph.add_node(node)
+    start_time_graph_build = time.time()
+    nodes_shallow_copy = list(vertiport_status.nodes())
+    auxiliary_graph.add_nodes_from(nodes_shallow_copy) # Add nodes from vertiport status, only their names
+    auxiliary_graph.add_edges_from(vertiport_status.edges()) # Add edges from vertiport status
+    
+    # Creating the departure and arrival nodes
+    for flight, value in flights.items():
+        origin_vertiport = value["origin_vertiport_id"]
+        destination_vertiport = value["requests"]["001"]["destination_vertiport_id"]
+        departure_time = value["requests"]["001"]["request_departure_time"]
+        arrival_time = value["requests"]["001"]["request_arrival_time"]
+        #change the hardcoded 3 to a random value
+        dep_node, arr_node = origin_vertiport + "_" + str(departure_time) + "_dep", destination_vertiport + "_" + str(arrival_time) + "_arr"
+        auxiliary_graph.add_node(dep_node)
+        auxiliary_graph.add_node(arr_node)
+        previous_node = origin_vertiport + "_" + str(departure_time - 1)
+        next_node = destination_vertiport + "_" + str(arrival_time + 1)
 
-    ## Construct edges
-        # Create arr -> standard edges
-        # auxiliary_graph.add_edge(node + "_arr", node, time=0, weight=0)
-        auxiliary_graph.add_edge(node + "_arr", node)
 
-        # Create standard -> dep edges
-        # auxiliary_graph.add_edge(node, node + "_dep", time=max_time, weight=0)
-        auxiliary_graph.add_edge(node, node + "_dep")
+        ## Construct edges from parking to departure to arrival to parking
+        auxiliary_graph.add_edge(previous_node, dep_node)
+        auxiliary_graph.add_edge(dep_node, arr_node)
+        auxiliary_graph.add_edge(arr_node, next_node)
 
-        # Connect standard nodes to node at next time step
-        if vertiport_status.nodes[node]["time"] != max_time:
-            vertiport_id = vertiport_status.nodes[node]["vertiport_id"]
-            next_time = vertiport_status.nodes[node]["time"] + time_step
-            auxiliary_graph.add_edge(node, vertiport_id + "_" + str(next_time))
+        # # Connect nodes at current time step to nodes at next time step
+        # initial_time = value["appearance_time"]
+        # max_time = arrival_time + timing_info["dissapear_ts"]
+        # time_steps = list(range(initial_time, max_time, timing_info["time_step"]))
+        # for step in time_steps:
+        #     node = origin_vertiport + "_" + str(step)
+        #     next_node = origin_vertiport + "_" + str(step + timing_info["time_step"])
+        #     auxiliary_graph.add_edge(node, next_node)
 
-    for edge in vertiport_status.edges:
-        origin_vertiport_id_with_depart_time, destination_vertiport_id_with_arrival_time = edge
-        # auxiliary_graph.add_edge(origin_vertiport_id_with_depart_time + "_dep", destination_vertiport_id_with_arrival_time + "_arr", time=0, weight=0)
-        auxiliary_graph.add_edge(origin_vertiport_id_with_depart_time + "_dep", destination_vertiport_id_with_arrival_time + "_arr")
 
     print(f"Time to build graph: {time.time() - start_time_graph_build}")
     return auxiliary_graph
@@ -693,7 +697,7 @@ def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, routes_
 
     market_auction_time=timing_info["start_time"]
     # Build Fisher Graph
-    market_graph = build_graph(vertiport_usage, timing_info)
+    market_graph = build_graph(vertiport_usage, flights, timing_info)
 
     #Extracting design parameters
     if design_parameters:
