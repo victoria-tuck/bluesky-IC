@@ -36,11 +36,15 @@ MAX_NUM_ITERATIONS = 5000
 def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, routes_data, vertiports, 
                                   output_folder=None, save_file=None, initial_allocation=True, design_parameters=None):
 
+    # # building the graph
     market_auction_time=timing_info["start_time"]
-    # Build Fisher Graph
-    market_graph = build_graph(vertiport_usage, timing_info)
+    # start_time_graph_build = time.time()
+    # builder = FisherGraphBuilder(vertiport_usage, timing_info)
+    # market_graph = builder.build_graph(flights)
+    # print(f"Time to build graph: {time.time() - start_time_graph_build}")
 
     #Extracting design parameters
+    # we should create a config file for this
     if design_parameters:
         price_default_good = design_parameters["price_default_good"]
         default_good_valuation = design_parameters["default_good_valuation"]
@@ -55,49 +59,52 @@ def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, routes_
         rebate_frequency = 1
 
     # Construct market
-    agent_information, market_information, bookkeeping = construct_market(market_graph, flights, timing_info, routes_data, vertiport_usage, 
+    agent_information, market_information, bookkeeping = construct_market(flights, timing_info, routes_data, vertiport_usage, 
                                                                           default_good_valuation=default_good_valuation, 
                                                                           dropout_good_valuation=dropout_good_valuation, BETA=BETA)
 
     # Run market
-    goods_list, times_list = bookkeeping
+    goods_list = bookkeeping
     num_goods, num_agents = len(goods_list), len(flights)
     u, agent_constraints, agent_goods_lists = agent_information
     # y = np.random.rand(num_agents, num_goods-2)*10
-    y = np.zeros((num_agents, num_goods))
+    y = np.zeros((num_agents, num_goods - 2))
     desired_goods = track_desired_goods(flights, goods_list)
     for i, agent_ids in enumerate(desired_goods):
-        dept_id = desired_goods[agent_ids]["desired_good_arr"]
-        arr_id = desired_goods[agent_ids]["desired_good_dep"]
-        y[i][dept_id]= 1
-        y[i][arr_id] = 1
+        # dept_id = desired_goods[agent_ids]["desired_good_arr"]
+        # arr_id = desired_goods[agent_ids]["desired_good_dep"] 
+        dept_to_arr_id = desired_goods[agent_ids]["desired_good_dep_to_arr"]
+        # y[i][dept_id]= 1
+        # y[i][arr_id] = 1 
+        y[i][dept_to_arr_id] = 1
     # y = np.random.rand(num_agents, num_goods)
     p = np.zeros(num_goods)
     p[-2] = price_default_good 
     p[-1] = 0 # dropout good
-    r = [np.zeros(len(agent_constraints[i][1])) for i in range(num_agents)]
+    # r = [np.zeros(len(agent_constraints[i][1])) for i in range(num_agents)]
+    r = np.zeros(num_agents)
+    _ , capacity, _ = market_information
     # x, p, r, overdemand = run_market((y,p,r), agent_information, market_information, bookkeeping, plotting=True, rational=False)
     x, prices, r, overdemand, agent_constraints, adjusted_budgets, data_to_plot = run_market((y,p,r), agent_information, market_information, 
                                                              bookkeeping, rational=False, price_default_good=price_default_good, 
                                                              rebate_frequency=rebate_frequency)
     
     extra_data = {
-        'x': x,
-        'prices': prices,
-        'r': r,
-        'agent_constraints': agent_constraints,
-        'adjusted_budgets': adjusted_budgets,
-        'data_to_plot': data_to_plot
-    }
+    'x': x,
+    'prices': prices,
+    'r': r,
+    'agent_constraints': agent_constraints,
+    'adjusted_budgets': adjusted_budgets,
+    'data_to_plot': data_to_plot}
     save_data(output_folder, "fisher_data", market_auction_time, **extra_data)
-    data_to_plot.append(desired_goods)
-    plotting_market(data_to_plot, output_folder, market_auction_time)
+    plotting_market(data_to_plot, desired_goods, output_folder, market_auction_time)
     
     # Building edge information for mapping - move this to separate function
     # move this part to a different function
     edge_information = build_edge_information(goods_list)
     agent_allocations, agent_dropout_x, agent_indices, agent_edge_information = process_allocations(x, edge_information, agent_goods_lists)
 
+    
     _ , capacity, _ = market_information
     int_allocations = []
     utilities = []
@@ -210,60 +217,80 @@ def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, routes_
     return allocation, rebased, None
 
 
-def plotting_market(data_to_plot, output_folder, market_auction_time=None):
-    x_iter, prices, p, overdemand, error, abs_error, rebates, agent_allocations, market_clearing, agent_constraints, yplot, social_welfare, desired_goods = data_to_plot
-    def plt_helper(figsize, data, labels, filename):
-        plt.figure(figsize=figsize)
-        if callable(data[0]):
-            data[0](*data[1])
-        else:
-            plt.plot(data[0], data[1])
-        plt.legend()
-        plt.xlabel(labels["x"])
-        plt.ylabel(labels["y"])
-        plt.title(labels["title"])
-        plt.savefig(filename)
-        plt.close()
-    
+def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_time=None):
+
+    x_iter = data_to_plot["x_iter"]
+    prices = data_to_plot["prices"]
+    p = data_to_plot["p"]
+    overdemand = data_to_plot["overdemand"]
+    error = data_to_plot["error"]
+    abs_error = data_to_plot["abs_error"]
+    rebates = data_to_plot["rebates"]
+    agent_allocations = data_to_plot["agent_allocations"]
+    market_clearing = data_to_plot["market_clearing"]
+    agent_constraints = data_to_plot["agent_constraints"]
+    yplot = data_to_plot["yplot"]
+    social_welfare = data_to_plot["social_welfare_vector"]
+
+
+    # x_iter, prices, p, overdemand, error, abs_error, rebates, agent_allocations, market_clearing, agent_constraints, yplot, social_welfare, desired_goods = data_to_plot
     def get_filename(base_name):
         if market_auction_time:
             return f"{output_folder}/{base_name}_a{market_auction_time}.png"
         else:
             return f"{output_folder}/{base_name}.png"
     
-    # Plot Price evolution
-    def price_evol_plt(p, x_iter, prices):
-        for good_index in range(len(p) - 2):
-            plt.plot(range(1, x_iter + 1), [prices[i][good_index] for i in range(len(prices))])
-            plt.plot(range(1, x_iter + 1), [prices[i][-2] for i in range(len(prices))], 'b--', label="Default Good")
-            plt.plot(range(1, x_iter + 1), [prices[i][-1] for i in range(len(prices))], 'r-.', label="Dropout Good")
-    price_evol_labels = {"x": 'x_iter', "y": 'Prices', "title": 'Price evolution'}
-    plt_helper((10, 5), (price_evol_plt, (p, x_iter, prices)), price_evol_labels, get_filename("price_evolution"))
+    # Price evolution
+    plt.figure(figsize=(10, 5))
+    for good_index in range(len(p) - 2):
+        plt.plot(range(1, x_iter + 1), [prices[i][good_index] for i in range(len(prices))])
+    plt.plot(range(1, x_iter + 1), [prices[i][-2] for i in range(len(prices))], 'b--', label="Default Good")
+    plt.plot(range(1, x_iter + 1), [prices[i][-1] for i in range(len(prices))], 'r-.', label="Dropout Good")
+    plt.xlabel('x_iter')
+    plt.ylabel('Prices')
+    plt.title("Price evolution")
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.savefig(get_filename("price_evolution"),  bbox_inches='tight')
+    plt.close()
 
-    # Plot Overdemand evolution
-    overdemand_labels = {"x": 'x_iter', "y": 'Demand - Supply', "title": 'Overdemand evolution'}
-    plt_helper((10, 5), (range(1, x_iter + 1), overdemand), overdemand_labels, get_filename("overdemand_evolution"))
+    # Overdemand evolution
+    plt.figure(figsize=(10, 5))
+    plt.plot(range(1, x_iter + 1), overdemand)
+    plt.xlabel('x_iter')
+    plt.ylabel('Demand - Supply')
+    plt.title("Overdemand evolution")
+    plt.savefig(get_filename("overdemand_evolution"))
+    plt.close()
 
-    # Plot Constraint error evolution
-    def constraint_error_plt(error, x_iter, agent_constraints):
-        for agent_index in range(len(agent_constraints)):
-            plt.plot(range(1, x_iter + 1), error[agent_index])
-    constraint_error_labels = {"x": 'x_iter', "y": 'Constraint error', "title": 'Constraint error evolution $\sum (linear constraints)^2$'}
-    plt_helper((10, 5), (constraint_error_plt, (error, x_iter, agent_constraints)), constraint_error_labels, get_filename("constraint_error_evolution"))
+    # Constraint error evolution
+    plt.figure(figsize=(10, 5))
+    for agent_index in range(len(agent_constraints)):
+        plt.plot(range(1, x_iter + 1), error[agent_index])
+    plt.xlabel('x_iter')
+    plt.ylabel('Constraint error')
+    plt.title("Constraint error evolution $\sum ||Ax - b||^2$")
+    plt.savefig(get_filename("linear_constraint_error_evolution"))
+    plt.close()
 
-    # Plot Absolute error evolution
-    def abs_error_plt(abs_error, x_iter, agent_constraints):
-        for agent_index in range(len(agent_constraints)):
-            plt.plot(range(1, x_iter + 1), abs_error[agent_index])
-    abs_error_labels = {"x": 'x_iter', "y": 'Constraint error', "title": 'Absolute error evolution $\sum (x_i - y_i)^2$'}
-    plt_helper((10, 5), (abs_error_plt, (abs_error, x_iter, agent_constraints)), abs_error_labels, get_filename("absolute_error_evolution"))
+    # Absolute error evolution
+    plt.figure(figsize=(10, 5))
+    for agent_index in range(len(agent_constraints)):
+        plt.plot(range(1, x_iter + 1), abs_error[agent_index])
+    plt.xlabel('x_iter')
+    plt.ylabel('Constraint error')
+    plt.title("Absolute error evolution $\sum ||x_i - y_i||^2$")
+    plt.savefig(get_filename("x-y_error_evolution"))
+    plt.close()
 
-    # Plot Rebate evolution
-    def rebate_plt(rebates, x_iter):
-        for constraint_index in range(len(rebates[0])):
-            plt.plot(range(1, x_iter + 1), [rebates[i][constraint_index] for i in range(len(rebates))])
-    rebate_labels = {"x": 'x_iter', "y": 'Rebate', "title": 'Rebate evolution'}
-    plt_helper((10, 5), (rebate_plt, (rebates, x_iter)), rebate_labels, get_filename("rebate_evolution"))
+    # Rebate evolution
+    plt.figure(figsize=(10, 5))
+    for constraint_index in range(len(rebates[0])):
+        plt.plot(range(1, x_iter + 1), [rebates[i][constraint_index] for i in range(len(rebates))])
+    plt.xlabel('x_iter')
+    plt.ylabel('Rebate')
+    plt.title("Rebate evolution")
+    plt.savefig(get_filename("rebate_evolution"))
+    plt.close()
 
     # Agent allocation evolution
     # plt.figure(figsize=(10, 5))
@@ -277,34 +304,54 @@ def plotting_market(data_to_plot, output_folder, market_auction_time=None):
     # plt.savefig(get_filename("agent_allocation_evolution"))
     # plt.close()
 
-    # Plot Desired goods evolution
-    def desired_goods_plt(agent_allocations, x_iter, desired_goods):
-        for agent in enumerate(desired_goods):
-            agent_id = agent[0]
-            agent_name = agent[1]       
-            dep_index = desired_goods[agent_name]["desired_good_dep"]
-            arr_index = desired_goods[agent_name]["desired_good_arr"]
-            plt.plot(range(1, x_iter + 1), [agent_allocations[i][agent_id][dep_index] for i in range(len(agent_allocations))], '--', label=f"{agent_name}_dep good")
-            plt.plot(range(1, x_iter + 1), [agent_allocations[i][agent_id][arr_index] for i in range(len(agent_allocations))], '-', label=f"{agent_name}_arr good")
-    desired_goods_labels = {"x": 'x_iter', "y": 'Allocation', "title": 'Desired Goods Agent allocation evolution'}
-    plt_helper((10, 5), (desired_goods_plt, (agent_allocations, x_iter, desired_goods)), desired_goods_labels, get_filename("desired_goods_allocation_evolution"))
+    # Desired goods evolution
+    plt.figure(figsize=(10, 5))
+    for agent in enumerate(desired_goods):
+        agent_id = agent[0]
+        agent_name = agent[1]       
+        # dep_index = desired_goods[agent_name]["desired_good_dep"]
+        # arr_index = desired_goods[agent_name]["desired_good_arr"]
+        label = f"Flight:{agent_name}, {desired_goods[agent_name]['desired_edge']}" 
+        # plt.plot(range(1, x_iter + 1), [agent_allocations[i][agent_id][dep_index] for i in range(len(agent_allocations))], '-', label=f"{agent_name}_dep good")
+        dep_to_arr_index = desired_goods[agent_name]["desired_good_dep_to_arr"]
+        plt.plot(range(1, x_iter + 1), [agent_allocations[i][agent_id][dep_to_arr_index] for i in range(len(agent_allocations))], '--', label=label)
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.xlabel('x_iter')
+    plt.ylabel('Allocation')
+    plt.title("Desired Goods Agent allocation evolution")
+    plt.savefig(get_filename("desired_goods_allocation_evolution"), bbox_inches='tight')
+    plt.close()
 
-    # Plot Market Clearing Error
-    market_clearing_labels = {"x": 'x_iter', "y": 'Market Clearing Error', "title": 'Market Clearing Error'}
-    plt_helper((10, 5), (range(1, x_iter + 1), market_clearing), market_clearing_labels, get_filename("market_clearing_error"))
+    # Market Clearing Error
+    plt.figure(figsize=(10, 5))
+    plt.plot(range(1, x_iter + 1), market_clearing)
+    plt.xlabel('x_iter')
+    plt.ylabel('Market Clearing Error')
+    plt.title("Market Clearing Error")
+    plt.savefig(get_filename("market_clearing_error"))
+    plt.close()
 
-    # Plot y
-    def y_plt(yplot, x_iter):
-        for agent_index in range(len(yplot[0])):
-            plt.plot(range(1, x_iter + 1), [yplot[i][agent_index][:-2] for i in range(len(yplot))])
-            plt.plot(range(1, x_iter + 1), [yplot[i][agent_index][-2] for i in range(len(yplot))], 'b--', label="Default Good")
-            plt.plot(range(1, x_iter + 1), [yplot[i][agent_index][-1] for i in range(len(yplot))], 'r-.', label="Dropout Good")
-    y_labels = {"x": 'x_iter', "y": 'y', "title": 'y evolution'}
-    plt_helper((10, 5), (y_plt, (yplot, x_iter)), y_labels, get_filename("y_evolution"))
+    # y
+    plt.figure(figsize=(10, 5))
+    for agent_index in range(len(yplot[0])):
+        plt.plot(range(1, x_iter + 1), [yplot[i][agent_index][:-2] for i in range(len(yplot))])
+        plt.plot(range(1, x_iter + 1), [yplot[i][agent_index][-2] for i in range(len(yplot))], 'b--', label="Default Good")
+        plt.plot(range(1, x_iter + 1), [yplot[i][agent_index][-1] for i in range(len(yplot))], 'r-.', label="Dropout Good")
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.xlabel('x_iter')
+    plt.title("y")
+    plt.savefig(get_filename("y-values"), bbox_inches='tight')
+    plt.close()
 
-    # Plot Social Welfare
-    social_welfare_labels = {"x": 'x_iter', "y": 'Social Welfare', "title": 'Social Welfare'}
-    plt_helper((10, 5), (range(1, x_iter + 1), social_welfare), social_welfare_labels, get_filename("social_welfare"))
+
+    # Social Welfare
+    plt.figure(figsize=(10, 5))
+    plt.plot(range(1, x_iter + 1), social_welfare)
+    plt.xlabel('x_iter')
+    plt.ylabel('Social Welfare')
+    plt.title("Social Welfare")
+    plt.savefig(get_filename("social_welfare"))
+    plt.close()
 
 
 def load_json(file=None):
@@ -346,9 +393,12 @@ def track_desired_goods(flights, goods_list):
         desired_arrival_time = flights[flight_id]["requests"]["001"]["request_arrival_time"]
         desired_good_arr = (f"{origin_vertiport}_{desired_dep_time}", f"{origin_vertiport}_{desired_dep_time}_dep")
         desired_good_dep = (f"{desired_vertiport}_{desired_arrival_time}_arr", f"{desired_vertiport}_{desired_arrival_time}")
+        desired_good_dep_to_arr = (f"{origin_vertiport}_{desired_dep_time}_dep", f"{desired_vertiport}_{desired_arrival_time}_arr")
         good_id_arr = goods_list.index(desired_good_arr)
         good_id_dep = goods_list.index(desired_good_dep)
-        desired_goods[flight_id] = {"desired_good_arr": good_id_arr, "desired_good_dep": good_id_dep}
+        good_id_dep_to_arr = goods_list.index(desired_good_dep_to_arr)
+        desired_goods[flight_id] = {"desired_good_arr": good_id_arr, "desired_good_dep": good_id_dep, "desired_good_dep_to_arr": good_id_dep_to_arr}
+        desired_goods[flight_id]["desired_edge"] = (f"{origin_vertiport}_{desired_dep_time}", f"{desired_vertiport}_{desired_arrival_time}")
 
     return desired_goods
 
