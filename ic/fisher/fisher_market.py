@@ -26,42 +26,6 @@ TOL_ERROR = 1e-2
 MAX_NUM_ITERATIONS = 5000
 UPDATED_APPROACH = True
 
-def build_graph(vertiport_status, timing_info):
-    """
-
-    """
-    print("Building graph...")
-    start_time_graph_build = time.time()
-    max_time, time_step = timing_info["end_time"], timing_info["time_step"]
-
-    auxiliary_graph = nx.DiGraph()
-    ## Construct nodes
-    #  Create dep, arr, and standard nodes for each initial node (vertiport + time step)
-    for node in vertiport_status.nodes:
-        auxiliary_graph.add_node(node + "_dep")
-        auxiliary_graph.add_node(node + "_arr")
-        auxiliary_graph.add_node(node)
-
-    ## Construct edges
-        # Create arr -> standard edges
-        auxiliary_graph.add_edge(node + "_arr", node)
-
-        # Create standard -> dep edges
-        auxiliary_graph.add_edge(node, node + "_dep")
-
-        # Connect standard nodes to node at next time step
-        if vertiport_status.nodes[node]["time"] != max_time:
-            vertiport_id = vertiport_status.nodes[node]["vertiport_id"]
-            next_time = vertiport_status.nodes[node]["time"] + time_step
-            auxiliary_graph.add_edge(node, vertiport_id + "_" + str(next_time))
-
-    for edge in vertiport_status.edges:
-        origin_vertiport_id_with_depart_time, destination_vertiport_id_with_arrival_time = edge
-        auxiliary_graph.add_edge(origin_vertiport_id_with_depart_time + "_dep", destination_vertiport_id_with_arrival_time + "_arr")
-
-    print(f"Time to build graph: {time.time() - start_time_graph_build}")
-    return auxiliary_graph
-
 
 def construct_market(flights, timing_info, routes, vertiport_usage, default_good_valuation=1, dropout_good_valuation=-1, BETA=1):
     """
