@@ -7,7 +7,7 @@ class VertiportStatus(nx.DiGraph):
     Class for storing the status of vertiports.
     """
     
-    def __init__(self, vertiports, edges, timing, data=None, **attr):
+    def __init__(self, vertiports, sectors, timing, data=None, **attr):
         """
         Create time-extended vertiport graph.
 
@@ -36,17 +36,24 @@ class VertiportStatus(nx.DiGraph):
                 self.nodes[time_extended_vertiport_id]["hold_capacity"] = vertiport[1]["hold_capacity"]
                 self.nodes[time_extended_vertiport_id]["vertiport_id"] = vertiport[0]
 
-        # Add edges to time extended graph
-        for step in self.time_steps:
-            for edge in edges:
-                arrival_time = step + edge["travel_time"]
-                if arrival_time > timing["end_time"]:
-                    continue
-                assert arrival_time in self.time_steps, f"Timing setup incorrect. Arrival time {arrival_time} not in time steps."
-                time_extended_start = edge["origin_vertiport_id"] + "_" + str(step)
-                time_extended_end = edge["destination_vertiport_id"] + "_" + str(arrival_time)
-                self.add_edge(time_extended_start, time_extended_end)
-
+        # # Add edges to time extended graph
+        # for step in self.time_steps:
+        #     for edge in edges:
+        #         arrival_time = step + edge["travel_time"]
+        #         if arrival_time > timing["end_time"]:
+        #             continue
+        #         assert arrival_time in self.time_steps, f"Timing setup incorrect. Arrival time {arrival_time} not in time steps."
+        #         time_extended_start = edge["origin_vertiport_id"] + "_" + str(step)
+        #         time_extended_end = edge["destination_vertiport_id"] + "_" + str(arrival_time)
+        #         self.add_edge(time_extended_start, time_extended_end)
+        
+        # Adding sector capacities to time extended graph
+        for i in len(self.time_steps) - 1:
+            for sector in sectors:
+                start_time, end_time = self.time_steps[i], self.time_steps[i+1]
+                time_extended_start = sector["id"] + "_" + str(start_time)
+                time_extended_end = sector["id"] + "_" + str(end_time)
+                self.add_edge(time_extended_start, time_extended_end, capacity=sector["capacity"])
 
     def add_aircraft(self, flights):
         """
