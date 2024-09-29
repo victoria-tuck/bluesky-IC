@@ -104,11 +104,12 @@ class FisherGraphBuilder:
                 self._add_edge_if_not_exists(f"{current_sector}_{next_time}", f"{next_sector}_{next_time}", sector_attributes)
 
         # Arriving at vertiport
-        arr_node = f"{destination_vertiport}_{arrival_time}_arr"
-        self._add_node_if_not_exists(arr_node)
-        self._add_node_if_not_exists(f"{destination_vertiport}_{arrival_time}")
-        self._add_edge_if_not_exists(f"{sector_path[-1]}_{sector_times[-1]}", arr_node, {"valuation": 0})
-        self._add_edge_if_not_exists(arr_node, f"{destination_vertiport}_{arrival_time}", arr_attributes)
+        if destination_vertiport is not None:
+            arr_node = f"{destination_vertiport}_{arrival_time}_arr"
+            self._add_node_if_not_exists(arr_node)
+            self._add_node_if_not_exists(f"{destination_vertiport}_{arrival_time}")
+            self._add_edge_if_not_exists(f"{sector_path[-1]}_{sector_times[-1]}", arr_node, {"valuation": 0})
+            self._add_edge_if_not_exists(arr_node, f"{destination_vertiport}_{arrival_time}", arr_attributes)
 
     def _create_sector_nodes(self, sector, start_time, end_time):
         """Create nodes for the given sector from start_time to end_time."""
