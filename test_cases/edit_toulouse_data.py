@@ -16,7 +16,10 @@ for flight_id, flight_data in flights.items():
     sampled_appearance_time = random.randint(max(request_start - 600, 0), max(request_start - 120, 0))
     
     # Create the sector_path and sector_times
+    old_to_new_sectors = {"V001": "V001", "V002": "V002", "V003": "V003", "V004": "V004",
+                          "V005": "S001", "V006": "S002", "V007": "S003", "V008": "S004", "V009": "S005"}
     sector_path = [req["destination_vertiport_id"] for req in requests]
+    fixed_sector_path = [old_to_new_sectors[sector] for sector in sector_path]
     sector_times = [int(req["request_departure_time"]) for req in requests]
 
     if len(requests) > 0:
@@ -34,7 +37,7 @@ for flight_id, flight_data in flights.items():
     flight_data["requests"] = {
         "bid": 1,
         "valuation": 1,
-        "sector_path": sector_path,
+        "sector_path": fixed_sector_path,
         "sector_times": sector_times,
         "destination_vertiport_id": destination_vertiport_id
     }

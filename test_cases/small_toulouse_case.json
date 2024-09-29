@@ -1,0 +1,115 @@
+{
+    "timing_info": {
+        "start_time": 1,
+        "end_time": 90,
+        "time_step": 1,
+        "auction_frequency": 15
+    },
+    "congestion_params": {
+        "lambda": 0.1,
+        "C": {
+            "V001": [
+                0.0,
+                0.2,
+                0.6,
+                1.2,
+                2.0,
+                3.0,
+                4.2,
+                5.6,
+                7.2,
+                9.0,
+                11.0
+            ]
+        }
+    },
+    "vertiports": {
+        "V001": {
+            "latitude": 43.6048,
+            "longitude": 1.5173739588333184,
+            "landing_capacity": 5,
+            "takeoff_capacity": 5,
+            "hold_capacity": 10
+        }
+    },
+    "sectors": {
+        "S0001": {
+            "latitude": 43.6048,
+            "longitude": 1.4428,
+            "hold_capacity": 10
+        },
+        "S0002": {
+            "latitude": 43.6048,
+            "longitude": 1.5157762111108113,
+            "hold_capacity": 10
+        }
+    },
+    "flights": {
+        "AC000": {
+            "appearance_time": 0,
+            "origin_vertiport_id": "V001",
+            "budget_constraint": 1000,
+            "decay_factor": 0.95,
+            "requests": {
+                "000": {
+                    "destination_vertiport_id": "V001",
+                    "request_departure_time": 0,
+                    "request_arrival_time": 0,
+                    "bid": 1,
+                    "valuation": 1
+                },
+                "001": {
+                    "bid": 1,
+                    "valuation": 1,
+                    "sector_path": [
+                        "S001",
+                        "S002"
+                    ],
+                    "sector_times": [
+                        120,
+                        180,
+                        240
+                    ],
+                    "destination_vertiport_id": null
+                }
+            }
+        },
+        "AC001": {
+            "appearance_time": 120,
+            "origin_vertiport_id": "V001",
+            "budget_constraint": 1000,
+            "decay_factor": 0.95,
+            "requests": {
+                "000": {
+                    "destination_vertiport_id": "V001",
+                    "request_departure_time": 0,
+                    "request_arrival_time": 0,
+                    "bid": 1,
+                    "valuation": 1
+                },
+                "001": {
+                    "bid": 1,
+                    "valuation": 1,
+                    "sector_path": [
+                        "S001",
+                        "S002"
+                    ],
+                    "sector_times": [
+                        240,
+                        300,
+                        360
+                    ],
+                    "destination_vertiport_id": null
+                }
+            }
+        }
+    },
+    "fleets": {
+        "F001": [
+            "AC000"
+        ],
+        "F002": [
+            "AC001"
+        ]
+    }
+}
