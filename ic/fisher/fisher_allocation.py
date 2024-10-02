@@ -33,7 +33,7 @@ TOL_ERROR = 1e-4
 MAX_NUM_ITERATIONS = 5000
 
 
-def construct_market(flights, timing_info, routes, vertiport_usage, default_good_valuation=1, dropout_good_valuation=-1, BETA=1):
+def construct_market(flights, timing_info, sectors, vertiport_usage, default_good_valuation=1, dropout_good_valuation=-1, BETA=1):
     """
 
     """
@@ -69,6 +69,15 @@ def construct_market(flights, timing_info, routes, vertiport_usage, default_good
         nodes.remove(starting_node)
         nodes = [starting_node] + nodes
         inc_matrix = nx.incidence_matrix(agent_graph, nodelist=nodes, edgelist=edges, oriented=True).toarray()
+        print(f"Agent nodes: {nodes}")
+        print(f"Agent edges: {edges}")
+        # for row in inc_matrix[-15,:]:
+        row = inc_matrix[-15,:]
+        positive_indices = [edges[index] for index in np.where(row == 1)[0]]
+        negative_indices = [edges[index] for index in np.where(row == -1)[0]]
+        print(f"BAD ROW: {positive_indices} - {negative_indices}")
+        # print(row)
+        # print(f"Incidence matrix: {inc_matrix}")
         rows_to_delete = []
         for i, row in enumerate(inc_matrix):
             if -1 not in row:
@@ -77,6 +86,7 @@ def construct_market(flights, timing_info, routes, vertiport_usage, default_good
         A[0] = -1 * A[0]
         valuations = []
         for edge in edges:
+            # print(f"Edge: {edge} with valuation {agent_graph.edges[edge]['valuation']}")
             valuations.append(agent_graph.edges[edge]["valuation"])
 
         b = np.zeros(len(A))
@@ -86,6 +96,7 @@ def construct_market(flights, timing_info, routes, vertiport_usage, default_good
         A_with_default_good[0, -1] = 1 # droupout good
         # A_with_default_good = np.hstack((A, np.zeros((A.shape[0], 1)))) # outside/default good
         goods = edges + ['default_good'] + ['dropout_good']
+        print(f"Goods: {goods}")
         # Appending values for default and dropout goods
         valuations.append(default_good_valuation) # Small positive valuation for default good
         valuations.append(dropout_good_valuation) # Small positive valuation for dropout good
@@ -97,7 +108,8 @@ def construct_market(flights, timing_info, routes, vertiport_usage, default_good
         goods_list += edges
 
     goods_list = goods_list + ['default_good'] + ['dropout_good']
-    supply = find_capacity(goods_list, routes, vertiport_usage)
+    supply = find_capacity(goods_list, sectors, vertiport_usage)
+    print(f"Supply: {supply}")
     
   
 
@@ -105,18 +117,23 @@ def construct_market(flights, timing_info, routes, vertiport_usage, default_good
     return (u, agent_constraints, agent_goods_lists), (w, supply, BETA), (goods_list)
 
 
-def find_capacity(goods_list, route_data, vertiport_data):
+def find_capacity(goods_list, sectors_data, vertiport_data):
     # Create a dictionary for route capacities, for now just connectin between diff vertiports
-    route_dict = {(route["origin_vertiport_id"], route["destination_vertiport_id"]): route["capacity"] for route in route_data}
+    sector_dict = {sid: sector["hold_capacity"] for sid, sector in sectors_data.items()}
+    # route_dict = {(route["origin_vertiport_id"], route["destination_vertiport_id"]): route["capacity"] for route in route_data}
 
     capacities = np.zeros(len(goods_list)) 
     for i, (origin, destination) in enumerate(goods_list[:-2]): # excluding default/outside good - consider changing this to remove "dropout_good" and "default_good"
+        print(f"Origin: {origin} - Destination: {destination}")
         origin_base = origin.split("_")[0]
         destination_base = destination.split("_")[0]
-        if origin_base != destination_base:
-            # Traveling between vertiport
-            capacity = route_dict.get((origin_base, destination_base), None)
-        else:
+        if origin_base[0] == 'S' and destination_base[0] == 'S':
+            # Traveling between sectors
+            capacity = sector_dict.get(origin_base, None)
+        # if origin_base != destination_base:
+        #     # Traveling between vertiport
+        #     capacity = route_dict.get((origin_base, destination_base), None)
+        elif origin_base[0] == 'V' and destination_base[0] == 'V':
             # Staying within a vertiport
             if origin.endswith('_arr'):
                 origin_time = origin.replace('_arr', '')
@@ -129,7 +146,21 @@ def find_capacity(goods_list, route_data, vertiport_data):
             else:
                 node = vertiport_data._node.get(origin)
                 capacity = node.get('hold_capacity') - node.get('hold_usage') 
-
+                print(f"Node hold capacity: {node.get('hold_capacity')}")
+                print(f"Node usage capacity: {node.get('hold_usage')}")
+                print(f"Capacity on edge {origin} to {destination}: {capacity}")
+        else:
+            if origin_base[0] == 'V':
+                # Traveling from vertiport to sector
+                origin_time = origin.replace('_dep', '')
+                node = vertiport_data._node.get(origin_time)
+                capacity = node.get('takeoff_capacity') - node.get('takeoff_usage')
+            elif destination_base[0] == 'V':
+                # Traveling from sector to vertiport
+                destination_time = destination.replace('_arr', '')
+                node = vertiport_data._node.get(destination)
+                capacity = node.get('landing_capacity') - node.get('landing_usage')
+        print(f"Capacity on edge {origin} to {destination}: {capacity}")
         capacities[i] = capacity
     
     capacities[-2] = 100 # default/outside good
@@ -253,8 +284,8 @@ def update_market(x_val, values_k, market_settings, constraints, agent_goods_lis
     for i in range(len(p_k_plus_1)):
         if p_k_plus_1[i] < 0:
             p_k_plus_1[i] = 0  
-        if p_k_plus_1[i] > 20:
-            p_k_plus_1[i] = 20 
+        # if p_k_plus_1[i] > 20:
+        #     p_k_plus_1[i] = 20 
     # p_k_plus_1[-1] = 0  # dropout good
     # p_k_plus_1[-2] = price_default_good  # default good
     p_k_plus_1 = np.append(p_k_plus_1, [price_default_good,0]) # default and dropout good
@@ -510,7 +541,12 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
     
     problem = None
     while x_iter <= MAX_NUM_ITERATIONS:  # max(abs(np.sum(opt_xi, axis=0) - C)) > epsilon:
-        x, adjusted_budgets = update_agents(w, u, p, r, agent_constraints, goods_list, agent_goods_lists, y, beta, x_iter, rebate_frequency, rational=rational, integral=INTEGRAL_APPROACH)
+        if x_iter == 0:
+            x = np.zeros((num_agents, len(p)))
+            x[:,:-2] = y
+            adjusted_budgets = w
+        else:
+            x, adjusted_budgets = update_agents(w, u, p, r, agent_constraints, goods_list, agent_goods_lists, y, beta, x_iter, rebate_frequency, rational=rational, integral=INTEGRAL_APPROACH)
         agent_allocations.append(x) # 
         overdemand.append(np.sum(x[:,:-2], axis=0) - supply[:-2].flatten())
         x_ij = np.sum(x[:,:-2], axis=0) # removing default and dropout good
@@ -550,18 +586,18 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
         current_social_welfare = social_welfare(x, p, u, supply)
         social_welfare_vector.append(current_social_welfare)
 
+        print("Iteration: ", x_iter, "- MCE: ", round(market_clearing_error, 5), "-Ax-b. Err: ", iter_constraint_error, " - Tol: ", round(tolerance,3), "x-y error:", iter_constraint_x_y)
+        logging.info(f"Iteration: {x_iter}, Market Clearing Error: {market_clearing_error}, Tolerance: {tolerance}")
+
         x_iter += 1
         if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.0001) and (x_iter>=5) and (iter_constraint_x_y <= 0.1):
             break
-        if x_iter ==  1000:
+        if x_iter == 500:
             break
 
 
 
 
-        print("Iteration: ", x_iter, "- MCE: ", round(market_clearing_error, 5), "-Ax-b. Err: ", iter_constraint_error, " - Tol: ", round(tolerance,3), "x-y error:", iter_constraint_x_y)
-        logging.info(f"Iteration: {x_iter}, Market Clearing Error: {market_clearing_error}, Tolerance: {tolerance}")
-    
         # if market_clearing_error <= tolerance:
         #     break
 
@@ -711,6 +747,7 @@ def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_t
 
     # Desired goods evolution
     plt.figure(figsize=(10, 5))
+    print(f"Allocations: {agent_allocations}")
     agent_desired_goods_list = []
     for agent in enumerate(desired_goods):
         agent_id = agent[0]
@@ -719,8 +756,8 @@ def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_t
         # arr_index = desired_goods[agent_name]["desired_good_arr"]
         label = f"Flight:{agent_name}, {desired_goods[agent_name]['desired_edge']}" 
         # plt.plot(range(1, x_iter + 1), [agent_allocations[i][agent_id][dep_index] for i in range(len(agent_allocations))], '-', label=f"{agent_name}_dep good")
-        dep_to_arr_index = desired_goods[agent_name]["desired_good_dep_to_arr"]
-        agent_desired_goods = [agent_allocations[i][agent_id][dep_to_arr_index] for i in range(len(agent_allocations))]
+        dep_index = desired_goods[agent_name]["desired_edge_idx"]
+        agent_desired_goods = [agent_allocations[i][agent_id][dep_index] for i in range(len(agent_allocations))]
         agent_desired_goods_list.append(agent_desired_goods)
         plt.plot(range(1, x_iter + 1), agent_desired_goods, '--', label=label)
     plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
@@ -792,25 +829,47 @@ def track_desired_goods(flights, goods_list):
     "return the index of the desired goods for each flight"
     desired_goods = {}
     for i, flight_id in enumerate(flights.keys()):
-        origin_vertiport = flights[flight_id]["origin_vertiport_id"]
-        desired_dep_time = flights[flight_id]["requests"]["001"]["request_departure_time"]
-        desired_vertiport = flights[flight_id]["requests"]["001"]["destination_vertiport_id"]
-        desired_arrival_time = flights[flight_id]["requests"]["001"]["request_arrival_time"]
-        desired_good_arr = (f"{origin_vertiport}_{desired_dep_time}", f"{origin_vertiport}_{desired_dep_time}_dep")
-        desired_good_dep = (f"{desired_vertiport}_{desired_arrival_time}_arr", f"{desired_vertiport}_{desired_arrival_time}")
-        desired_good_dep_to_arr = (f"{origin_vertiport}_{desired_dep_time}_dep", f"{desired_vertiport}_{desired_arrival_time}_arr")
-        good_id_arr = goods_list.index(desired_good_arr)
-        good_id_dep = goods_list.index(desired_good_dep)
-        good_id_dep_to_arr = goods_list.index(desired_good_dep_to_arr)
-        desired_goods[flight_id] = {"desired_good_arr": good_id_arr, "desired_good_dep": good_id_dep, "desired_good_dep_to_arr": good_id_dep_to_arr}
-        desired_goods[flight_id]["desired_edge"] = (f"{origin_vertiport}_{desired_dep_time}", f"{desired_vertiport}_{desired_arrival_time}")
+        flight = flights[flight_id]
+        appearance_time = flight["appearance_time"]
+        desired_request = flight["requests"]["001"]
+        origin_vertiport = flight["origin_vertiport_id"]
+        desired_dep_time = desired_request["request_departure_time"]
+        desired_vertiport = desired_request["destination_vertiport_id"]
+        desired_arrival_time = desired_request["request_arrival_time"]
+        desired_edge = (f"{origin_vertiport}_{desired_dep_time}", f"{origin_vertiport}_{desired_dep_time}_dep")
+        flights_desired_goods = [desired_edge]
+        for i in range(appearance_time, desired_dep_time):
+            flights_desired_goods.append((f"{origin_vertiport}_{i}", f"{origin_vertiport}_{i+1}"))
+        flights_desired_goods.append((f"{origin_vertiport}_{desired_dep_time}_dep", f"{desired_request["sector_path"][0]}_{desired_request["sector_times"][0]}"))
+        for i in range(len(desired_request["sector_path"])):
+            sector = desired_request["sector_path"][i]
+            start_time = desired_request["sector_times"][i]
+            end_time = desired_request["sector_times"][i+1]
+            for sector_time in range(start_time, end_time):
+                flights_desired_goods.append((f"{sector}_{sector_time}", f"{sector}_{sector_time+1}"))
+            if i < len(desired_request["sector_path"]) - 1:
+                next_sector = desired_request["sector_path"][i+1]
+                flights_desired_goods.append((f"{sector}_{end_time}", f"{next_sector}_{end_time}"))
+        if desired_vertiport is not None:
+            flights_desired_goods.append((f"{sector}_{end_time}", f"{desired_vertiport}_{desired_arrival_time}_arr"))
+            flights_desired_goods.append((f"{desired_vertiport}_{desired_arrival_time}_arr", f"{desired_vertiport}_{desired_arrival_time}"))
+            # desired_good_dep_to_arr = (f"{origin_vertiport}_{desired_dep_time}_dep", f"{desired_vertiport}_{desired_arrival_time}_arr")
+            # good_id_arr = goods_list.index(desired_good_arr)
+            # good_id_dep_to_arr = goods_list.index(desired_good_dep_to_arr)
+            # desired_goods[flight_id]["desired_good_dep_to_arr"] = good_id_dep_to_arr
+        # good_id_dep = goods_list.index(desired_good_dep)
+        # desired_goods[flight_id] = {"desired_good_arr": good_id_arr, "desired_good_dep": good_id_dep, "desired_good_dep_to_arr": good_id_dep_to_arr}
+        # desired_goods[flight_id]["desired_good_dep"] = good_id_dep
+        print(f"Desired goods for flight {flight_id}: {flights_desired_goods}")
+        index_list = []
+        for good in flights_desired_goods:
+            index_list.append(goods_list.index(good))
+        desired_goods[flight_id] = {"good_indices": index_list, "desired_edge_idx": goods_list.index(desired_edge), 
+                                    "desired_edge": desired_edge}
 
     return desired_goods
 
-
-
-
-def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, routes_data, vertiports, 
+def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, sectors_data, vertiports, 
                                   output_folder=None, save_file=None, initial_allocation=True, design_parameters=None):
 
     # # building the graph
@@ -836,7 +895,7 @@ def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, routes_
         rebate_frequency = 1
 
     # Construct market
-    agent_information, market_information, bookkeeping = construct_market(flights, timing_info, routes_data, vertiport_usage, 
+    agent_information, market_information, bookkeeping = construct_market(flights, timing_info, sectors_data, vertiport_usage, 
                                                                           default_good_valuation=default_good_valuation, 
                                                                           dropout_good_valuation=dropout_good_valuation, BETA=BETA)
 
@@ -847,13 +906,26 @@ def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, routes_
     # y = np.random.rand(num_agents, num_goods-2)*10
     y = np.zeros((num_agents, num_goods - 2))
     desired_goods = track_desired_goods(flights, goods_list)
-    for i, agent_ids in enumerate(desired_goods):
+    for i, agent_id in enumerate(desired_goods):
         # dept_id = desired_goods[agent_ids]["desired_good_arr"]
         # arr_id = desired_goods[agent_ids]["desired_good_dep"] 
-        dept_to_arr_id = desired_goods[agent_ids]["desired_good_dep_to_arr"]
+        # dept_to_arr_id = desired_goods[agent_ids]["desired_good_dep_to_arr"]
         # y[i][dept_id]= 1
-        # y[i][arr_id] = 1 
-        y[i][dept_to_arr_id] = 1
+        # y[i][arr_id] = 1
+        # y[i][desired_goods[agent_id]["good_indices"][0]] = 1
+        for good_idx in desired_goods[agent_id]["good_indices"]:
+            y[i][good_idx] = 1
+        # print(f"Initial allocation for agent {i}: {y[i]}")
+        # print(f"Goods: {agent_goods_lists[i]}")
+        # ybar = np.array([y[i, goods_list.index(good)] for good in agent_goods_lists[i][:-2]] + [0,0])
+        # print(f"y bar: {ybar}")
+        # agent_goods = agent_goods_lists[i]
+        # print(f"Agent goods: {agent_goods}")
+        # print(f"ybar is 1: {[agent_goods[ind] for ind in np.where(ybar == 1)[0]]}")
+        # print(f"Ax - b: {agent_constraints[i][0] @ ybar - agent_constraints[i][1]}")
+        # invalid_constraints = np.where(agent_constraints[i][0] @ ybar - agent_constraints[i][1] == 1)
+        # print(f"A: {agent_constraints[i][0]}")
+        # assert all(agent_constraints[i][0] @ ybar - agent_constraints[i][1] == 0), f"Initial allocation for agent {i} does not satisfy constraints for agent {i}"
     # y = np.random.rand(num_agents, num_goods)
     p = np.zeros(num_goods)
     p[-2] = price_default_good 

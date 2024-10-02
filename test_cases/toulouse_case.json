@@ -30,27 +30,27 @@
         }
     },
     "sectors": {
-        "S0001": {
+        "S001": {
             "latitude": 43.6048,
             "longitude": 1.4428,
             "hold_capacity": 10
         },
-        "S0002": {
+        "S002": {
             "latitude": 43.6048,
             "longitude": 1.5157762111108113,
             "hold_capacity": 10
         },
-        "S0003": {
+        "S003": {
             "latitude": 43.6048,
             "longitude": 1.369823788889189,
             "hold_capacity": 10
         },
-        "S0004": {
+        "S004": {
             "latitude": 43.55195689763083,
             "longitude": 1.4428,
             "hold_capacity": 10
         },
-        "S0005": {
+        "S005": {
             "latitude": 43.657643102369164,
             "longitude": 1.4428,
             "hold_capacity": 10

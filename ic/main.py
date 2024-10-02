@@ -315,7 +315,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method="fisher",
     vertiports = data["vertiports"]
     timing_info = data["timing_info"]
     auction_freq = timing_info["auction_frequency"]
-    routes_data = data["routes"]
+    sectors_data = data["sectors"]
 
     start_time = timing_info["start_time"]
     end_time = timing_info["end_time"]
@@ -339,7 +339,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method="fisher",
 
     for auction_start in auction_intervals:
 
-        if auction_start >= 11: # remove this to run the full simulation, this is just to run the first auction
+        if auction_start >= 100: # remove this to run the full simulation, this is just to run the first auction
             break
         else: 
             auction_end = auction_start + auction_freq
@@ -356,23 +356,26 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method="fisher",
             }
 
             unique_vertiport_ids = set()
-            interval_routes = set()
+            interval_sectors = set()
             for flight in interval_flights.values():
                 origin = flight['origin_vertiport_id']
                 unique_vertiport_ids.add(origin)
                 # Assuming there's also a destination_vertiport_id in the flight data
                 for request in flight['requests'].values():
                     destination = request['destination_vertiport_id']
-                    unique_vertiport_ids.add(destination)
-                    interval_routes.add((origin, destination))
-            
+                    if destination is not None:
+                        unique_vertiport_ids.add(destination)
+                    if request["request_departure_time"] != 0:
+                        interval_sectors.update(request["sector_path"])
+                        # interval_routes.add((origin, destination))
+
             # Filter vertiport data
             filtered_vertiports = {vid: vertiports[vid] for vid in unique_vertiport_ids}
-            filtered_routes = [route for route in routes_data if (route['origin_vertiport_id'], route['destination_vertiport_id']) in interval_routes]
+            filtered_sectors = {sid: sectors_data[sid] for sid in interval_sectors}
         
             # Create vertiport graph and add starting aircraft positions
-            filtered_vertiport_usage = VertiportStatus(filtered_vertiports, filtered_routes, timing_info)
-            filtered_vertiport_usage.add_aircraft(interval_flights)
+            filtered_vertiport_usage = VertiportStatus(filtered_vertiports, filtered_sectors, timing_info)
+            # filtered_vertiport_usage.add_aircraft(interval_flights)
 
             print("Performing auction for interval: ", auction_start, " to ", auction_end)
             write_market_interval(auction_start, auction_end, interval_flights, output_folder)
@@ -391,7 +394,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method="fisher",
             }
             if method == "fisher":
                 allocated_flights, rebased_flights, payments = fisher_allocation_and_payment(
-                    filtered_vertiport_usage, interval_flights, current_timing_info, filtered_routes, filtered_vertiports,
+                    filtered_vertiport_usage, interval_flights, current_timing_info, filtered_sectors, filtered_vertiports,
                     output_folder, save_file=scenario_name, initial_allocation=initial_allocation, design_parameters=design_parameters
                 )
             elif method == "vcg":
