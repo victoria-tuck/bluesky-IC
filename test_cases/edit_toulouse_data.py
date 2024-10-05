@@ -16,6 +16,7 @@ flights = data["flights"]
 
 empty_flights = []
 # Iterate over the flights and modify the "requests" section
+max_time = 0
 for flight_id, flight_data in flights.items():
     requests = flight_data["requests"]
     if len(requests) == 0:
@@ -45,6 +46,7 @@ for flight_id, flight_data in flights.items():
     if len(sector_times) > 0:
         departure_time = sector_times[0]
         arrival_time = sector_times[-1]
+        max_time = max(max_time, max(sector_times))
     else:    
         departure_time = 0
         arrival_time = 0
@@ -73,9 +75,9 @@ for flight_id in empty_flights:
 data["flights"] = flights
 data["timing_info"] = {
     "start_time": 1,
-    "end_time": 20,
+    "end_time": max_time + 1,
     "time_step": 1,
-    "auction_frequency": 10
+    "auction_frequency": 20
 }
 data["congestion_params"] = {
     "lambda": 0.1,

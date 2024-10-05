@@ -30,7 +30,7 @@ from write_csv import write_output, save_data
 INTEGRAL_APPROACH = False
 UPDATED_APPROACH = True
 TOL_ERROR = 1e-4
-MAX_NUM_ITERATIONS = 5000
+MAX_NUM_ITERATIONS = 10000
 
 
 def construct_market(flights, timing_info, sectors, vertiport_usage, default_good_valuation=1, dropout_good_valuation=-1, BETA=1):
@@ -145,6 +145,8 @@ def find_capacity(goods_list, sectors_data, vertiport_data):
                 capacity = node.get('takeoff_capacity') - node.get('takeoff_usage') 
             else:
                 node = vertiport_data._node.get(origin)
+                if node is None:
+                    print(f"Nodes: {vertiport_data.nodes}")
                 capacity = node.get('hold_capacity') - node.get('hold_usage') 
                 print(f"Node hold capacity: {node.get('hold_capacity')}")
                 print(f"Node usage capacity: {node.get('hold_usage')}")
@@ -284,8 +286,8 @@ def update_market(x_val, values_k, market_settings, constraints, agent_goods_lis
     for i in range(len(p_k_plus_1)):
         if p_k_plus_1[i] < 0:
             p_k_plus_1[i] = 0  
-        # if p_k_plus_1[i] > 20:
-        #     p_k_plus_1[i] = 20 
+        # if p_k_plus_1[i] > 200:
+        #     p_k_plus_1[i] = 200 
     # p_k_plus_1[-1] = 0  # dropout good
     # p_k_plus_1[-2] = price_default_good  # default good
     p_k_plus_1 = np.append(p_k_plus_1, [price_default_good,0]) # default and dropout good
@@ -592,7 +594,7 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
         x_iter += 1
         if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.0001) and (x_iter>=5) and (iter_constraint_x_y <= 0.1):
             break
-        if x_iter == 500:
+        if x_iter == 10000:
             break
 
 
@@ -747,7 +749,7 @@ def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_t
 
     # Desired goods evolution
     plt.figure(figsize=(10, 5))
-    print(f"Allocations: {agent_allocations}")
+    # print(f"Allocations: {agent_allocations}")
     agent_desired_goods_list = []
     for agent in enumerate(desired_goods):
         agent_id = agent[0]
