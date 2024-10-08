@@ -10,7 +10,7 @@ def this_round(input_time):
     return round(input_time / DISCRETIZATION_STEP)
 
 # Load the original JSON data from a file (for example)
-with open("toulouse_case.json", "r") as f:
+with open("toulouse_case2.json", "r") as f:
     data = json.load(f)
 flights = data["flights"]
 
@@ -29,24 +29,36 @@ for flight_id, flight_data in flights.items():
     # Create the sector_path and sector_times
     old_to_new_sectors = {"V001": "V001", "V002": "V002", "V003": "V003", "V004": "V004",
                           "V005": "S001", "V006": "S002", "V007": "S003", "V008": "S004", "V009": "S005"}
-    sector_path = [req["destination_vertiport_id"] for req in requests]
-    fixed_sector_path = [old_to_new_sectors[sector] for sector in sector_path]
-    sector_times = [this_round(int(req["request_departure_time"])) for req in requests]
+    sector_path = [old_to_new_sectors[sector] for sector in requests["001"]["destination_vertiport_id"]]
+    # sector_path = [req["destination_vertiport_id"] for req in requests]
+    # fixed_sector_path = [old_to_new_sectors[sector] for sector in sector_path]
+    sector_times = [this_round(req_time) for req_time in [requests["001"]["request_departure_time"][0]] + requests["001"]["request_arrival_time"]]
+    # sector_times = [this_round(int(req["request_departure_time"])) for req in requests]
 
     if len(requests) > 0:
-        sector_times.append(this_round(int(requests[-1]["request_arrival_time"])))  # Add the last arrival time
-        destination = requests[-1]["destination_vertiport_id"]
-        if is_vertiport(requests[-1]["destination_vertiport_id"]):
-            destination_vertiport_id = requests[-1]["destination_vertiport_id"]
+        # sector_times.append(this_round(int(requests[-1]["request_arrival_time"])))  # Add the last arrival time
+        destination = requests["001"]["destination_vertiport_id"][-1]
+        if is_vertiport(destination):
+            destination_vertiport_id = destination
+            extended_sector_path = sector_path
+            extended_sector_times = sector_times
         else:
             destination_vertiport_id = None
+            extended_sector_path = sector_path + sector_path[:-1][::-1]
+            sector_times_diff = [time1 - time2 for time1, time2 in zip(sector_times[1:], sector_times[:-1])][::-1]
+            print(sector_times_diff)
+            # sector_times_diff = (sector_times[:-1] - sector_times[1:]).reverse()
+            # Adding 30 seconds in between outgoing and return trip
+            extended_sector_times = sector_times[:-1] + [sector_times[-1] + sum(sector_times_diff[:ind+1]) + this_round(30) for ind in range(len(sector_times_diff))]
     else:
         destination_vertiport_id = None
+        extended_sector_times = sector_times
+        extended_sector_path = sector_path
     
     if len(sector_times) > 0:
-        departure_time = sector_times[0]
-        arrival_time = sector_times[-1]
-        max_time = max(max_time, max(sector_times))
+        departure_time = extended_sector_times[0]
+        arrival_time = extended_sector_times[-1]
+        max_time = max(max_time, max(extended_sector_times))
     else:    
         departure_time = 0
         arrival_time = 0
@@ -63,8 +75,8 @@ for flight_id, flight_data in flights.items():
         "001": {
             "bid": random.randint(1, 300),
             "valuation": random.randint(1, 300),
-            "sector_path": fixed_sector_path,
-            "sector_times": sector_times,
+            "sector_path": extended_sector_path,
+            "sector_times": extended_sector_times,
             "destination_vertiport_id": destination_vertiport_id,
             "request_departure_time": departure_time,
             "request_arrival_time": arrival_time        
