@@ -10,7 +10,8 @@ def this_round(input_time):
     return round(input_time / DISCRETIZATION_STEP)
 
 # Load the original JSON data from a file (for example)
-with open("toulouse_case2.json", "r") as f:
+filename = "toulouse_case3"
+with open(f"{filename}.json", "r") as f:
     data = json.load(f)
 flights = data["flights"]
 
@@ -27,8 +28,10 @@ for flight_id, flight_data in flights.items():
     rounded_appearance_time = this_round(sampled_appearance_time)
     
     # Create the sector_path and sector_times
-    old_to_new_sectors = {"V001": "V001", "V002": "V002", "V003": "V003", "V004": "V004",
-                          "V005": "S001", "V006": "S002", "V007": "S003", "V008": "S004", "V009": "S005"}
+    old_to_new_sectors = {"V001": "V001", "V002": "V002", "V003": "V003", "V004": "V004"}
+    for ind in range(5, len(data["sectors"])+5):
+        old_to_new_sectors[f"V00{ind}"] = f"S00{ind-4}"
+                        #   "V005": "S001", "V006": "S002", "V007": "S003", "V008": "S004", "V009": "S005"}
     sector_path = [old_to_new_sectors[sector] for sector in requests["001"]["destination_vertiport_id"]]
     # sector_path = [req["destination_vertiport_id"] for req in requests]
     # fixed_sector_path = [old_to_new_sectors[sector] for sector in sector_path]
@@ -111,5 +114,5 @@ data["congestion_params"] = {
 }
 
 # Save the modified data back to a file (or use the data as needed)
-with open("modified_toulouse_case.json", "w") as f:
+with open(f"modified_{filename}.json", "w") as f:
     json.dump(data, f, indent=4)

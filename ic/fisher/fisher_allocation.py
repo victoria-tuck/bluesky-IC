@@ -542,6 +542,7 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
     start_time_algorithm = time.time()  
     
     problem = None
+    convergence_iter = None
     while x_iter <= MAX_NUM_ITERATIONS:  # max(abs(np.sum(opt_xi, axis=0) - C)) > epsilon:
         if x_iter == 0:
             x = np.zeros((num_agents, len(p)))
@@ -592,9 +593,14 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
         logging.info(f"Iteration: {x_iter}, Market Clearing Error: {market_clearing_error}, Tolerance: {tolerance}")
 
         x_iter += 1
-        if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.0001) and (x_iter>=5) and (iter_constraint_x_y <= 0.1):
+        if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.0001) and (x_iter>=5) and (iter_constraint_x_y <= 0.1) and (convergence_iter is None):
+            convergence_iter = x_iter
+            print(f"Defining convergence iteration: {x_iter}")
+            # break
+        if convergence_iter is not None and x_iter > convergence_iter * 10:
+            print("Finishing after extended iterations")
             break
-        if x_iter == 10000:
+        if x_iter == 1000:
             break
 
 
@@ -645,7 +651,7 @@ def social_welfare(x, p, u, supply):
 
 
 
-def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_time=None):
+def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_time=None, rebate_frequency=1):
 
     x_iter = data_to_plot["x_iter"]
     prices = data_to_plot["prices"]
@@ -797,6 +803,18 @@ def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_t
     plt.ylabel('Social Welfare')
     plt.title("Social Welfare")
     plt.savefig(get_filename("social_welfare"))
+    plt.close()
+
+    # Rebate error
+    plt.figure(figsize=(10, 5))
+    print(rebates)
+    print(f"Rebate frequency: {rebate_frequency}")
+    rebate_error = [[rebates[i][j][0] - rebates[i - i % int(rebate_frequency)][j][0] for j in range(len(rebates[0]))] for i in range(len(rebates))]
+    plt.plot(range(1, x_iter + 1), rebate_error)
+    plt.xlabel('x_iter')
+    plt.ylabel('Rebate error')
+    plt.title("Rebate error")
+    plt.savefig(get_filename("rebate_error"))
     plt.close()
 
 def load_json(file=None):
@@ -952,7 +970,7 @@ def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, sectors
     'capacity': capacity,
     'data_to_plot': data_to_plot}
     save_data(output_folder, "fisher_data", market_auction_time, **extra_data)
-    plotting_market(data_to_plot, desired_goods, output_folder, market_auction_time)
+    plotting_market(data_to_plot, desired_goods, output_folder, market_auction_time, rebate_frequency)
     
     # Building edge information for mapping - move this to separate function
     # move this part to a different function
