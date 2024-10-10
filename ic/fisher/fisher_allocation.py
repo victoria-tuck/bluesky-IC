@@ -585,7 +585,7 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
                 abs_error[agent_index].append(agent_error)
     
         
-        # if x_iter % rebate_frequency == 0:
+        # if x_iter % lambda_frequency == 0:
         if True:
             update_rebates = True
         else:
@@ -662,7 +662,7 @@ def social_welfare(x, p, u, supply, agent_indices):
 
 
 
-def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_time=None, rebate_frequency=1):
+def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_time=None, lambda_frequency=1):
 
     x_iter = data_to_plot["x_iter"]
     prices = data_to_plot["prices"]
@@ -819,8 +819,8 @@ def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_t
     # Rebate error
     plt.figure(figsize=(10, 5))
     print(rebates)
-    print(f"Rebate frequency: {rebate_frequency}")
-    rebate_error = [[rebates[i][j][0] - rebates[i - i % int(rebate_frequency)][j][0] for j in range(len(rebates[0]))] for i in range(len(rebates))]
+    print(f"Rebate frequency: {lambda_frequency}")
+    rebate_error = [[rebates[i][j][0] - rebates[i - i % int(lambda_frequency)][j][0] for j in range(len(rebates[0]))] for i in range(len(rebates))]
     plt.plot(range(1, x_iter + 1), rebate_error)
     plt.xlabel('x_iter')
     plt.ylabel('Rebate error')
@@ -974,7 +974,7 @@ def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, sectors
     'capacity': capacity,
     'data_to_plot': data_to_plot}
     save_data(output_folder, "fisher_data", market_auction_time, **extra_data)
-    plotting_market(data_to_plot, desired_goods, output_folder, market_auction_time, rebate_frequency)
+    plotting_market(data_to_plot, desired_goods, output_folder, market_auction_time, lambda_frequency)
     
     # Building edge information for mapping - move this to separate function
     # move this part to a different function

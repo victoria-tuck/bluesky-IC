@@ -36,12 +36,12 @@
         "S001": {
             "latitude": 43.6048,
             "longitude": 1.4428,
-            "capacity": 5
+            "hold_capacity": 5
         },
         "S002": {
             "latitude": 43.6048,
             "longitude": 1.5157762111108113,
-            "capacity": 5
+            "hold_capacity": 5
         }
     },
     "flights": {

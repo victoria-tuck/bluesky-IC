@@ -233,16 +233,18 @@ def step_simulation(
         # vertiport_usage.move_aircraft(flight["origin_vertiport_id"], request)
 
         # Add movement to stack commands
-        origin_vertiport = vertiports[flight["origin_vertiport_id"]]
-        destination_vertiport = vertiports[request["destination_vertiport_id"]]
-        add_commands_for_flight(
-            flight_id,
-            flight,
-            request,
-            origin_vertiport,
-            destination_vertiport,
-            stack_commands,
-        )
+        # origin_vertiport = vertiports[flight["origin_vertiport_id"]]
+        # if request["destination_vertiport_id"] is None:
+        #     continue
+        # destination_vertiport = vertiports[request["destination_vertiport_id"]]
+        # add_commands_for_flight(
+        #     flight_id,
+        #     flight,
+        #     request,
+        #     origin_vertiport,
+        #     destination_vertiport,
+        #     stack_commands,
+        # )
 
     return vertiport_usage
 
@@ -259,10 +261,12 @@ def adjust_interval_flights(allocated_flights, flights):
         list: The adjusted list of allocated flights, dictionary with f
     """
     adjusted_flights = []
+    print(f"Allocated flights: {allocated_flights}")
     for i, (flight_id, dept_arr_tuple) in enumerate(allocated_flights):
         flight = flights[flight_id]
-        allocated_dep_time = int(re.search(r'_(\d+)_', dept_arr_tuple[0]).group(1)) 
-        allocated_arr_time = int(re.search(r'_(\d+)_', dept_arr_tuple[1]).group(1))
+        print(dept_arr_tuple[0])
+        allocated_dep_time = int(re.search(r'_(\d+)_', dept_arr_tuple[1]).group(1)) 
+        # allocated_arr_time = int(re.search(r'_(\d+)_', dept_arr_tuple[1]).group(1))
         requested_dep_time = flight["requests"]['001']['request_departure_time']
         if requested_dep_time == allocated_dep_time:
             adjusted_flights.append((flight_id, '001'))
@@ -273,7 +277,7 @@ def adjust_interval_flights(allocated_flights, flights):
             flight["requests"]['002'] = {
                 "destination_vertiport_id": flight["requests"]['001']['destination_vertiport_id'],
                 "request_departure_time": allocated_dep_time,
-                "request_arrival_time": allocated_arr_time,
+                # "request_arrival_time": allocated_arr_time,
                 'valuation': flight["requests"]['001']["valuation"] * decay**i
             }
 

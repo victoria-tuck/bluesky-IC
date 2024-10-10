@@ -110,7 +110,7 @@ def rank_allocations(agents_data):
 
     ranked_agents = {}
     for flight_id, data in agents_data.items():
-        desired_good_idx = data['desired_good_info']["desired_good_dep_to_arr"]
+        desired_good_idx = data['desired_good_info']["desired_edge_idx"]
         desired_good_allocation = data['fisher_allocation'][desired_good_idx]
         ranked_agents[flight_id] = {"fisher_desired_good_allocation": desired_good_allocation}
         ranked_agents[flight_id]["desired_good_id"] = desired_good_idx
@@ -139,7 +139,7 @@ def get_next_auction_data(agent_data, market_data):
     allocation, rebased, dropped = [], [], []
     for  flight_id, data in agent_data.items():
         if data['status'] == 'allocated':
-            desired_good_idx = data['desired_good_info']["desired_good_dep_to_arr"]
+            desired_good_idx = data['desired_good_info']["desired_edge_idx"]
             int_allocation_long = np.zeros(len(data["fisher_allocation"]))
             int_allocation_long[data["agent_edge_indices"]] = data["final_allocation"][:-1] 
             int_allocation_long[-1] = data["final_allocation"][-1]

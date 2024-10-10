@@ -62,10 +62,11 @@ def track_delayed_goods(agents_data_dict, market_data_dict):
     for agent_id, agent_data in agents_data_dict.items():
         delayed_goods = []
         for good in agent_data["agent_goods_list"]:
-            if "dep" in good[0] and "arr" in good[1]:
+            if "dep" in good[0]: # and "arr" in good[1]:
                 good_tuple = (good[0], good[1])
                 delayed_goods.append(good_tuple)
         delayed_goods.pop(0)
+        print("Delayed goods: ", delayed_goods)
         agent_data['delayed_goods'] = delayed_goods
         delayed_goods_indices = [goods_list.index(good) for good in delayed_goods]
         agent_data["idx_delayed_goods"] = delayed_goods_indices
