@@ -209,7 +209,7 @@ def update_basic_market(x, values_k, market_settings, constraints):
 
 
 def update_market(x_val, values_k, market_settings, constraints, agent_goods_lists, goods_list, 
-                  price_default_good, problem, update_rebates=True, price_upper_bound=1000, integral=False):
+                  price_default_good, problem, update_rebates=True, integral=False, price_upper_bound=1000):
     '''
     Update market consumption, prices, and rebates
     '''
@@ -431,7 +431,10 @@ def update_agent(w_i, u_i, p, r_i, constraints, y_i, beta, x_iter, update_freque
         solvers = [cp.SCS, cp.CLARABEL, cp.MOSEK, cp.OSQP, cp.ECOS, cp.CVXOPT]
     for solver in solvers:
         try:
-            result = problem.solve(solver=solver, mosek_params={"MSK_DPAR_INTPNT_CO_TOL_REL_GAP": 1e-7})
+            if solver == cp.MOSEK:
+                result = problem.solve(solver=solver, mosek_params={"MSK_DPAR_INTPNT_CO_TOL_REL_GAP": 1e-7})
+            else:
+                result = problem.solve(solver=solver)
             logging.info(f"Agent Opt - Problem solved with solver {solver}")
             break
         except cp.error.SolverError as e:
@@ -593,7 +596,7 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
         # Update market
         k, y, p, r, problem = update_market(x, (1, p, r), (supply, beta), agent_constraints, agent_goods_lists, goods_list, 
                                             price_default_good, problem, 
-                                            update_rebates=update_rebates, price_upper_bound=price_upper_bound, integral=INTEGRAL_APPROACH)
+                                            update_rebates=update_rebates, integral=INTEGRAL_APPROACH, price_upper_bound=price_upper_bound)
         yplot.append(y)
         rebates.append([[rebate] for rebate in r])
         prices.append(p)
@@ -606,8 +609,8 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
         x_iter += 1
         if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.0001) and (x_iter>=10) and (iter_constraint_x_y <= 0.01):
             break
-        if x_iter == 1000:
-            break
+        # if x_iter ==  100:
+        #     break
 
 
 
@@ -920,7 +923,7 @@ def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, sectors
     agent_information, market_information, bookkeeping = construct_market(flights, timing_info, sectors_data, vertiport_usage, 
                                                                           default_good_valuation=default_good_valuation, 
                                                                           dropout_good_valuation=dropout_good_valuation, BETA=BETA)
-
+    
     # Run market
     goods_list = bookkeeping
     num_goods, num_agents = len(goods_list), len(flights)
@@ -985,22 +988,22 @@ def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, sectors
     market_data_dict = store_market_data(extra_data, design_parameters, market_auction_time)
     agents_data_dict = track_delayed_goods(agents_data_dict, market_data_dict)
     # Rank agents based on their allocation and settling any contested goods
-    sorted_agent_dict, ranked_list = rank_allocations(agents_data_dict)
+    sorted_agent_dict, ranked_list = rank_allocations(agents_data_dict, market_data_dict)
     agents_data_dict, market_data_dict= agent_allocation_selection(ranked_list, agents_data_dict, market_data_dict)
-
+    valuations = {key: agents_data_dict[key]["valuation"] for key in agents_data_dict.keys()}
 
     # Getting data for next auction
-    allocation, rebased, dropped = get_next_auction_data(agents_data_dict, market_data_dict)
+    allocation, rebased, dropped, = get_next_auction_data(agents_data_dict, market_data_dict)
+    print(f"Allocation: {allocation}")
 
-
-    output_data = {"market_data":market_data_dict, "agents_data":agents_data_dict}
+    output_data = {"market_data":market_data_dict, "agents_data":agents_data_dict, "ranked_list":ranked_list, "valuations":valuations}
     save_data(output_folder, "fisher_data_after", market_auction_time, **output_data)
 
 
     write_output(flights, edge_information, market_data_dict, 
                 agents_data_dict, market_auction_time, output_folder)
 
-    return allocation, rebased, dropped
+    return allocation, rebased, dropped, valuations
     
 
 
