@@ -16,6 +16,12 @@ docs/_build/
 # virtual environment
 venv
 
+#venv
+bluesky-venv
+
+#scenarios
+scenario/TEST_IC
+
 # PyBuilder
 target/
 
@@ -94,3 +100,9 @@ ssd.obj
 *-checkpoint.py
 *-checkpoint.ipynb
 .ropeproject/config.py
+
+#testing files
+ic/Picklerandomstate
+ic/results/*.png
+ic/results/*
+ic/latex/*
