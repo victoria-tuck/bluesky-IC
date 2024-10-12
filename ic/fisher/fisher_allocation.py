@@ -55,7 +55,7 @@ def construct_market(flights, timing_info, sectors, vertiport_usage, default_goo
     
     for flight_id, flight in flights.items():
 
-
+        print(f"Building graph for flight {flight_id}")
         builder = FisherGraphBuilder(vertiport_usage, timing_info)
         agent_graph = builder.build_graph(flight)
         origin_vertiport = flight["origin_vertiport_id"]
@@ -69,13 +69,15 @@ def construct_market(flights, timing_info, sectors, vertiport_usage, default_goo
         nodes.remove(starting_node)
         nodes = [starting_node] + nodes
         inc_matrix = nx.incidence_matrix(agent_graph, nodelist=nodes, edgelist=edges, oriented=True).toarray()
-        print(f"Agent nodes: {nodes}")
-        print(f"Agent edges: {edges}")
-        # for row in inc_matrix[-15,:]:
-        row = inc_matrix[-15,:]
-        positive_indices = [edges[index] for index in np.where(row == 1)[0]]
-        negative_indices = [edges[index] for index in np.where(row == -1)[0]]
-        print(f"BAD ROW: {positive_indices} - {negative_indices}")
+        # print(f"Agent nodes: {nodes}")
+        # print(f"Agent edges: {edges}")
+        if flight_id == "AC005":
+            for row in inc_matrix:
+        # row = inc_matrix[-15,:]
+
+                positive_indices = [edges[index] for index in np.where(row == 1)[0]]
+                negative_indices = [edges[index] for index in np.where(row == -1)[0]]
+                print(f"{positive_indices} - {negative_indices}")
         # print(row)
         # print(f"Incidence matrix: {inc_matrix}")
         rows_to_delete = []
@@ -96,7 +98,7 @@ def construct_market(flights, timing_info, sectors, vertiport_usage, default_goo
         A_with_default_good[0, -1] = 1 # droupout good
         # A_with_default_good = np.hstack((A, np.zeros((A.shape[0], 1)))) # outside/default good
         goods = edges + ['default_good'] + ['dropout_good']
-        print(f"Goods: {goods}")
+        # print(f"Agent {flight_id}'s goods: {goods}")
         # Appending values for default and dropout goods
         valuations.append(default_good_valuation) # Small positive valuation for default good
         valuations.append(dropout_good_valuation) # Small positive valuation for dropout good
@@ -111,7 +113,9 @@ def construct_market(flights, timing_info, sectors, vertiport_usage, default_goo
     # Remove duplicate goods from goods_list
     goods_list = list(dict.fromkeys(goods_list))
     supply = find_capacity(goods_list, sectors, vertiport_usage)
-    print(f"Supply: {supply}")
+    # for sup, good in zip(supply, goods_list):
+    #     print(f"Supply for {good}: {sup}")
+    # print(f"Supply: {supply}")
     
   
 
@@ -147,9 +151,9 @@ def find_capacity(goods_list, sectors_data, vertiport_data):
                 capacity = node.get('takeoff_capacity') - node.get('takeoff_usage') 
             else:
                 node = vertiport_data._node.get(origin)
-                if node is None:
-                    print(f"Origin: {origin} - Destination: {destination}")
-                    print(f"Nodes: {vertiport_data.nodes}")
+                # if node is None:
+                    # print(f"Origin: {origin} - Destination: {destination}")
+                    # print(f"Nodes: {vertiport_data.nodes}")
                 capacity = node.get('hold_capacity') - node.get('hold_usage') 
                 # print(f"Node hold capacity: {node.get('hold_capacity')}")
                 # print(f"Node usage capacity: {node.get('hold_usage')}")
@@ -164,9 +168,9 @@ def find_capacity(goods_list, sectors_data, vertiport_data):
                 # Traveling from sector to vertiport
                 destination_time = destination.replace('_arr', '')
                 node = vertiport_data._node.get(destination_time)
-                if node is None:
-                    print(f"Origin: {origin} - Destination: {destination}")
-                    print(f"Nodes: {vertiport_data.nodes}")
+                # if node is None:
+                #     print(f"Origin: {origin} - Destination: {destination}")
+                #     print(f"Nodes: {vertiport_data.nodes}")
                 capacity = node.get('landing_capacity') - node.get('landing_usage')
         # print(f"Capacity on edge {origin} to {destination}: {capacity}")
         capacities[i] = capacity
@@ -613,8 +617,8 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
         x_iter += 1
         if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.01) and (x_iter>=10) and (iter_constraint_x_y <= 0.05):
             break
-        if x_iter ==  1000:
-            break
+        # if x_iter ==  5:
+        #     break
 
 
 
@@ -825,8 +829,8 @@ def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_t
 
     # Rebate error
     plt.figure(figsize=(10, 5))
-    print(rebates)
-    print(f"Rebate frequency: {lambda_frequency}")
+    # print(rebates)
+    # print(f"Rebate frequency: {lambda_frequency}")
     rebate_error = [[rebates[i][j][0] - rebates[i - i % int(lambda_frequency)][j][0] for j in range(len(rebates[0]))] for i in range(len(rebates))]
     plt.plot(range(1, x_iter + 1), rebate_error)
     plt.xlabel('x_iter')
@@ -886,7 +890,7 @@ def track_desired_goods(flights, goods_list):
         # good_id_dep = goods_list.index(desired_good_dep)
         # desired_goods[flight_id] = {"desired_good_arr": good_id_arr, "desired_good_dep": good_id_dep, "desired_good_dep_to_arr": good_id_dep_to_arr}
         # desired_goods[flight_id]["desired_good_dep"] = good_id_dep
-        print(f"Desired goods for flight {flight_id}: {flights_desired_goods}")
+        # print(f"Desired goods for flight {flight_id}: {flights_desired_goods}")
         index_list = []
         for good in flights_desired_goods:
             index_list.append(goods_list.index(good))
@@ -970,6 +974,19 @@ def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, sectors
                                                              lambda_frequency=lambda_frequency, price_upper_bound=price_upper_bound)
     
 
+    print("---FINAL ALLOCATION---")
+    # for agent_x, desired_good in zip(x, desired_goods):
+    print(f"Agent allocation of goods: {[goods_list[i] for i in np.where(x[2] > 0.9)[0]]}")
+    print(f"Partial allocation: {[goods_list[i] for i in np.where(np.logical_and(x[2] > 0.1, x[2] <= 0.9))[0]]}")
+    print(f"Partially allocated good values: {[x[2][i] for i in np.where(np.logical_and(x[2] > 0.1, x[2] <= 0.9))[0]]}")
+    # print(f"Full agent allocations: {x[2][-2]}")
+    # print(f"Goods list: {goods_list}")
+    # print(f"{np.where(np.array(goods_list) == ('S001_37', 'S002_37'))}")
+    # print(f"Weird allocation: {[x[2][ind] for ind in np.where(goods_list == ('S001_37', 'S002_37'))[0]]}")
+    # print(f"Weird allocation: {[x[2][ind] for ind in np.where(goods_list == ('S002_37', 'S002_38'))[0]]}")
+        # allocated_goods = [agent_goods_list[i] for i in np.where(row > 0.9)[0]]
+        # print(f"{row}")
+    # print(f"Final allocation: {x}")
     extra_data = {
     'x_prob': x,
     'prices': prices,

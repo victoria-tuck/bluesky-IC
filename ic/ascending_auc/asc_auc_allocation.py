@@ -130,9 +130,9 @@ class bundle:
         return tot
     
     def show(self):
-        print(self.flight_id)
+        # print(self.flight_id)
         spots = [i.spot for i in self.times]
-        print(spots)
+        # print(spots)
 
 
 #[('AC004', ('V001_13_dep', 'V002_18_arr')), ('AC005', ('V007_17_dep', 'V002_55_arr')), ('AC008', ('V003_20_dep', 'V006_42_arr'))]
@@ -201,7 +201,7 @@ def process_request(id_, req_id, depart_port, arrive_port, sector_path, sector_t
         # nb = bundle(id_, req_id, curtimesarray, maxBid, 0, budget)
         b.update_flight_path(adjusted_depart_time, depart_port, adjusted_arrive_time, arrive_port)
         reqs += [b]
-        print(f"Request goods: {b.goods}")
+        # print(f"Request goods: {b.goods}")
 
     # while(delayed_arr_t + 1 < end_time): # arrive_port + _arr on last timestep
     #     delay +=1
@@ -223,11 +223,11 @@ def multiplicitiesDict(vals): # can optimize
     s = {}
     for i in k:
         s[i] = vals.count(i)
-        print(f"Count of {i.good}: {vals.count(i)}")
+        # print(f"Count of {i.good}: {vals.count(i)}")
     return s
 
 def run_auction(reqs, method, start_time, end_time, capacities, sector_data, vertiport_data):
-    print(f"All agent reqs: {reqs}")
+    # print(f"All agent reqs: {reqs}")
     numreq = len(reqs)
     price_per_req = [0] * numreq
     final = False
@@ -237,15 +237,15 @@ def run_auction(reqs, method, start_time, end_time, capacities, sector_data, ver
     while(not final):
         final = True
         it += 1
-        #print('AUC ITER # ', it)
+        print('AUC ITER # ', it)
         # for t in range(start_time, end_time):
         prices = []
         favored_reqs = []
         favored_req_inds = []
         favored_goods = []
         for agent_reqs in reqs:
-            for req in agent_reqs:
-                print(f"Agent req goods: {req.goods}")
+            # for req in agent_reqs:
+                # print(f"Agent req goods: {req.goods}")
             price_per_req = [sum([good.price for good in req.goods]) for req in agent_reqs]
             if(method == "profit"):
                 _, ind, favored_req = max([(r.value - price_per_req[i], i, r) for i, r in enumerate(agent_reqs)], key = lambda x: x[0])
@@ -257,7 +257,7 @@ def run_auction(reqs, method, start_time, end_time, capacities, sector_data, ver
             favored_reqs.append(favored_req)
             favored_req_inds.append(ind)
             favored_goods += favored_req.goods
-        print(f"Favored reqs: {favored_reqs}")
+        # print(f"Favored reqs: {favored_reqs}")
             #look through all requests at a time step
             # spots_reqs = []
         
@@ -273,17 +273,17 @@ def run_auction(reqs, method, start_time, end_time, capacities, sector_data, ver
             #print('A  -----------------')
             # print(spots_reqs)
         favored_good_names = [good.good for good in favored_goods]
-        print(f"Favored good names: {favored_good_names}")
+        # print(f"Favored good names: {favored_good_names}")
         capacities = find_capacity(favored_good_names + ['dummy', 'dummy'], sector_data, vertiport_data)
         capacitiesDict = {good: capacity for good, capacity in zip(favored_goods, capacities)}
         multiplicities = multiplicitiesDict(favored_goods)
-        print(f"Multiplicities: {[mult.good for mult in multiplicities]}")
-        print(f"Capacities: {[cap.good for cap in capacitiesDict.keys()]}")
+        # print(f"Multiplicities: {[mult.good for mult in multiplicities]}")
+        # print(f"Capacities: {[cap.good for cap in capacitiesDict.keys()]}")
 
         for key, val in multiplicities.items():
-            print(f"Key: {key.good} with usage {val} and capacity {capacitiesDict[key]}")
+            # print(f"Key: {key.good} with usage {val} and capacity {capacitiesDict[key]}")
             if(val > capacitiesDict[key]):
-                print(f"{key} contested")
+                print(f"Contested: {key.good} with usage {val} and capacity {capacitiesDict[key]}")
                 final = False
                 for agent_reqs in reqs:
                     for req in agent_reqs:

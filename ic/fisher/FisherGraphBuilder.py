@@ -97,7 +97,9 @@ class FisherGraphBuilder:
             sector_attributes = {"valuation": 0}
             for ts in range(current_time, next_time):
                 start_node = f"{current_sector}_{ts}"
-                end_node = f"{current_sector}_{ts+1}"  
+                end_node = f"{current_sector}_{ts+1}" 
+                if start_node == "S002_35" and end_node == "S002_36":
+                    print(f"Adding ({start_node}, {end_node})") 
                 self._add_node_if_not_exists(end_node)
                 self._add_edge_if_not_exists(start_node, end_node, sector_attributes)
 
@@ -108,7 +110,7 @@ class FisherGraphBuilder:
         # Arriving at vertiport
         if destination_vertiport is not None:
             arr_node = f"{destination_vertiport}_{arrival_time}_arr"
-            print(f"Adding {arr_node} and {destination_vertiport}_{arrival_time}")
+            # print(f"Adding {arr_node} and {destination_vertiport}_{arrival_time}")
             self._add_node_if_not_exists(arr_node)
             self._add_node_if_not_exists(f"{destination_vertiport}_{arrival_time}")
             self._add_edge_if_not_exists(f"{sector_path[-1]}_{sector_times[-1]}", arr_node, {"valuation": 0})
