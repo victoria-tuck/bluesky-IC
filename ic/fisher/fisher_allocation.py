@@ -126,7 +126,7 @@ def find_capacity(goods_list, sectors_data, vertiport_data):
 
     capacities = np.zeros(len(goods_list)) 
     for i, (origin, destination) in enumerate(goods_list[:-2]): # excluding default/outside good - consider changing this to remove "dropout_good" and "default_good"
-        print(f"Origin: {origin} - Destination: {destination}")
+        # print(f"Origin: {origin} - Destination: {destination}")
         origin_base = origin.split("_")[0]
         destination_base = destination.split("_")[0]
         if origin_base[0] == 'S' and destination_base[0] == 'S':
@@ -148,11 +148,12 @@ def find_capacity(goods_list, sectors_data, vertiport_data):
             else:
                 node = vertiport_data._node.get(origin)
                 if node is None:
+                    print(f"Origin: {origin} - Destination: {destination}")
                     print(f"Nodes: {vertiport_data.nodes}")
                 capacity = node.get('hold_capacity') - node.get('hold_usage') 
-                print(f"Node hold capacity: {node.get('hold_capacity')}")
-                print(f"Node usage capacity: {node.get('hold_usage')}")
-                print(f"Capacity on edge {origin} to {destination}: {capacity}")
+                # print(f"Node hold capacity: {node.get('hold_capacity')}")
+                # print(f"Node usage capacity: {node.get('hold_usage')}")
+                # print(f"Capacity on edge {origin} to {destination}: {capacity}")
         else:
             if origin_base[0] == 'V':
                 # Traveling from vertiport to sector
@@ -162,9 +163,12 @@ def find_capacity(goods_list, sectors_data, vertiport_data):
             elif destination_base[0] == 'V':
                 # Traveling from sector to vertiport
                 destination_time = destination.replace('_arr', '')
-                node = vertiport_data._node.get(destination)
+                node = vertiport_data._node.get(destination_time)
+                if node is None:
+                    print(f"Origin: {origin} - Destination: {destination}")
+                    print(f"Nodes: {vertiport_data.nodes}")
                 capacity = node.get('landing_capacity') - node.get('landing_usage')
-        print(f"Capacity on edge {origin} to {destination}: {capacity}")
+        # print(f"Capacity on edge {origin} to {destination}: {capacity}")
         capacities[i] = capacity
     
     capacities[-2] = 100 # default/outside good
@@ -607,10 +611,10 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
         logging.info(f"Iteration: {x_iter}, Market Clearing Error: {market_clearing_error}, Tolerance: {tolerance}")
 
         x_iter += 1
-        if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.0001) and (x_iter>=10) and (iter_constraint_x_y <= 0.01):
+        if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.01) and (x_iter>=10) and (iter_constraint_x_y <= 0.05):
             break
-        # if x_iter ==  100:
-        #     break
+        if x_iter ==  1000:
+            break
 
 
 

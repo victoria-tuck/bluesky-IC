@@ -36,17 +36,17 @@
         "S001": {
             "latitude": 43.6048,
             "longitude": 1.4428,
-            "hold_capacity": 5
+            "hold_capacity": 1
         },
         "S002": {
             "latitude": 43.6048,
             "longitude": 1.5157762111108113,
-            "hold_capacity": 5
+            "hold_capacity": 1
         }
     },
     "flights": {
         "AC000": {
-            "appearance_time": 5,
+            "appearance_time": 3,
             "origin_vertiport_id": "V001",
             "budget_constraint": 300,
             "decay_factor": 0.95,
@@ -61,16 +61,16 @@
                 "001": {
                     "bid": 200,
                     "valuation": 200,
-                    "request_departure_time": 7,
-                    "request_arrival_time": 9,
+                    "request_departure_time": 4,
+                    "request_arrival_time": 6,
                     "sector_path": [
                         "S001",
                         "S002"
                     ],
                     "sector_times": [
-                        7,
-                        8,
-                        9
+                        4,
+                        5,
+                        6
                     ],
                     "destination_vertiport_id": null
                 }

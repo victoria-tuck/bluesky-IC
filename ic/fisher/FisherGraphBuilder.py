@@ -58,7 +58,7 @@ class FisherGraphBuilder:
                     attributes = {"valuation": decay_valuation}
                     new_sector_times = [ts + ts_delay for ts in sector_times]
                     self._create_path_elements(origin_vertiport, destination_vertiport, sector_path, new_sector_times,
-                              new_departure_time, new_departure_time, attributes=attributes)
+                              new_departure_time, new_arrival_time, attributes=attributes)
 
         return self.graph
     
@@ -108,6 +108,7 @@ class FisherGraphBuilder:
         # Arriving at vertiport
         if destination_vertiport is not None:
             arr_node = f"{destination_vertiport}_{arrival_time}_arr"
+            print(f"Adding {arr_node} and {destination_vertiport}_{arrival_time}")
             self._add_node_if_not_exists(arr_node)
             self._add_node_if_not_exists(f"{destination_vertiport}_{arrival_time}")
             self._add_edge_if_not_exists(f"{sector_path[-1]}_{sector_times[-1]}", arr_node, {"valuation": 0})

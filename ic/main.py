@@ -400,7 +400,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
 
     file_name = file_path.split("/")[-1].split(".")[0]
     # data = load_json(file_path)
-    output_folder = f"ic/results/{file_name}_{design_parameters['beta']}_{design_parameters['dropout_good_valuation']}_{design_parameters['default_good_valuation']}_{design_parameters['price_default_good']}_{design_parameters['lambda_frequency']}"
+    output_folder = f"ic/results/{file_name}_{method}_{design_parameters['beta']}_{design_parameters['dropout_good_valuation']}_{design_parameters['default_good_valuation']}_{design_parameters['price_default_good']}_{design_parameters['lambda_frequency']}_{design_parameters['price_upper_bound']}"
     Path(output_folder).mkdir(parents=True, exist_ok=True)
 
     flights = data["flights"]
@@ -479,7 +479,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
         # Get the current flights
         # current_flight_ids = ordered_flights[appearance_time]
         
-        if prev_auction_time > 100:
+        if prev_auction_time > 10:
             break
 
         # This is to ensure it doest not rebase the flights beyond simulation end time
@@ -555,7 +555,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
             # )
         elif method == "ascending-auction-budgetbased":
             allocated_flights, payments = ascending_auc_allocation_and_payment(
-                    filtered_vertiport_usage, current_flights, current_timing_info, routes_data, "budget",
+                    filtered_vertiport_usage, current_flights, current_timing_info, filtered_sectors, "budget",
                     save_file=scenario_name, initial_allocation=initial_allocation, design_parameters=design_parameters
                 )
             #print(allocated_flights)
@@ -573,7 +573,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
         
         elif method == "ascending-auction-profitbased":
             allocated_flights, payments = ascending_auc_allocation_and_payment(
-                    filtered_vertiport_usage, current_flights, current_timing_info, routes_data, "profit",
+                    filtered_vertiport_usage, current_flights, current_timing_info, filtered_sectors, "profit",
                     save_file=scenario_name, initial_allocation=initial_allocation, design_parameters=design_parameters
                 )
             #print(allocated_flights)
