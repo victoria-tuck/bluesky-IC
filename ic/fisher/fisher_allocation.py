@@ -91,6 +91,22 @@ def construct_market(flights, timing_info, sectors, vertiport_usage, default_goo
             # print(f"Edge: {edge} with valuation {agent_graph.edges[edge]['valuation']}")
             valuations.append(agent_graph.edges[edge]["valuation"])
 
+        for i, constraint in enumerate(builder.additional_constraints):
+            arrival_index = edges.index(constraint[-1])
+            for edge in constraint[:-1]:
+                edge_index = edges.index(edge)
+                A = np.vstack((A, np.zeros(len(A[0]))))
+                A[-1, edge_index] = 1
+                A[-1, arrival_index] = -1
+                # valuations.append(0)
+
+        if flight_id == "AC005":
+            for row in A:
+        # row = inc_matrix[-15,:]
+                positive_indices = [edges[index] for index in np.where(row == 1)[0]]
+                negative_indices = [edges[index] for index in np.where(row == -1)[0]]
+                print(f"{positive_indices} - {negative_indices}")
+
         b = np.zeros(len(A))
         b[0] = 1
         
@@ -615,10 +631,10 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
         logging.info(f"Iteration: {x_iter}, Market Clearing Error: {market_clearing_error}, Tolerance: {tolerance}")
 
         x_iter += 1
-        if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.01) and (x_iter>=10) and (iter_constraint_x_y <= 0.05):
+        if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.01) and (x_iter>=10) and (iter_constraint_x_y <= 0.1):
             break
-        # if x_iter ==  5:
-        #     break
+        if x_iter == 1000:
+            break
 
 
 
