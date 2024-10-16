@@ -266,45 +266,9 @@ def step_simulation_delay(
         allocated_flights (list): The list of allocated flights.
         stack_commands (list): The list of stack commands to add to.
     """
-    for flight_id, request_id, delay, bid, d, a in allocated_flights:
-        # Pull flight and allocated request
-        flight = flights[flight_id]
-        request = flight["requests"][request_id]
-
-        request["request_departure_time"] += delay
-        request["request_arrival_time"] += delay
-        request["bid"] = bid
-
-        # Move aircraft in VertiportStatus
-        vertiport_usage.move_aircraft(flight["origin_vertiport_id"], request)
-
-        # Add movement to stack commands
-        origin_vertiport = vertiports[flight["origin_vertiport_id"]]
-        destination_vertiport = vertiports[request["destination_vertiport_id"]]
-        add_commands_for_flight(
-            flight_id,
-            flight,
-            request,
-            origin_vertiport,
-            destination_vertiport,
-            stack_commands,
-        )
-
-    return vertiport_usage
-
-def step_simulation_delay(
-    vertiport_usage, vertiports, flights, allocated_flights, stack_commands
-):
-    """
-    Step the simulation forward based on the allocated flights.
-
-    Args:
-        vertiport_usage (VertiportStatus): The current status of the vertiports.
-        vertiports (dict): The vertiports information.
-        flights (dict): The flights information.
-        allocated_flights (list): The list of allocated flights.
-        stack_commands (list): The list of stack commands to add to.
-    """
+    if allocated_flights is None:
+        return vertiport_usage
+    
     for flight_id, request_id, delay, bid, d, a in allocated_flights:
         # Pull flight and allocated request
         flight = flights[flight_id]
@@ -332,6 +296,33 @@ def step_simulation_delay(
         # )
 
     return vertiport_usage
+
+def step_simulation_delay_fisher(
+    vertiport_usage, vertiports, flights, allocated_flights, stack_commands, auction_period
+):
+    """
+    Step the simulation forward based on the allocated flights.
+
+    Args:
+        vertiport_usage (VertiportStatus): The current status of the vertiports.
+        vertiports (dict): The vertiports information.
+        flights (dict): The flights information.
+        allocated_flights (list): The list of allocated flights.
+        stack_commands (list): The list of stack commands to add to.
+        auction_period (int): The length of each auction
+    """
+    if allocated_flights is None:
+        return vertiport_usage
+    
+    for flight_id, request in allocated_flights:
+        # Pull flight and allocated request
+        flight = flights[flight_id]
+
+        # Move aircraft in VertiportStatus
+        vertiport_usage.allocate_aircraft(flight["origin_vertiport_id"], flight, request, auction_period)
+    
+    return vertiport_usage
+
 
 def adjust_interval_flights(allocated_flights, flights):
     """
@@ -369,15 +360,17 @@ def adjust_interval_flights(allocated_flights, flights):
     return adjusted_flights, flights
 
 def adjust_rebased_flights(rebased_flights, flights, auction_start, auction_end):
-    for i, (flight_id, _) in enumerate(rebased_flights):
+    for i, flight_id in enumerate(rebased_flights):
         flights[flight_id]["appearance_time"] = auction_start
+        print(f"Flight {flight_id} appearance time: {auction_start}")
         valuation = flights[flight_id]["requests"]['001']["valuation"]
         decay = flights[flight_id]["decay_factor"]
         travel_time = flights[flight_id]["requests"]['001']['request_arrival_time'] - flights[flight_id]["requests"]['001']['request_departure_time']
         new_requested_dep_time = auction_end + 1
         flights[flight_id]["requests"]['001']['request_departure_time'] = new_requested_dep_time
         flights[flight_id]["requests"]['001']['request_arrival_time'] = new_requested_dep_time + travel_time
-        flights[flight_id]['valuation']= valuation*decay**i #change decay
+        flights[flight_id]['valuation']= valuation/2 #change decay
+        flights[flight_id]['budget_constraint'] +=  flights[flight_id]['original_budget']
 
     return flights
 #def run_scenario(data, scenario_path, scenario_name, method, save_scenario=True, payment_calc=True):
@@ -400,7 +393,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
 
     file_name = file_path.split("/")[-1].split(".")[0]
     # data = load_json(file_path)
-    output_folder = f"ic/results/{file_name}_{method}_{design_parameters['beta']}_{design_parameters['dropout_good_valuation']}_{design_parameters['default_good_valuation']}_{design_parameters['price_default_good']}_{design_parameters['lambda_frequency']}_{design_parameters['price_upper_bound']}"
+    output_folder = f"ic/results/{file_name}_{method}_{design_parameters['beta']}_{design_parameters['dropout_good_valuation']}_{design_parameters['default_good_valuation']}_{design_parameters['price_default_good']}_{design_parameters['lambda_frequency']}_{design_parameters['price_upper_bound']}_receding"
     Path(output_folder).mkdir(parents=True, exist_ok=True)
 
     flights = data["flights"]
@@ -434,7 +427,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
     end_time = timing_info["end_time"]
     auction_intervals = list(range(start_time, end_time, auction_freq))
 
-    max_travel_time = 60
+    max_travel_time = 6
     last_auction =  end_time - max_travel_time - auction_freq
 
     # Add fleet weighting information to flights
@@ -455,10 +448,11 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
         else:
             ordered_flights[appearance_time].append(flight_id)
 
-    auction_times = list(np.arange(0, timing_info["end_time"], auction_freq))
 
-    max_travel_time = 60
-    last_auction =  end_time - max_travel_time - auction_freq
+    max_travel_time = 6
+    last_auction =  end_time - max(max_travel_time,auction_freq)
+    auction_times = list(np.arange(0, last_auction+1, auction_freq))
+    print(f"Last auction: {last_auction}")
 
     # Initialize stack commands
     stack_commands = ["00:00:00.00>TRAILS OFF\n00:00:00.00>PAN CCR\n00:00:00.00>ZOOM 1\n00:00:00.00>CDMETHOD STATEBASED\n00:00:00.00>DTMULT 30\n"]
@@ -475,19 +469,31 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
     # Iterate through each time flights appear
     # for appearance_time in sorted(ordered_flights.keys()):
     results = []
+    print("Auction times: ", auction_times)
     for prev_auction_time, auction_time in zip(auction_times[:-1], auction_times[1:]):
         # Get the current flights
         # current_flight_ids = ordered_flights[appearance_time]
         
-        if prev_auction_time > 10:
-            break
+        # if prev_auction_time > 5:
+        #     break
 
         # This is to ensure it doest not rebase the flights beyond simulation end time
         if rebased_flights and auction_time <= last_auction + 1:
+           print("Rebasing flights")
            flights = adjust_rebased_flights(rebased_flights, flights, prev_auction_time, auction_time)
+        
+        # Sort arriving flights by appearance time
+        ordered_flights = {}
+        for flight_id, flight in flights.items():
+            appearance_time = flight["appearance_time"]
+            if appearance_time not in ordered_flights:
+                ordered_flights[appearance_time] = [flight_id]
+            else:
+                ordered_flights[appearance_time].append(flight_id)
         
         relevant_appearances = [key for key in ordered_flights.keys() if key >= prev_auction_time and key < auction_time]
         current_flight_ids = sum([ordered_flights[appearance_time] for appearance_time in relevant_appearances], [])
+        print("Current flight ids: ", current_flight_ids)
         if len(current_flight_ids) == 0:
             continue
         current_flights = {
@@ -514,7 +520,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
         filtered_sectors = {sid: sectors_data[sid] for sid in interval_sectors}
     
         # Create vertiport graph and add starting aircraft positions
-        filtered_vertiport_usage = VertiportStatus(filtered_vertiports, filtered_sectors, timing_info)
+        # filtered_vertiport_usage = VertiportStatus(filtered_vertiports, filtered_sectors, timing_info)
         # filtered_vertiport_usage.add_aircraft(interval_flights)
 
         print("Performing auction for interval: ", prev_auction_time, " to ", auction_time) 
@@ -538,7 +544,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
         if method == "vcg":
 
             allocated_flights, payments, sw = vcg_allocation_and_payment(
-                filtered_vertiport_usage, current_flights, current_timing_info, congestion_info, fleets, save_file=scenario_name, initial_allocation=initial_allocation, payment_calc=payment_calc, save=save_scenario
+                vertiport_usage, current_flights, current_timing_info, congestion_info, fleets, save_file=scenario_name, initial_allocation=initial_allocation, payment_calc=payment_calc, save=save_scenario
             )
             # Update system status based on allocation
             #print(allocated_flights)
@@ -547,16 +553,34 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
             )
         elif method == "fisher":
             allocated_flights, rebased_flights, payments, valuations = fisher_allocation_and_payment(
-                filtered_vertiport_usage, current_flights, current_timing_info, filtered_sectors, filtered_vertiports,
+                vertiport_usage, current_flights, current_timing_info, filtered_sectors, filtered_vertiports,
                 output_folder, save_file=scenario_name, initial_allocation=initial_allocation, design_parameters=design_parameters
             )
+            print(f"Allocated flights: {allocated_flights}")
+            print(f"Rebased flights: {rebased_flights}")
             print(f"Social welfare: {sum([val for val in valuations.values()])}")
-            # vertiport_usage = step_simulation(
-            #     vertiport_usage, vertiports, flights, allocated_flights, stack_commands
-            # )
+            allocated_requests = []
+            for flight_id, allocated_dep in allocated_flights:
+                dep_time = int(allocated_dep[0].split("_")[1])
+                flight = current_flights[flight_id]
+                allocated_request = None
+                for delay in range(5):
+                    if flight["requests"]["001"]["request_departure_time"] + delay != dep_time:
+                        continue
+                    allocated_request = flight["requests"]["001"]
+                    allocated_request["request_departure_time"] += delay
+                    allocated_request["request_arrival_time"] += delay
+                    allocated_request["sector_times"] = [sector_time + delay for sector_time in allocated_request["sector_times"]]
+                    allocated_request["valuation"] = allocated_request["valuation"]*flight["decay_factor"]**delay
+                    allocated_requests.append((flight_id, allocated_request))
+                    break
+            print(f"Allocated requests: {allocated_requests}")
+            vertiport_usage = step_simulation_delay_fisher(
+                vertiport_usage, vertiports, flights, allocated_requests, stack_commands, auction_freq
+            )
         elif method == "ascending-auction-budgetbased":
             allocated_flights, payments = ascending_auc_allocation_and_payment(
-                    filtered_vertiport_usage, current_flights, current_timing_info, filtered_sectors, "budget",
+                    vertiport_usage, current_flights, current_timing_info, filtered_sectors, "budget",
                     save_file=scenario_name, initial_allocation=initial_allocation, design_parameters=design_parameters
                 )
             #print(allocated_flights)
@@ -575,7 +599,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
         
         elif method == "ascending-auction-profitbased":
             allocated_flights, payments = ascending_auc_allocation_and_payment(
-                    filtered_vertiport_usage, current_flights, current_timing_info, filtered_sectors, "profit",
+                    vertiport_usage, current_flights, current_timing_info, filtered_sectors, "profit",
                     save_file=scenario_name, initial_allocation=initial_allocation, design_parameters=design_parameters
                 )
             #print(allocated_flights)
@@ -593,7 +617,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method, design_p
             allocated_flights = [i[0:2] for i in allocated_flights]
         elif method == "ff":
             allocated_flights, payments = ff_allocation_and_payment(
-                filtered_vertiport_usage, current_flights, current_timing_info, save_file=scenario_name, initial_allocation=initial_allocation
+                vertiport_usage, current_flights, current_timing_info, save_file=scenario_name, initial_allocation=initial_allocation
             )
             # System status updated as part of allocation
         if initial_allocation:
