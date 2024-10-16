@@ -156,12 +156,13 @@ def write_customer_board(flights, agents_data, output_folder):
         request = flights[key]["requests"]["001"]
         origin_vertiport_id, dep_time, destination_vertiport_id, arr_time = None, None, None, None
         
-        if allocated_flight:
+        if value["status"] != "dropped":
             dep_info, arr_info = allocated_flight[0], allocated_flight[1]
             origin_vertiport_id, dep_time = dep_info.split('_')[0], dep_info.split('_')[1]
             destination_vertiport_id, arr_time = arr_info.split('_')[0], arr_info.split('_')[1]
             payment = value["payment"]
-            status = value["status"]
+            # status = value["status"]
+            status = "on-time" if dep_time == request["request_departure_time"] else "delayed"
         else:
             status = "cancelled"
             origin_vertiport_id = flights[key]["origin_vertiport_id"]
@@ -203,7 +204,7 @@ def write_SP_board(edge_information, agents_data, output_folder):
         arr_time = request["request_arrival_time"]
         destination_vertiport_id = request["destination_vertiport_id"]
         allocated_origin_vertiport, allocated_dep_time, allocated_destination_vertiport,allocated_arr_time = None, None, None, None        
-        if allocated_flight:
+        if value["status"] != "dropped":
             dep_info, arr_info = allocated_flight[0], allocated_flight[1]
             allocated_origin_vertiport, allocated_dep_time = dep_info.split('_')[0], dep_info.split('_')[1]
             allocated_destination_vertiport, allocated_arr_time = arr_info.split('_')[0], arr_info.split('_')[1]
@@ -260,7 +261,7 @@ def write_network_board(market_data_dict, agent_data_dict, output_folder):
         statuses.append(agent_data["status"])
         allocated_flight = agent_data["good_allocated"]
         allocated_flights.append(allocated_flight)
-        allocated_id = goods.index(allocated_flight) if allocated_flight else None
+        allocated_id = goods.index(allocated_flight) if agent_data["status"] is not "dropped" else None
         end_capacities.append(market_data_dict["capacity"][allocated_id] if allocated_id is not None else None)
         total_payment += agent_data["payment"]
 

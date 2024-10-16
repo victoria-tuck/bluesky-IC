@@ -16,7 +16,10 @@ def extract_parameter_from_filename(filename, parameter):
     elif parameter == "price_default_good":
         match = re.search(r'[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_(\d+\.\d+)', filename)
     elif parameter == "lambda_freq":
-        match = re.search(r'[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_(\d+\.\d+)', filename)
+        # match = re.search(r'[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_(\d+\.\d+)', filename)
+        match = re.search(r'[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_(\d+\.\d+)', filename)
+        # match = re.search(r'[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_[^_]+_(\d+\.\d+)', filename)
+
     else:
         raise ValueError(f"Unknown parameter: {parameter}")
 
@@ -235,9 +238,9 @@ def plotting_combined_market(files, output_folder, parameter_to_evaluate, market
     plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.xlabel('$x_{iter}$')
     plt.ylabel('Allocated Edge')
-    plt.xlim(0, 200)
+    # plt.xlim(0, 1050)
     plt.title("Contested Goods Beta Analysis")
-    plt.savefig(get_filename(f"combined_desired_goods_beta_analysis_{parameter_to_evaluate}"), bbox_inches='tight')
+    plt.savefig(get_filename(f"combined_desired_goods_analysis_{parameter_to_evaluate}"), bbox_inches='tight')
     plt.close()
 
     # # Market Clearing Error
@@ -294,16 +297,16 @@ if __name__ == "__main__":
     #         "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/casef_20240917_081204_100.0_1.0_1.0_10.0_10.0/fisher_data_1.pkl",
     #         ]
     files = [
-            "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/casef_20240925_175552short_5.0_1.0_1.0_0.1_10.0/fisher_data_1.pkl",
-            "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/casef_20240925_175552short_5.0_1.0_1.0_0.2_10.0/fisher_data_1.pkl",
-            "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/casef_20240925_175552short_5.0_1.0_1.0_0.5_10.0/fisher_data_1.pkl",
-            "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/casef_20240925_175552short_5.0_1.0_1.0_1.0_10.0/fisher_data_1.pkl",
-            # "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/casef_20240925_175552short_5.0_1.0_1.0_10.0_2.0/fisher_data_1.pkl",
+            "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/beta-sqrtx_dec_through_iterations/casef_20240925_175552_10.0_1.0_1.0_10.0_1.0_100.0/fisher_data_1.pkl",
+            "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/beta-sqrtx_dec_through_iterations/casef_20240925_175552_10.0_1.0_1.0_10.0_10.0_100.0/fisher_data_1.pkl",
+            "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/beta-sqrtx_dec_through_iterations/casef_20240925_175552_10.0_1.0_1.0_10.0_50.0_100.0/fisher_data_1.pkl",
+            "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/beta-sqrtx_dec_through_iterations/casef_20240925_175552_10.0_1.0_1.0_10.0_100.0_100.0/fisher_data_1.pkl",
+            # "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/casef_20240925_175552short_50.0_1.0_1.0_10.0_10.0_100.0/fisher_data_1.pkl",
             # "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/results/casef_20240925_175552short_1.0_1.0_1.0_10.0_2.0/fisher_data_1.pkl",
             ]
     output_folder = "/home/gaby/Documents/UCB/AAM/GIT/bluesky-IC/ic/plots/"
     # options "beta","price_val", "default_val", "price_default_good","lambda_freq"
-    parameter_to_evaluate = "price_default_good"    
+    parameter_to_evaluate = "lambda_freq"   
     market_auction_time = None  # Adjust if needed
 
     plotting_combined_market(files, output_folder, parameter_to_evaluate, market_auction_time)

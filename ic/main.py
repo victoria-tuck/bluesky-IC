@@ -309,7 +309,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method="fisher",
 
     file_name = file_path.split("/")[-1].split(".")[0]
     # data = load_json(file_path)
-    output_folder = f"ic/results/{file_name}_{design_parameters['beta']}_{design_parameters['dropout_good_valuation']}_{design_parameters['default_good_valuation']}_{design_parameters['price_default_good']}_{design_parameters['lambda_frequency']}"
+    output_folder = f"ic/results/{file_name}_{design_parameters['beta']}_{design_parameters['dropout_good_valuation']}_{design_parameters['default_good_valuation']}_{design_parameters['price_default_good']}_{design_parameters['lambda_frequency']}_{design_parameters['price_upper_bound']}"
     Path(output_folder).mkdir(parents=True, exist_ok=True)
 
     flights = data["flights"]
@@ -373,7 +373,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method="fisher",
         
             # Create vertiport graph and add starting aircraft positions
             filtered_vertiport_usage = VertiportStatus(filtered_vertiports, filtered_routes, timing_info)
-            filtered_vertiport_usage.add_aircraft(interval_flights)
+            # filtered_vertiport_usage.add_aircraft(interval_flights)
 
             print("Performing auction for interval: ", auction_start, " to ", auction_end)
             write_market_interval(auction_start, auction_end, interval_flights, output_folder)
@@ -386,6 +386,7 @@ def run_scenario(data, scenario_path, scenario_name, file_path, method="fisher",
             current_timing_info = {
                 "start_time" : auction_start,
                 "end_time": timing_info["end_time"],
+                "auction_start": auction_start,
                 "time_step": timing_info["time_step"],
                 "auction_frequency": timing_info["auction_frequency"],
                 "auction_end": auction_end

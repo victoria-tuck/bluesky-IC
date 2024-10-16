@@ -168,7 +168,9 @@ def get_next_auction_data(agent_data, market_data):
                     agent_data[flight_id]["good_allocated"] = good_tuple
                     allocation.append((flight_id, good_tuple))
                     agent_data[flight_id]["good_allocated_idx_short_list"] = data["agent_goods_list"].index(good_tuple)
-
+                else:
+                    data['status'] = 'parked'
+                    # need to imporve how we are handling parking allocations
                 print("Check allocation")
                 # else:
                 #     data['status'] = 'rebased'
@@ -179,13 +181,13 @@ def get_next_auction_data(agent_data, market_data):
         #     dropped.append(flight_id)
         #     good_tuple = ('VOOO', 'V000')
         #     agent_data[flight_id]["good_allocated"] = good_tuple
-        else:
-            data['status'] = 'rebased'
-            edges_id = np.where(data["final_allocation"] == 1)[0]
-            edges = [data["agent_goods_list"][edge_id] for edge_id in edges_id]
-            rebased.append(flight_id)
-            good_tuple = find_dep_and_arrival_nodes(edges)
-            agent_data[flight_id]["good_allocated"] = good_tuple
+        # else:
+        #     data['status'] = 'rebased'
+        #     edges_id = np.where(data["final_allocation"] == 1)[0]
+        #     edges = [data["agent_goods_list"][edge_id] for edge_id in edges_id]
+        #     rebased.append(flight_id)
+        #     good_tuple = find_dep_and_arrival_nodes(edges)
+        #     agent_data[flight_id]["good_allocated"] = good_tuple
     
     return allocation, rebased, dropped
 
@@ -211,8 +213,12 @@ def compute_utilites(agent_data):
     agent_utility_vec = agent_data["utility"]
     dropout_utility = agent_utility_vec[-1]
     default_utility = agent_utility_vec[-2]
-    allocated_good_utility = agent_utility_vec[agent_data["good_allocated_idx_short_list"]]
-    x_allocated = agent_data["final_allocation"][agent_data["good_allocated_idx_short_list"]]
+    if agent_data["status"] == 'dropped':
+        allocated_good_utility = 0
+        x_allocated = 0   
+    else:
+        allocated_good_utility = agent_utility_vec[agent_data["good_allocated_idx_short_list"]]
+        x_allocated = agent_data["final_allocation"][agent_data["good_allocated_idx_short_list"]]
     desired_good_utility = agent_data["flight_info"]["requests"]["001"]["valuation"]
     agent_fu = allocated_good_utility *  x_allocated + default_utility * agent_data["final_allocation"][-2] + dropout_utility * agent_data["final_allocation"][-1]
     agent_fu_max = desired_good_utility

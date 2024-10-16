@@ -115,22 +115,23 @@ def find_capacity(goods_list, route_data, vertiport_data):
     for i, (origin, destination) in enumerate(goods_list[:-2]): # excluding default/outside good - consider changing this to remove "dropout_good" and "default_good"
         origin_base = origin.split("_")[0]
         destination_base = destination.split("_")[0]
-        if origin_base != destination_base:
+
+        # Staying within a vertiport
+        if origin.endswith('_arr'):
+            origin_time = origin.replace('_arr', '')
+            node = vertiport_data._node.get(origin_time)
+            capacity = node.get('landing_capacity') - node.get('landing_usage') 
+        elif destination.endswith('_dep'):
+            destination_time = destination.replace('_dep', '')
+            node = vertiport_data._node.get(destination_time)
+            capacity = node.get('takeoff_capacity') - node.get('takeoff_usage') 
+        elif origin_base == destination_base:
+            node = vertiport_data._node.get(origin)
+            capacity = node.get('hold_capacity') #- node.get('hold_usage') for whatever reason this is starting at 5
+        else:
             # Traveling between vertiport
             capacity = route_dict.get((origin_base, destination_base), None)
-        else:
-            # Staying within a vertiport
-            if origin.endswith('_arr'):
-                origin_time = origin.replace('_arr', '')
-                node = vertiport_data._node.get(origin_time)
-                capacity = node.get('landing_capacity') - node.get('landing_usage') 
-            elif destination.endswith('_dep'):
-                destination_time = destination.replace('_dep', '')
-                node = vertiport_data._node.get(destination_time)
-                capacity = node.get('takeoff_capacity') - node.get('takeoff_usage') 
-            else:
-                node = vertiport_data._node.get(origin)
-                capacity = node.get('hold_capacity') - node.get('hold_usage') 
+            print({(origin_base, destination_base): capacity})
 
         capacities[i] = capacity
     
@@ -348,8 +349,10 @@ def update_agent(w_i, u_i, p, r_i, constraints, y_i, beta, x_iter, update_freque
     num_goods = len(p)
 
     if x_iter % update_frequency == 0:
+        # print("updating frequency")
         # lambda_i = r_i.T @ b_i # update lambda
         lambda_i = r_i * b_i[0]
+        print(f"Lambda: {lambda_i}")
         w_adj = w_i + lambda_i
         # print(w_adj)
         w_adj = max(w_adj, 0)
@@ -516,6 +519,7 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
     start_time_algorithm = time.time()  
     
     problem = None
+    # beta_init = beta
     while x_iter <= MAX_NUM_ITERATIONS:  # max(abs(np.sum(opt_xi, axis=0) - C)) > epsilon:
         if x_iter == 0: 
             beta_init = beta
@@ -550,8 +554,12 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
     
         
         # if x_iter % rebate_frequency == 0:
+        # else:
+        #     
         if True:
             update_rebates = True
+
+            # beta = beta_init/np.sqrt(x_iter+1)
         else:
             update_rebates = False
         # Update market
@@ -820,7 +828,7 @@ def fisher_allocation_and_payment(vertiport_usage, flights, timing_info, routes_
                                   output_folder=None, save_file=None, initial_allocation=True, design_parameters=None):
 
     # # building the graph
-    market_auction_time=timing_info["start_time"]
+    market_auction_time=timing_info["auction_start"]
     # start_time_graph_build = time.time()
     # builder = FisherGraphBuilder(vertiport_usage, timing_info)
     # market_graph = builder.build_graph(flights)
