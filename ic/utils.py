@@ -150,7 +150,7 @@ def get_next_auction_data(agent_data, market_data):
         allocation_indices = np.where(data["final_allocation"] == 1)[0]
         allocation_indices = [int(alloc) for alloc in allocation_indices]
         # print(f"Allocation indices: {allocation_indices}")
-        print(f"Allocated goods: {[data["agent_goods_list"][index] for index in allocation_indices]}")
+        print(f"Allocated goods: {[data['agent_goods_list'][index] for index in allocation_indices]}")
         if data['status'] == 'allocated':
             desired_good_idx = data['desired_good_info']["desired_edge_idx"]
             int_allocation_long = np.zeros(len(data["fisher_allocation"]))
