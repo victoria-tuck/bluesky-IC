@@ -590,11 +590,11 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
     problem = None
     convergence_iter = None
     while x_iter <= MAX_NUM_ITERATIONS:  # max(abs(np.sum(opt_xi, axis=0) - C)) > epsilon:
+        beta_init = beta
         # if x_iter == 0: 
         #     beta_init = beta
         # else:
         #     beta = beta_init/np.sqrt(x_iter)
-            # beta = beta_init / (x_iter + 1)
         
         if x_iter == 0:
             x = np.zeros((num_agents, len(p)))
