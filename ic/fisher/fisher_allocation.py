@@ -363,7 +363,7 @@ def update_basic_agents(w, u, p, r, constraints, y, beta, rational=False):
     return x
 
 
-def update_agents(w, u, p, r, constraints, goods_list, agent_goods_lists, y, beta, x_iter, update_frequency, rational=False, parallel=False, integral=False):
+def update_agents(w, u, p, r, constraints, goods_list, agent_goods_lists, y, beta, x_iter, update_frequency, omega, rational=False, parallel=False, integral=False):
     num_agents, num_goods = len(w), len(p)
 
     agent_indices = range(num_agents)
@@ -372,21 +372,23 @@ def update_agents(w, u, p, r, constraints, goods_list, agent_goods_lists, y, bet
     agent_ys = [np.array([y[i, goods_list.index(good)] for good in agent_goods_lists[i][:-2]]) for i in agent_indices]
     # agent_ys = [np.array([y[i, goods_list[:-2].index(good)] for good in agent_goods_lists[i][:-2]]) for i in agent_indices] # removing dropout and detault good (3)
     # agent_ys = [np.array([y[i, goods_list[:-1].index(good)] for good in agent_goods_lists[i][:-1]]) for i in agent_indices] # removing dropout (4)
-    args = [(w[i], agent_utilities[i], agent_prices[i], r[i], constraints[i], agent_ys[i], beta, x_iter, update_frequency, rational, integral) for i in agent_indices]
+    args = [(w[i], agent_utilities[i], agent_prices[i], r[i], constraints[i], agent_ys[i], beta, x_iter, update_frequency, omega[i], rational, integral) for i in agent_indices]
 
     # Update agents in parallel or not depending on parallel flag
     # parallel = True
     if not parallel:
         results = []
         adjusted_budgets = []
+        new_omega = []
         build_times = []
         solve_times = []
         for arg in args:
             updates =  update_agent(*arg)
             results.append(updates[0])
             adjusted_budgets.append(updates[1])
-            build_times.append(updates[2][0])
-            solve_times.append(updates[2][1])
+            new_omega.append(updates[2])
+            build_times.append(updates[3][0])
+            solve_times.append(updates[3][1])
         # results = [update_agent(*arg) for arg in args]
         print(f"Average build time: {np.mean(build_times)} - Average solve time: {np.mean(solve_times)}")
     else:
@@ -395,8 +397,9 @@ def update_agents(w, u, p, r, constraints, goods_list, agent_goods_lists, y, bet
             pooled_results = pool.starmap(update_agent, args)
             results = [result[0] for result in pooled_results]
             adjusted_budgets = [result[1] for result in pooled_results]
-            build_times = [result[2][0] for result in pooled_results]
-            solve_times = [result[2][1] for result in pooled_results]
+            new_omega = [result[2] for result in pooled_results]
+            build_times = [result[3][0] for result in pooled_results]
+            solve_times = [result[3][1] for result in pooled_results]
         print(f"Average build time: {np.mean(build_times)} - Average solve time: {np.mean(solve_times)}")
 
     x = np.zeros((num_agents, num_goods))
@@ -404,9 +407,9 @@ def update_agents(w, u, p, r, constraints, goods_list, agent_goods_lists, y, bet
         for good in goods_list:
             if good in agent_goods_lists[i]:
                 x[i, goods_list.index(good)] = agent_x[agent_goods_lists[i].index(good)]
-    return x, adjusted_budgets
+    return x, adjusted_budgets, new_omega
 
-def update_agent(w_i, u_i, p, r_i, constraints, y_i, beta, x_iter, update_frequency, rational=False, integral=True, solver=cp.SCS):
+def update_agent(w_i, u_i, p, r_i, constraints, y_i, beta, x_iter, update_frequency, omega, rational=False, integral=True, solver=cp.SCS):
     """
     Update individual agent's consumption given market settings and constraints
     """
@@ -419,14 +422,15 @@ def update_agent(w_i, u_i, p, r_i, constraints, y_i, beta, x_iter, update_freque
     num_goods = len(p)
 
     if x_iter % update_frequency == 0:
-        print(f"{x_iter % update_frequency}")
+        # print(f"{x_iter % update_frequency}")
         # lambda_i = r_i.T @ b_i # update lambda
-        lambda_i = r_i * b_i[0]
-        w_adj = w_i + lambda_i
+        new_omega = r_i * b_i[0]
+        w_adj = w_i + new_omega
         # print(w_adj)
         w_adj = max(w_adj, 0)
     else:
-        w_adj = w_i
+        new_omega = omega
+        w_adj = max(w_i + omega, 0)
     # w_adj = abs(w_adj) 
 
     # print(f"Adjusted budget: {w_adj}")
@@ -496,7 +500,7 @@ def update_agent(w_i, u_i, p, r_i, constraints, y_i, beta, x_iter, update_freque
         logging.info("Agent opt - Optimization result: %s", result)
 
 
-    return x_i.value, w_adj, (build_time, solve_time)
+    return x_i.value, w_adj, new_omega, (build_time, solve_time)
 
 
 def run_basic_market(initial_values, agent_settings, market_settings, plotting=False, rational=False):
@@ -600,8 +604,9 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
             x = np.zeros((num_agents, len(p)))
             x[:,:-2] = y
             adjusted_budgets = w
+            omega = np.zeros(num_agents)
         else:
-            x, adjusted_budgets = update_agents(w, u, p, r, agent_constraints, goods_list, agent_goods_lists, y, beta, x_iter, lambda_frequency, rational=rational, integral=INTEGRAL_APPROACH)
+            x, adjusted_budgets, omega = update_agents(w, u, p, r, agent_constraints, goods_list, agent_goods_lists, y, beta, x_iter, lambda_frequency, omega, rational=rational, integral=INTEGRAL_APPROACH)
         agent_allocations.append(x) # 
         overdemand.append(np.sum(x[:,:-2], axis=0) - supply[:-2].flatten())
         x_ij = np.sum(x[:,:-2], axis=0) # removing default and dropout good
@@ -647,7 +652,7 @@ def run_market(initial_values, agent_settings, market_settings, bookkeeping, rat
         logging.info(f"Iteration: {x_iter}, Market Clearing Error: {market_clearing_error}, Tolerance: {tolerance}")
 
         x_iter += 1
-        if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.01) and (x_iter>=10) and (iter_constraint_x_y <= 0.1) and (x_iter >= 1001):
+        if (market_clearing_error <= tolerance) and (iter_constraint_error <= 0.01) and (x_iter>=10) and (iter_constraint_x_y <= 0.1): # and (x_iter >= 3001):
             break
         if x_iter == 1000:
             break
@@ -860,11 +865,16 @@ def plotting_market(data_to_plot, desired_goods, output_folder, market_auction_t
     plt.close()
 
     # Rebate error
+    cmap = plt.get_cmap("tab20")
+    linestyles = ['-', '--', '-.', ':']
     plt.figure(figsize=(10, 5))
     # print(rebates)
     # print(f"Rebate frequency: {lambda_frequency}")
     rebate_error = [[rebates[i][j][0] - rebates[i - i % int(lambda_frequency)][j][0] for j in range(len(rebates[0]))] for i in range(len(rebates))]
-    plt.plot(range(1, x_iter + 1), rebate_error)
+    print(rebate_error)
+    for index, id in enumerate(desired_goods.keys()):
+        plt.plot(range(1, x_iter + 1), [row[index] for row in rebate_error], color=cmap(index % cmap.N), linestyle=linestyles[index % len(linestyles)], label=id)
+    plt.legend(bbox_to_anchor=(0.5, 0., 0.5, 0.5), loc='lower right')
     plt.xlabel('x_iter')
     plt.ylabel('Rebate error')
     plt.title("Rebate error")
